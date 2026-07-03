@@ -9,21 +9,20 @@
         .btn { display: inline-block; padding: 15px 35px; background: #00adb5; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 18px; margin-top: 20px; cursor: pointer; border: none; box-shadow: 0 4px 15px rgba(0,173,181,0.4); }
         #app-screen { display: none; text-align: center; padding: 20px; }
         #start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; cursor: pointer; }
-        .welcome-btn { padding: 20px 40px; background: #ff4757; color: white; font-size: 22px; font-weight: bold; border-radius: 50px; animation: pulse 1.5s infinite; box-shadow: 0 4px 20px rgba(255,71,87,0.5); }
-        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
+        .welcome-btn { padding: 20px 40px; background: #ff4757; color: white; font-size: 22px; font-weight: bold; border-radius: 50px; box-shadow: 0 4px 20px rgba(255,71,87,0.5); }
     </style>
 </head>
 <body>
 
     <div id="start-screen">
         <div class="welcome-btn">CHẠM ĐỂ VÀO APP</div>
-        <p style="font-size: 14px; color: #aaa; margin-top: 15px;">(Bắt buộc chạm để kích hoạt âm thanh iOS)</p>
+        <p style="font-size: 14px; color: #aaa; margin-top: 15px;">(Bắt buộc chạm để kích hoạt âm thanh trên iOS)</p>
     </div>
 
     <div id="app-screen">
         <h1 style="color: #00adb5; font-size: 28px; margin-bottom: 10px;">ĐỘ NHẠY CHUẨN</h1>
-        <p style="color: #ccc; font-size: 16px;">Ứng dụng cài đặt cấu hình lối tắt màn hình chính.</p>
-        <button class="btn" onclick="downloadProfile()">CÀI ĐẶT APP RA MÀN HÌNH</button>
+        <p style="color: #ccc; font-size: 16px;">Ứng dụng lối tắt màn hình chính.</p>
+        <a class="btn" href="app.mobileconfig" download>CÀI ĐẶT APP RA MÀN HÌNH</a>
     </div>
 
     <audio id="bg-music" loop>
@@ -35,68 +34,11 @@
         const appScreen = document.getElementById('app-screen');
         const audio = document.getElementById('bg-music');
         
-        // Kích hoạt phát nhạc ngay khi người dùng chạm màn hình lần đầu
         startScreen.addEventListener('click', () => {
             audio.play().catch(e => console.log("Lỗi nhạc:", e));
             startScreen.style.display = 'none';
             appScreen.style.display = 'block';
         });
-
-        // Tự động sinh file cấu hình Web Clip chuẩn cho iPhone
-        function downloadProfile() {
-            const domain = window.location.origin;
-            const profileXml = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>PayloadContent</key>
-    <array>
-        <dict>
-            <key>Label</key>
-            <string>Độ Nhạy Chuẩn</string>
-            <key>URL</key>
-            <string>${domain}</string>
-            <key>IsRemovable</key>
-            <true/>
-            <key>FullScreen</key>
-            <true/>
-            <key>IgnoreManifestScope</key>
-            <true/>
-            <key>Precomposed</key>
-            <true/>
-            <key>PayloadDescription</key>
-            <string>Lối tắt ứng dụng Độ Nhạy Chuẩn</string>
-            <key>PayloadDisplayName</key>
-            <string>Độ Nhạy Chuẩn</string>
-            <key>PayloadIdentifier</key>
-            <string>com.bohieuday.webclip</string>
-            <key>PayloadType</key>
-            <string>com.apple.webclip.managed</string>
-            <key>PayloadUUID</key>
-            <string>${crypto.randomUUID()}</string>
-            <key>PayloadVersion</key>
-            <integer>1</integer>
-        </dict>
-    </array>
-    <key>PayloadDisplayName</key>
-    <string>Cấu hình Độ Nhạy Chuẩn</string>
-    <key>PayloadIdentifier</key>
-    <string>com.bohieuday.profile</string>
-    <key>PayloadType</key>
-    <string>Configuration</string>
-    <key>PayloadUUID</key>
-    <string>${crypto.randomUUID()}</string>
-    <key>PayloadVersion</key>
-    <integer>1</integer>
-</dict>
-</plist>`;
-
-            const blob = new Blob([profileXml], { type: 'application/x-apple-aspen-config' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'app.mobileconfig';
-            link.click();
-        }
     </script>
 </body>
 </html>
