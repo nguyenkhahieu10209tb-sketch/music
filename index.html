@@ -3,162 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DoNhayChuan Pro VIP - AI Engine</title>
+    <title>DoNhayChuan Pro VIP - AI Engine 2026</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
 
         :root {
             --primary: #ff2a5f;
             --accent: #ff7e67;
             --cyan: #00f2fe;
             --blue: #4facfe;
-            --glass-bg: rgba(20, 22, 35, 0.7);
+            --glass-bg: rgba(20, 22, 35, 0.75);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --gold: #ffd700;
         }
 
         * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
 
         body {
             margin: 0; padding: 0; height: 100vh;
-            background: #090a0f; color: #fff;
+            background: #06070d; color: #fff;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             overflow: hidden; user-select: none; -webkit-user-select: none;
         }
 
-        /* Animated Background Orbs */
+        /* Background Orbs Animation */
         .bg-orbs { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; animation: float 10s infinite alternate ease-in-out; }
-        .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -100px; left: -100px; }
-        .orb-2 { width: 250px; height: 250px; background: var(--blue); bottom: -50px; right: -50px; animation-delay: -5s; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.45; animation: float 12s infinite alternate ease-in-out; }
+        .orb-1 { width: 350px; height: 350px; background: var(--primary); top: -120px; left: -120px; }
+        .orb-2 { width: 300px; height: 300px; background: var(--blue); bottom: -80px; right: -80px; animation-delay: -6s; }
         
-        @keyframes float { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(50px) scale(1.2); } }
+        @keyframes float { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(40px) scale(1.15); } }
 
         #music-toggle {
             position: fixed; top: 20px; right: 20px; z-index: 1000;
             background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border); border-radius: 50%;
             width: 45px; height: 45px; display: none; align-items: center; justify-content: center;
-            font-size: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s;
+            font-size: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s;
         }
         #music-toggle:active { transform: scale(0.9); }
 
-        .container { padding: 20px; width: 100%; max-width: 450px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: none; }
+        .container { padding: 20px; width: 100%; max-width: 460px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: none; }
         .container::-webkit-scrollbar { display: none; }
         
         .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; justify-content: center; }
-        .active-screen { display: flex; animation: fadeIn 0.5s ease-out; }
+        .active-screen { display: flex; animation: fadeIn 0.4s ease-out; }
 
         .title-gradient {
-            font-size: 30px; font-weight: 800; text-align: center; margin-bottom: 5px;
+            font-size: 32px; font-weight: 800; text-align: center; margin-bottom: 5px;
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0px 5px 20px rgba(255, 42, 95, 0.4);
+            text-shadow: 0px 5px 25px rgba(255, 42, 95, 0.35);
         }
 
         .btn {
             background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none;
-            padding: 16px; border-radius: 15px; font-size: 15px; font-weight: 800; width: 100%;
-            cursor: pointer; box-shadow: 0 8px 25px rgba(255, 42, 95, 0.4); transition: 0.2s; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;
+            padding: 16px; border-radius: 15px; font-size: 14px; font-weight: 800; width: 100%;
+            cursor: pointer; box-shadow: 0 6px 20px rgba(255, 42, 95, 0.35); transition: 0.2s; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn:active { transform: scale(0.95); box-shadow: 0 4px 10px rgba(255, 42, 95, 0.3); }
-        .btn-cyan { background: linear-gradient(135deg, var(--blue), var(--cyan)); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4); }
+        .btn:active { transform: scale(0.96); box-shadow: 0 4px 10px rgba(255, 42, 95, 0.2); }
+        .btn-cyan { background: linear-gradient(135deg, var(--blue), var(--cyan)); box-shadow: 0 6px 20px rgba(79, 172, 254, 0.35); }
+        .btn-gold { background: linear-gradient(135deg, #f5af19, #e15f41); box-shadow: 0 6px 20px rgba(245, 175, 25, 0.35); }
 
         input[type="password"], input[type="text"], select {
-            width: 100%; padding: 15px; margin-top: 15px; border-radius: 12px;
-            background: rgba(0, 0, 0, 0.4); color: white; border: 1px solid var(--glass-border);
+            width: 100%; padding: 15px; margin-top: 12px; border-radius: 14px;
+            background: rgba(0, 0, 0, 0.5); color: white; border: 1px solid var(--glass-border);
             font-size: 14px; outline: none; backdrop-filter: blur(10px); transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 242, 254, 0.3); }
-        option { background: #111; color: #fff; }
-
-        /* Datalist Input Styling */
+        input:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 12px rgba(0, 242, 254, 0.3); }
+        option { background: #0f1015; color: #fff; }
         input::-webkit-calendar-picker-indicator { opacity: 0; }
         
         .tab-menu { display: flex; gap: 8px; justify-content: space-between; margin-bottom: 20px; width: 100%; }
         .tab-btn {
-            flex: 1; padding: 12px 5px; border-radius: 12px; background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border); color: #aaa; font-weight: 700; font-size: 11px;
+            flex: 1; padding: 14px 5px; border-radius: 12px; background: rgba(0,0,0,0.4);
+            border: 1px solid var(--glass-border); color: #888; font-weight: 700; font-size: 11px;
             text-align: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);
         }
-        .tab-btn.active { background: rgba(255,255,255,0.1); color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,242,254,0.2); }
+        .tab-btn.active { background: rgba(255,255,255,0.08); color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,242,254,0.15); }
         
         .tab-content {
-            background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: 20px;
-            padding: 20px; width: 100%; display: none; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 30px;
+            background: var(--glass-bg); backdrop-filter: blur(25px); border-radius: 22px;
+            padding: 22px; width: 100%; display: none; border: 1px solid var(--glass-border); box-shadow: 0 25px 45px rgba(0,0,0,0.5); margin-bottom: 25px;
         }
-        .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
+        .tab-content.active { display: block; animation: slideUp 0.35s ease-out; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        .locked-overlay { text-align: center; padding: 20px 0; }
-        .locked-icon { font-size: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,42,95,0.6)); }
+        .locked-overlay { text-align: center; padding: 25px 0; }
+        .locked-icon { font-size: 55px; margin-bottom: 12px; filter: drop-shadow(0 0 12px rgba(255,42,95,0.5)); }
 
-        .sens-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .sens-item { background: rgba(0,0,0,0.5); padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .sens-item span { display: block; font-size: 10px; color: #aaa; text-transform: uppercase; }
-        .sens-item strong { font-size: 22px; color: var(--cyan); text-shadow: 0 0 8px rgba(0,242,254,0.5); font-weight: 800; }
+        .sens-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .sens-item { background: rgba(0,0,0,0.55); padding: 14px; border-radius: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.04); }
+        .sens-item span { display: block; font-size: 11px; color: #aaa; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+        .sens-item strong { font-size: 24px; color: var(--cyan); text-shadow: 0 0 10px rgba(0,242,254,0.4); font-weight: 800; }
 
-        /* Guide Box Styling */
-        .guide-box { background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 12px; margin-top: 15px; border-left: 3px solid var(--cyan); }
+        .guide-box { background: rgba(0, 0, 0, 0.45); padding: 16px; border-radius: 14px; margin-top: 15px; border-left: 4px solid var(--cyan); }
         .guide-step { margin-bottom: 12px; font-size: 13px; color: #ddd; line-height: 1.5; }
         .guide-step:last-child { margin-bottom: 0; }
         .guide-step b { color: #fff; }
-        .guide-step .hl { color: var(--cyan); font-weight: bold; }
+        .guide-step .hl { color: var(--cyan); font-weight: 700; }
 
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .toggle-row:last-child { border-bottom: none; }
         .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.12); transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+        input:checked + .slider { background-color: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
         input:checked + .slider:before { transform: translateX(24px); }
 
-        .pro-box { background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 15px; padding: 20px; text-align: center; margin-top: 15px; }
-        .qr-wrapper { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 15px 0; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .qr-img { width: 160px; height: 160px; display: block; object-fit: contain; }
+        .pro-box { background: rgba(255, 215, 0, 0.03); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 18px; padding: 20px; text-align: center; margin-top: 15px; }
+        .qr-wrapper { background: #fff; padding: 12px; border-radius: 16px; display: inline-block; margin: 15px 0; box-shadow: 0 0 25px rgba(255,255,255,0.15); }
+        .qr-img { width: 170px; height: 170px; display: block; object-fit: contain; }
         
-        .layer-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px dashed var(--accent); }
+        .layer-box { background: rgba(0,0,0,0.35); padding: 16px; border-radius: 14px; margin-top: 15px; border: 1px dashed var(--accent); }
 
-        #processing-status, #success-status { display: none; text-align: center; margin-top: 20px; font-weight: bold; }
-        .spinner { border: 3px solid rgba(255,255,255,0.1); width: 35px; height: 35px; border-radius: 50%; border-left-color: var(--cyan); animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
+        #processing-status, #success-status { display: none; text-align: center; margin-top: 25px; font-weight: bold; }
+        .spinner { border: 3px solid rgba(255,255,255,0.1); width: 38px; height: 38px; border-radius: 50%; border-left-color: var(--cyan); animation: spin 0.8s linear infinite; margin: 0 auto 12px auto; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
-        .pulse-btn { padding: 20px 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; font-size: 18px; font-weight: 800; border-radius: 50px; border:none; box-shadow: 0 0 30px rgba(255, 42, 95, 0.6); animation: pulse 1.5s infinite; cursor: pointer; text-transform: uppercase; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 42, 95, 0.8); } 100% { transform: scale(1); } }
+        .pulse-btn { padding: 22px 45px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; font-size: 18px; font-weight: 800; border-radius: 50px; border:none; box-shadow: 0 0 35px rgba(255, 42, 95, 0.55); animation: pulse 1.6s infinite; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); box-shadow: 0 0 55px rgba(255, 42, 95, 0.75); } 100% { transform: scale(1); } }
+
+        /* Hardware Acceleration Anchor for Touch Calibration */
+        .hardware-accelerated { transform: translate3d(0,0,0); backface-visibility: hidden; perspective: 1000px; }
     </style>
 </head>
-<body>
+<body class="hardware-accelerated">
     <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
     <div id="music-toggle">🔊</div>
 
     <div id="install-screen" class="screen container">
         <h1 class="title-gradient">DoNhayChuan Pro</h1>
-        <p style="color: #bbb; text-align:center;">Hệ thống Tối Ưu Hóa Giao Diện Đỉnh Cao</p>
-        <button class="btn" id="install-btn">CÀI ĐẶT RA MÀN HÌNH</button>
-        <p id="instruction" style="display:none; color:#ffd700; background:rgba(255,215,0,0.1); padding:15px; border-radius:12px; border:1px dashed #ffd700; margin-top:20px; font-size:14px; text-align:center;">
-            📥 <b>Đã xuất cấu hình!</b><br>Vào Cài đặt > Đã tải về hồ sơ để kích hoạt.
+        <p style="color: #bbb; text-align:center; font-size:14px;">AI Tuning Platform & Engine Matrix</p>
+        <button class="btn" id="install-btn">CÀI ĐẶT RA MÀN HÌNH MÁY</button>
+        <p id="instruction" style="display:none; color:var(--gold); background:rgba(255,215,0,0.08); padding:16px; border-radius:14px; border:1px dashed var(--gold); margin-top:20px; font-size:13px; text-align:center; line-height:1.5;">
+            📥 <b>Hệ thống Đã Đóng Gói Profile!</b><br>Vui lòng vào Cài đặt hệ thống > Đã tải về hồ sơ để kích hoạt quyền cấu hình Trợ năng.
         </p>
     </div>
 
     <div id="start-screen" class="screen">
         <button class="pulse-btn" id="enter-btn">CHẠM ĐỂ VÀO APP</button>
-        <p style="font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 25px;">Yêu cầu tương tác để kết nối AI Engine</p>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 25px; font-weight:600; letter-spacing:0.5px;">SECURE CONNECTION WITH AI CORE ENGINE</p>
     </div>
 
     <div id="login-screen" class="screen container">
-        <h1 class="title-gradient">ĐĂNG NHẬP</h1>
-        <p style="text-align:center; color:#bbb;">Nhập mã cơ sở để vào hệ thống</p>
-        <input type="password" id="pass-input" placeholder="Nhập mật khẩu...">
-        <button class="btn btn-cyan" id="login-btn">TRUY CẬP</button>
-        <p id="login-error" style="color: var(--primary); display: none; text-align:center; margin-top: 15px; font-weight: bold;">❌ Mật khẩu không chính xác!</p>
+        <h1 class="title-gradient" style="font-size:28px;">TRUY CẬP CORE SYSTEM</h1>
+        <p style="text-align:center; color:#aaa; font-size:13px;">Nhập mã chứng chỉ cơ sở của bạn</p>
+        <input type="password" id="pass-input" placeholder="Nhập mật khẩu truy cập...">
+        <button class="btn btn-cyan" id="login-btn">XÁC THỰC ENTRY</button>
+        <p id="login-error" style="color: var(--primary); display: none; text-align:center; margin-top: 15px; font-weight: bold; font-size:13px;">❌ Mật khẩu hệ thống không chính xác!</p>
     </div>
 
-    <div id="main-screen" class="screen container" style="justify-content: flex-start; padding-top:30px;">
-        <h1 class="title-gradient" style="font-size: 26px; margin-bottom: 20px;">AI CONFIG ENGINE</h1>
+    <div id="main-screen" class="screen container" style="justify-content: flex-start; padding-top:25px;">
+        <h1 class="title-gradient" style="font-size: 25px; margin-bottom: 20px; letter-spacing:0.5px;">AI CONFIG INTERFACE</h1>
 
         <div class="tab-menu">
             <div class="tab-btn active" data-tab="tab-ai">🤖 AI TỐI ƯU</div>
@@ -169,126 +171,184 @@
         <div id="tab-ai" class="tab-content active">
             <div id="file-locked" class="locked-overlay">
                 <div class="locked-icon">🔒</div>
-                <h3 style="color: var(--primary); margin: 0 0 10px 0;">HỆ THỐNG ĐÃ BỊ KHÓA</h3>
-                <p style="color:#bbb; font-size:13px; line-height:1.5;">Bộ phân tích Độ nhạy chuẩn và Config DPI AI chỉ dành cho thành viên PRO VIP.</p>
-                <button class="btn" onclick="document.querySelector('[data-tab=tab-pro]').click()">MỞ KHÓA PRO NGAY</button>
+                <h3 style="color: var(--primary); margin: 0 0 10px 0; font-size:16px;">HỆ THỐNG ĐÃ BỊ KHÓA</h3>
+                <p style="color:#bbb; font-size:12px; line-height:1.6; padding: 0 10px;">Bộ cấu hình Thuật Toán DPI cá nhân và Cẩm nang Trợ Năng Đầm Tâm Độc Quyền chỉ mở cho tài khoản PRO VIP.</p>
+                <button class="btn btn-gold" style="font-size:12px;" onclick="document.querySelector('[data-tab=tab-pro]').click()">MỞ KHÓA PRO VIP NGAY</button>
             </div>
             
             <div id="file-unlocked" style="display: none;">
-                <label style="font-size: 12px; color: var(--cyan); font-weight:bold; text-transform: uppercase;">1. Chọn Hệ Điều Hành:</label>
-                <select id="ai-os">
-                    <option value="none">-- Chạm để chọn HĐH --</option>
-                    <option value="ios">📱 Hệ điều hành iOS (iPhone/iPad)</option>
-                    <option value="android">🤖 Hệ điều hành Android</option>
+                <label style="font-size: 11px; color: var(--cyan); font-weight:700; text-transform: uppercase;">1. Chọn Hãng Máy:</label>
+                <select id="ai-brand">
+                    <option value="none">-- Chọn Hãng Thiết Bị --</option>
+                    <option value="apple">Apple (iPhone / iPad)</option>
+                    <option value="samsung">Samsung</option>
+                    <option value="xiaomi">Xiaomi / Redmi / POCO</option>
+                    <option value="oppo">Oppo / Realme</option>
+                    <option value="vivo">Vivo / iQOO</option>
+                    <option value="gaming">Gaming Phone (ROG / RedMagic)</option>
                 </select>
 
-                <div id="ai-device-wrap" style="display:none; margin-top:15px;">
-                    <label style="font-size: 12px; color: var(--cyan); font-weight:bold; text-transform: uppercase;">2. Tìm kiếm dòng máy của bạn:</label>
-                    <input type="text" id="ai-device" list="device-list" placeholder="🔍 VD: iPhone 13, Galaxy S24...">
+                <div id="ai-device-wrap" style="display:none; margin-top:14px;">
+                    <label style="font-size: 11px; color: var(--cyan); font-weight:700; text-transform: uppercase;">2. Tên Dòng Máy Hệ Thống:</label>
+                    <input type="text" id="ai-device" list="device-list" placeholder="🔍 Nhập hoặc chọn dòng máy của bạn...">
                     <datalist id="device-list"></datalist>
 
-                    <div style="display:flex; gap:10px; margin-top:15px;">
-                        <select id="ai-ram"><option value="none">RAM</option></select>
-                        <select id="ai-rom"><option value="none">ROM</option></select>
+                    <div style="display:flex; gap:10px; margin-top:14px;">
+                        <select id="ai-ram"><option value="none">RAM máy</option></select>
+                        <select id="ai-rom"><option value="none">ROM máy</option></select>
                     </div>
 
-                    <button class="btn btn-cyan" id="btn-calc-ai" style="margin-top:20px;">⚙️ PHÂN TÍCH THÔNG SỐ AI</button>
+                    <label style="font-size: 11px; color: var(--cyan); font-weight:700; text-transform: uppercase; display:block; margin-top:14px;">3. Chọn Cự Ly Thực Chiến Chủ ĐẠO:</label>
+                    <select id="ai-distance">
+                        <option value="1.0">Tầm Trung / Sấy AR & SMG (Cân Bằng Meta)</option>
+                        <option value="1.25">Cận Chiến / Shotgun / Súng Ngắn (X2 Tốc độ vuốt)</option>
+                        <option value="0.75">Tầm Xa / Súng Ngắm Sniper (Tối đa Đầm Tâm)</option>
+                    </select>
+
+                    <button class="btn btn-cyan" id="btn-calc-ai" style="margin-top:20px; font-size:13px;">⚙️ TRÍCH XUẤT CẤU HÌNH ĐỘ NHẠY META</button>
                 </div>
 
                 <div id="ai-result-box" style="display:none; margin-top:25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-                    <h3 style="color:var(--cyan); text-align:center; margin:0 0 15px 0;">⚡ BỘ CẤU HÌNH TỐI ƯU ⚡</h3>
+                    <h3 style="color:var(--cyan); text-align:center; margin:0 0 15px 0; font-size:15px; letter-spacing:1px;">⚡ ĐỘ NHẠY TRONG GAME (META 0 - 200) ⚡</h3>
                     <div class="sens-grid">
                         <div class="sens-item"><span>Nhìn xung quanh</span><strong id="r-gen">0</strong></div>
                         <div class="sens-item"><span>Red Dot Sight</span><strong id="r-red">0</strong></div>
                         <div class="sens-item"><span>Ống ngắm 2x</span><strong id="r-2x">0</strong></div>
                         <div class="sens-item"><span>Ống ngắm 4x</span><strong id="r-4x">0</strong></div>
-                        <div class="sens-item"><span>Nút bắn (%)</span><strong id="r-fire" style="color:var(--primary);">0%</strong></div>
-                        <div class="sens-item"><span id="lbl-dpi">DPI Đề xuất</span><strong id="r-dpi" style="color:var(--primary);">0</strong></div>
+                        <div class="sens-item"><span>Nút bắn lý tưởng</span><strong id="r-fire" style="color:var(--primary);">0%</strong></div>
+                        <div class="sens-item"><span id="lbl-dpi">DPI Khuyên Dùng</span><strong id="r-dpi" style="color:var(--primary);">0</strong></div>
                     </div>
 
                     <div class="guide-box" id="guide-box-ios" style="display: none;">
-                        <h4 style="color:#fff; margin:0 0 10px 0; font-size: 14px;">📘 HƯỚNG DẪN CÀI ĐẶT TRỢ NĂNG (iOS)</h4>
-                        <div class="guide-step"><b>1.</b> Vào Cài đặt > Trợ năng > <b>Điều khiển công tắc</b>.<br>Cài <i>Tốc độ con trỏ (Trượt)</i> thành: <span class="hl" id="g-ios-ptr">120</span>.</div>
-                        <div class="guide-step"><b>2.</b> Trợ năng > Cảm ứng > <b>AssistiveTouch</b>.<br>Kéo <i>Độ nhạy theo dõi</i> lên mức: <span class="hl" id="g-ios-sen">Max</span>.</div>
-                        <div class="guide-step"><b>3.</b> Bật <b>Thích nghi cảm ứng</b> > Bỏ qua lặp lại: <i>0.10s</i> để chống giật tâm khi sấy.</div>
+                        <h4 style="color:#fff; margin:0 0 12px 0; font-size: 13px;">📘 CẨM NĂNG TRỢ NĂNG ĐẮT GIÁ (iOS)</h4>
+                        <div class="guide-step"><b>1.</b> Vào Cài đặt > Trợ năng > <b>Điều khiển công tắc</b>.<br>Sửa mục <i>Tốc độ con trỏ di chuyển</i> chính xác thành: <span class="hl" id="g-ios-ptr">120</span>.</div>
+                        <div class="guide-step"><b>2.</b> Vào Trợ năng > Cảm ứng > <b>AssistiveTouch</b>.<br>Kéo thanh <i>Độ nhạy theo dõi</i> lên mức tối đa để đồng bộ tốc độ quét.</div>
+                        <div class="guide-step"><b>3.</b> Kích hoạt mục <b>Thích nghi cảm ứng</b> > Đổi <i>Bỏ qua lặp lại</i> thành <span class="hl">0.10s</span> giúp cố định đường đạn thẳng.</div>
                     </div>
 
                     <div class="guide-box" id="guide-box-android" style="display: none;">
-                        <h4 style="color:#fff; margin:0 0 10px 0; font-size: 14px;">📘 HƯỚNG DẪN CẤU HÌNH HỆ THỐNG (Android)</h4>
-                        <div class="guide-step"><b>1.</b> Mở <b>Tùy chọn nhà phát triển</b>.<br>Sửa <i>Chiều rộng tối thiểu (DPI)</i> thành: <span class="hl" id="g-and-dpi">600</span>.</div>
-                        <div class="guide-step"><b>2.</b> Tìm <b>Tốc độ con trỏ</b> (Trong Ngôn ngữ & Nhập liệu) > Kéo lên mức tối đa (Max).</div>
-                        <div class="guide-step"><b>3.</b> Trong Tùy chọn nhà phát triển > Chỉnh 3 mục <b>Tỷ lệ hình động</b> xuống mức: <span class="hl">0.5x</span> để giảm độ trễ phản hồi.</div>
+                        <h4 style="color:#fff; margin:0 0 12px 0; font-size: 13px;">📘 CẨM NĂNG TÙY CHỌN NHÀ PHÁT TRIỂN (Android)</h4>
+                        <div class="guide-step"><b>1.</b> Vào Cài đặt bổ sung > Tùy chọn nhà phát triển.<br>Tìm mục <i>Chiều rộng tối thiểu (DPI)</i> và sửa thành: <span class="hl" id="g-and-dpi">600</span>.</div>
+                        <div class="guide-step"><b>2.</b> Tìm mục <b>Tốc độ con trỏ</b> (Trong phần Ngôn ngữ & bàn phím) > Kéo hết cỡ lên mức Max.</div>
+                        <div class="guide-step"><b>3.</b> Đặt 3 thông số liên quan đến <b>Tỷ lệ hình động</b> về mức <span class="hl">0.5x</span> để giải phóng băng thông GPU và triệt tiêu độ trễ vuốt.</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="tab-opt" class="tab-content">
-            <h3 style="color:var(--cyan); margin:0 0 15px 0; text-align:center;">TINH CHỈNH TỔNG THỂ</h3>
-            <div class="toggle-row"><span>🎯 Đầm tâm (Anti-Shake)</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="toggle-row"><span>🚀 Mở khóa FPS Max</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="toggle-row"><span>👆 Touch Booster Cảm ứng</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
-            <div class="toggle-row"><span>🌐 Giảm Ping (Net Optimizer)</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <h3 style="color:var(--cyan); margin:0 0 15px 0; text-align:center; font-size:15px;">MA TRẬN ĐIỀU CHỈNH PHẦN CỨNG</h3>
             
-            <button class="btn btn-cyan" id="btn-khoichay" style="margin-top: 30px;">🔥 KHỞI CHẠY HỆ THỐNG</button>
+            <div class="toggle-row">
+                <div>
+                    <span style="display:block; font-size:13px; font-weight:600;">🎯 Đầm tâm chống loạn (Anti-Shake)</span>
+                    <span style="font-size:10px; color:#aaa;">Khóa mục tiêu ổn định không lệch</span>
+                </div>
+                <label class="switch"><input type="checkbox" id="opt-shake"><span class="slider"></span></label>
+            </div>
+            
+            <div class="toggle-row">
+                <div>
+                    <span style="display:block; font-size:13px; font-weight:600;">🚀 Kích hoạt Max FPS</span>
+                    <span style="font-size:10px; color:#aaa;">Ép luồng xử lý đồ họa mượt nhất</span>
+                </div>
+                <label class="switch"><input type="checkbox" id="opt-fps"><span class="slider"></span></label>
+            </div>
+            
+            <div class="toggle-row">
+                <div>
+                    <span style="display:block; font-size:13px; font-weight:600;">👆 Touch Booster Cảm Biến (GPU Accel)</span>
+                    <span style="font-size:10px; color:#aaa;">Chống rít, duy trì Polling Rate cao nhất</span>
+                </div>
+                <label class="switch"><input type="checkbox" id="opt-touch"><span class="slider"></span></label>
+            </div>
+            
+            <div class="toggle-row">
+                <div>
+                    <span style="display:block; font-size:13px; font-weight:600;">🌐 Gaming DNS Net Optimizer</span>
+                    <span style="font-size:10px; color:#aaa;">Định tuyến băng thông chống ping nhảy vọt</span>
+                </div>
+                <label class="switch"><input type="checkbox" id="opt-ping"><span class="slider"></span></label>
+            </div>
+
+            <label style="font-size: 11px; color: var(--cyan); font-weight:700; text-transform: uppercase; display:block; margin-top:20px;">4. Chọn Phiên Bản Trò Chơi Để Khởi Chạy:</label>
+            <select id="game-version">
+                <option value="freefiremax://">Free Fire MAX (Khuyên dùng)</option>
+                <option value="freefire://">Free Fire Thường</option>
+            </select>
+            
+            <button class="btn btn-cyan" id="btn-khoichay" style="margin-top: 25px; font-size:14px;">🔥 KHỞI CHẠY & VÀO GAME NGAY</button>
 
             <div id="processing-status">
                 <div class="spinner"></div>
-                <div style="color:var(--cyan);">ĐANG GHI ĐÈ CẤU HÌNH VÀO BỘ NHỚ...</div>
+                <div style="color:var(--cyan); font-size:12px; letter-spacing:0.5px;">ĐANG GIẢI PHÓNG RAM CACHE & KÍCH HOẠT ĐỒ HỌA NỀN...</div>
             </div>
             <div id="success-status">
-                <div style="font-size: 40px; margin-bottom:10px;">✅</div>
-                <div style="color:#00f2fe; font-size:18px;">TỐI ƯU HÓA HOÀN TẤT</div>
-                <p style="font-size: 12px; color: #aaa;">Hãy vào game ngay để test cảm giác vuốt!</p>
+                <div style="font-size: 35px; margin-bottom:8px;">⚔️</div>
+                <div style="color:#00f2fe; font-size:16px; font-weight:700;">HỆ THỐNG ĐÃ SẴN SÀNG!</div>
+                <p style="font-size: 11px; color: #aaa; margin:5px 0 0 0;">Đang tự động chuyển hướng kết nối sâu vào game...</p>
             </div>
         </div>
 
         <div id="tab-pro" class="tab-content">
-            <div id="pro-status-header" style="background:rgba(0,0,0,0.5); padding:15px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.05);">
-                <p style="margin:0; font-size: 13px; color:#bbb;">Trạng thái: <strong id="pro-badge" style="color:#aaa;">CHƯA KÍCH HOẠT</strong></p>
+            <div id="pro-status-header" style="background:rgba(0,0,0,0.55); padding:14px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.04);">
+                <p style="margin:0; font-size: 13px; color:#bbb; font-weight:600;">Trạng thái tài khoản: <strong id="pro-badge" style="color:#888;">STANDARD MEMBER</strong></p>
             </div>
             
             <div id="pro-buy-section" class="pro-box">
-                <h3 style="color:#ffd700; margin:0 0 10px 0; font-size:18px;">👑 MUA BẢN PRO VIP MAX</h3>
-                <p style="font-size:12px; color:#ccc; line-height:1.5;">Quét mã QR qua ZaloPay/Ngân hàng để thanh toán. Admin sẽ cấp bộ 2 Mã Mở Khóa cho bạn.</p>
+                <h3 style="color:var(--gold); margin:0 0 8px 0; font-size:17px; font-weight:700;">👑 KÍCH HOẠT QUYỀN LỰC PRO VIP MAX</h3>
+                <p style="font-size:12px; color:#ccc; line-height:1.5; margin:0;">Quét mã QR giao dịch. Hệ thống sẽ tự động đối soát dựa trên nội dung và cấp bộ 2 lớp mật mã kích hoạt lõi.</p>
                 
                 <div class="qr-wrapper">
-                    <img class="qr-img" src="./image.png" alt="Mã QR ZaloPay">
+                    <img class="qr-img" src="./image.png" alt="Mã QR Thanh Toán Hệ Thống">
                 </div>
                 
-                <div style="font-size:13px; color:#fff; background:rgba(0,0,0,0.4); padding:10px; border-radius:8px;">
-                    <p style="margin:5px 0;">Ngân hàng: <b>ZaloPay / Vietcombank</b></p>
-                    <p style="margin:5px 0;">STK: <b style="color:var(--cyan);">0395734228</b></p>
-                    <p style="margin:5px 0;">Tên: <b>Nguyễn Khắc Hiếu</b></p>
+                <div style="font-size:12px; color:#fff; background:rgba(0,0,0,0.45); padding:12px; border-radius:10px; text-align:left; border: 1px solid rgba(255,255,255,0.03);">
+                    <p style="margin:4px 0;">🏦 Phương thức: <b>ZaloPay / Vietcombank</b></p>
+                    <p style="margin:4px 0;">💳 Số tài khoản: <b style="color:var(--cyan);">0395734228</b></p>
+                    <p style="margin:4px 0;">👤 Chủ tài khoản: <b>Nguyễn Khắc Hiếu</b></p>
                 </div>
 
                 <div id="auth-layer-1" class="layer-box">
-                    <p style="color:#ffd700; font-weight:bold; margin:0 0 10px 0; font-size: 13px;">BƯỚC 1: XÁC THỰC LỚP 1</p>
-                    <input type="text" id="pass-pro-1" placeholder="Mã Kích Hoạt 1...">
-                    <button class="btn" id="btn-pro-1" style="padding:12px; font-size:13px;">XÁC NHẬN</button>
-                    <p id="err-pro-1" style="color:var(--primary); font-size:12px; display:none; margin-top:10px;">❌ Mã xác thực không đúng!</p>
+                    <p style="color:var(--gold); font-weight:700; margin:0 0 8px 0; font-size: 12px; letter-spacing:0.5px;">BƯỚC 1: XÁC THỰC ENTRY CODE 1</p>
+                    <input type="text" id="pass-pro-1" placeholder="Nhập mã xác thực lớp 1...">
+                    <button class="btn" id="btn-pro-1" style="padding:12px; font-size:12px; margin-top:10px;">KIỂM TRA LỚP 1</button>
+                    <p id="err-pro-1" style="color:var(--primary); font-size:11px; display:none; margin-top:8px; font-weight:700;">❌ Mã kích hoạt lớp 1 chưa chính xác!</p>
                 </div>
 
                 <div id="auth-layer-2" class="layer-box" style="display:none; border-color:var(--cyan);">
-                    <p style="color:var(--cyan); font-weight:bold; margin:0 0 10px 0; font-size: 13px;">BƯỚC 2: MỞ KHÓA LÕI AI</p>
-                    <input type="password" id="pass-pro-2" placeholder="Mã Kích Hoạt 2...">
-                    <button class="btn btn-cyan" id="btn-pro-2" style="padding:12px; font-size:13px;">KÍCH HOẠT HỆ THỐNG</button>
-                    <p id="err-pro-2" style="color:var(--primary); font-size:12px; display:none; margin-top:10px;">❌ Mã xác thực không đúng!</p>
+                    <p style="color:var(--cyan); font-weight:700; margin:0 0 8px 0; font-size: 12px; letter-spacing:0.5px;">BƯỚC 2: GIẢI MÃ LÕI TOÁN HỌC AI</p>
+                    <input type="password" id="pass-pro-2" placeholder="Nhập mã mở khóa lõi AI lớp 2...">
+                    <button class="btn btn-cyan" id="btn-pro-2" style="padding:12px; font-size:12px; margin-top:10px;">MỞ KHÓA TOÀN DIỆN</button>
+                    <p id="err-pro-2" style="color:var(--primary); font-size:11px; display:none; margin-top:8px; font-weight:700;">❌ Mã giải mã lớp 2 không khớp!</p>
                 </div>
             </div>
 
-            <div id="pro-success-section" style="display:none; text-align:center; padding: 20px 0;">
-                <div style="font-size: 60px; margin-bottom: 15px; filter: drop-shadow(0 0 20px #ffd700);">👑</div>
-                <h2 style="color:#ffd700; margin:0 0 10px 0;">ĐÃ MỞ KHÓA PRO</h2>
-                <p style="color:#ccc; font-size:13px; line-height:1.5;">Hệ thống AI Config và Cẩm nang kéo tâm đã sẵn sàng. Hãy quay lại mục AI TỐI ƯU để sử dụng!</p>
+            <div id="pro-success-section" style="display:none; text-align:center; padding: 25px 0;">
+                <div style="font-size: 55px; margin-bottom: 12px; filter: drop-shadow(0 0 15px var(--gold));">👑</div>
+                <h2 style="color:var(--gold); margin:0 0 8px 0; font-size:22px; font-weight:800;">ĐÃ KÍCH HOẠT QUYỀN PRO VIP</h2>
+                <p style="color:#aaa; font-size:12px; line-height:1.6; margin-bottom:20px;">Hệ thống thuật toán AI phân tán và Cẩm nang Trợ năng nâng cao đã được đồng bộ hóa thành công trên thiết bị của bạn.</p>
+                
+                <div style="text-align:left; background:rgba(0,0,0,0.4); padding:15px; border-radius:12px; border:1px solid var(--cyan); font-size:12px;">
+                    <p style="margin:4px 0; color:var(--cyan); font-weight:700;">🎁 ĐẶC QUYỀN HỆ THỐNG ĐÃ MỞ KHÓA:</p>
+                    <p style="margin:6px 0 3px 0;">• <b>Siri Shortcuts RAM Cleaner (iOS):</b> Truy cập ứng dụng Phím tắt tạo lệnh giải phóng bộ nhớ tức thì.</p>
+                    <p style="margin:3px 0 0 0;">• <b>Secure Private DNS (Android):</b> Cấu hình Private DNS thành <span style="color:var(--cyan); font-weight:700;">dns.google</span> trong mục mạng để nén ping tối ưu.</p>
+                </div>
             </div>
         </div>
+
+        <div class="layer-box" style="margin-top:5px; margin-bottom:20px; border-color: rgba(255,255,255,0.1); background: rgba(0,0,0,0.25); text-align:center;">
+            <h4 style="color: var(--cyan); margin: 0 0 5px 0; font-size: 13px; font-weight:700;">⚡ KHỞI ĐỘNG CƠ TAY TRƯỚC TRẬN ĐẤU</h4>
+            <p style="font-size: 11px; color: #aaa; margin: 0 0 12px 0; line-height:1.4;">Luyện tập phản xạ ngón tay với nhịp điệu Click cơ học Gaming êm tai (Mặc định: TẮT).</p>
+            <button class="btn" id="btn-warmup" style="margin-top:0; padding:12px; font-size:12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); box-shadow:none;">▶️ BẬT LUYỆN TẬP NHỊP ĐIỆU</button>
+        </div>
+
     </div>
 
     <audio id="bg-music" loop><source src="music.mp3" type="audio/mpeg"></audio>
 
     <script>
-        // KIỂM TRA WEB APP
+        // QUẢN LÝ ĐIỀU HƯỚNG MÀN HÌNH PWA TRÊN WEB
         const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches || window.location.search.includes('mode=app');
         const screens = {
             install: document.getElementById('install-screen'),
@@ -300,8 +360,11 @@
         const musicToggle = document.getElementById('music-toggle');
         let isMusicPlaying = false;
 
-        if (isStandalone) screens.start.classList.add('active-screen');
-        else screens.install.classList.add('active-screen');
+        if (isStandalone) {
+            screens.start.classList.add('active-screen');
+        } else {
+            screens.install.classList.add('active-screen');
+        }
 
         document.getElementById('install-btn').addEventListener('click', () => {
             window.location.href = './app.mobileconfig';
@@ -309,26 +372,36 @@
         });
 
         document.getElementById('enter-btn').addEventListener('click', () => {
-            audio.play().then(() => { isMusicPlaying = true; musicToggle.style.display = 'flex'; }).catch(e => console.log(e));
+            audio.play().then(() => { 
+                isMusicPlaying = true; 
+                musicToggle.style.display = 'flex'; 
+            }).catch(e => console.log("Yêu cầu quyền audio:", e));
             screens.start.classList.remove('active-screen');
             screens.login.classList.add('active-screen');
         });
 
         musicToggle.addEventListener('click', () => {
-            if (isMusicPlaying) { audio.pause(); musicToggle.innerText = '🔇'; } 
-            else { audio.play(); musicToggle.innerText = '🔊'; }
+            if (isMusicPlaying) { 
+                audio.pause(); 
+                musicToggle.innerText = '🔇'; 
+            } else { 
+                audio.play(); 
+                musicToggle.innerText = '🔊'; 
+            }
             isMusicPlaying = !isMusicPlaying;
         });
 
-        // LOGIN (bohieudaycon09)
+        // ĐĂNG NHẬP CORE CƠ SỞ (Mật mã: bohieudaycon09)
         document.getElementById('login-btn').addEventListener('click', () => {
             if (document.getElementById('pass-input').value === 'bohieudaycon09') {
                 screens.login.classList.remove('active-screen');
                 screens.main.classList.add('active-screen');
-            } else { document.getElementById('login-error').style.display = 'block'; }
+            } else { 
+                document.getElementById('login-error').style.display = 'block'; 
+            }
         });
 
-        // TABS
+        // ĐIỀU HƯỚNG TAB CHỨC NĂNG
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -338,32 +411,20 @@
             });
         });
 
-        // KHO DỮ LIỆU ĐIỆN THOẠI KHỔNG LỒ
-        const db_ios = [
-            "iPhone 6 / 6 Plus", "iPhone 6s / 6s Plus", "iPhone 7 / 7 Plus", "iPhone 8 / 8 Plus",
-            "iPhone X", "iPhone XR", "iPhone XS", "iPhone XS Max", 
-            "iPhone 11", "iPhone 11 Pro", "iPhone 11 Pro Max",
-            "iPhone 12 Mini", "iPhone 12", "iPhone 12 Pro", "iPhone 12 Pro Max",
-            "iPhone 13 Mini", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max",
-            "iPhone 14", "iPhone 14 Plus", "iPhone 14 Pro", "iPhone 14 Pro Max",
-            "iPhone 15", "iPhone 15 Plus", "iPhone 15 Pro", "iPhone 15 Pro Max",
-            "iPad Gen 8/9/10", "iPad Air 4/5", "iPad Pro M1/M2/M4"
-        ];
-        const db_android = [
-            "Samsung Galaxy S24 Ultra", "Samsung Galaxy S24/S24+", "Samsung Galaxy S23 Ultra", "Samsung Galaxy S22 Ultra",
-            "Samsung Galaxy A55 5G", "Samsung Galaxy A35", "Samsung Galaxy A15", "Samsung Galaxy Z Fold 5",
-            "Xiaomi 14 / 14 Pro / Ultra", "Xiaomi 13T / 13T Pro", "Redmi Note 13 Pro+", "Redmi Note 12",
-            "POCO X6 Pro 5G", "POCO F5 / F5 Pro", "POCO M6 Pro",
-            "Oppo Find X7 Ultra", "Oppo Reno 11 Pro", "Oppo A79",
-            "Realme 12 Pro+", "Realme 11", "Realme GT 5 Pro",
-            "Vivo X100 Pro", "Vivo V30", "iQOO 12",
-            "ROG Phone 8 Pro", "RedMagic 9 Pro", "Black Shark 5"
-        ];
+        // CƠ SỞ DỮ LIỆU THIẾT BỊ PHÂN CHIA THEO HÃNG MÁY CHUYÊN NGHIỆP
+        const db_devices = {
+            apple: ["iPhone 6 / 6 Plus", "iPhone 7 / 7 Plus", "iPhone 8 / 8 Plus", "iPhone X / XR", "iPhone XS / XS Max", "iPhone 11 / 11 Pro", "iPhone 11 Pro Max", "iPhone 12 / 12 Pro", "iPhone 12 Pro Max", "iPhone 13 / 13 Pro", "iPhone 13 Pro Max", "iPhone 14 / 14 Plus", "iPhone 14 Pro Max", "iPhone 15 / 15 Plus", "iPhone 15 Pro Max", "iPad Air 4/5 / Pro M1", "iPad Pro M2 / M4"],
+            samsung: ["Galaxy S24 Ultra", "Galaxy S24 / S24+", "Galaxy S23 Ultra / S23+", "Galaxy S22 Ultra", "Galaxy S21 Ultra / FE", "Galaxy Note 20 Ultra", "Galaxy A55 5G / A35", "Galaxy A15 / A25", "Galaxy M54 / M34", "Galaxy Z Fold 5 / Z Flip 5"],
+            xiaomi: ["Xiaomi 14 / 14 Ultra", "Xiaomi 13T / 13T Pro", "Xiaomi 13 / 13 Pro", "Redmi Note 13 / Pro / Pro+", "Redmi Note 12 / Pro", "Redmi 13C / 12", "POCO X6 Pro 5G", "POCO F5 / F5 Pro", "POCO M6 Pro"],
+            oppo: ["Oppo Find X7 Ultra", "Oppo Find X6 Pro", "Oppo Reno 11 / 11 Pro", "Oppo Reno 10 Series", "Oppo A79 / A58 / A38", "Realme 12 Pro+", "Realme 11 / Pro", "Realme C67 / C55", "Realme GT 5 Pro"],
+            vivo: ["Vivo X100 / X100 Pro", "Vivo X90 Pro", "Vivo V30 / V30e", "Vivo V29 Series", "Vivo Y100 / Y17s", "iQOO 12 / 12 Pro", "iQOO Neo 9 / Neo 9 Pro", "iQOO Z9 / Z8"],
+            gaming: ["ROG Phone 8 / 8 Pro", "ROG Phone 7 / Ultimate", "ROG Phone 6 / 6D", "RedMagic 9 Pro / 9 Pro+", "RedMagic 8 Pro / 8S Pro", "RedMagic 7 / 7 Pro", "Black Shark 5 / 5 Pro"]
+        };
 
         const ram_list = ["2GB", "3GB", "4GB", "6GB", "8GB", "12GB", "16GB", "24GB"];
         const rom_list = ["32GB", "64GB", "128GB", "256GB", "512GB", "1TB"];
 
-        const aiOs = document.getElementById('ai-os');
+        const brandSelect = document.getElementById('ai-brand');
         const datalist = document.getElementById('device-list');
         const aiWrap = document.getElementById('ai-device-wrap');
         const aiRam = document.getElementById('ai-ram');
@@ -372,19 +433,22 @@
         ram_list.forEach(r => aiRam.innerHTML += `<option value="${r}">${r}</option>`);
         rom_list.forEach(r => aiRom.innerHTML += `<option value="${r}">${r}</option>`);
 
-        aiOs.addEventListener('change', () => {
+        brandSelect.addEventListener('change', () => {
             document.getElementById('ai-result-box').style.display = 'none';
-            if (aiOs.value === 'none') { aiWrap.style.display = 'none'; return; }
+            if (brandSelect.value === 'none') { 
+                aiWrap.style.display = 'none'; 
+                return; 
+            }
             aiWrap.style.display = 'block';
             document.getElementById('ai-device').value = "";
             datalist.innerHTML = "";
-            let source = aiOs.value === 'ios' ? db_ios : db_android;
-            source.forEach(dev => datalist.innerHTML += `<option value="${dev}">`);
+            let models = db_devices[brandSelect.value] || [];
+            models.forEach(m => datalist.innerHTML += `<option value="${m}">`);
         });
 
-        // THUẬT TOÁN AI (DETERMINISTIC HASHING) - Sinh số cố định dựa trên Tên Máy + RAM
-        function generateFixedStats(deviceString, ramString, isIOS) {
-            let seedString = deviceString.toLowerCase().replace(/\s/g, '') + ramString;
+        // THUẬT TOÁN BĂM CỐ ĐỊNH PHÂN TÍCH THEO CỰ LY CHIẾN ĐẤU (THANG ĐIỂM 0 - 200)
+        function generateDeterministicStats(deviceName, ramString, distanceMultiplier) {
+            let seedString = (deviceName + ramString).toLowerCase().replace(/\s/g, '');
             let hash = 0;
             for (let i = 0; i < seedString.length; i++) {
                 hash = (hash << 5) - hash + seedString.charCodeAt(i);
@@ -392,42 +456,58 @@
             }
             let seed = Math.abs(hash);
 
-            let gen = 85 + (seed % 15);     // 85 - 100
-            let red = 90 + (seed % 10);     // 90 - 100
-            let s2x = 88 + ((seed/2) % 12); // 88 - 100
-            let s4x = 85 + ((seed/3) % 15); // 85 - 100
+            // Phân bổ dải điểm cơ sở từ 110 đến 155
+            let baseGen = 110 + (seed % 46);
+            let baseRed = 120 + (seed % 36);
+            let base2x = 115 + (seed % 41);
+            let base4x = 110 + (seed % 46);
             
-            // Nút bắn phụ thuộc màn hình (Giả lập qua chuỗi)
-            let fireBtn = 40 + (seed % 15); 
-            if(deviceString.includes("Max") || deviceString.includes("Ultra") || deviceString.includes("Pro+")) fireBtn += 5; // Màn to nút to
+            let mult = parseFloat(distanceMultiplier);
+            
+            // Ép kịch trần 200 cho meta mới
+            let finalGen = Math.min(200, Math.floor(baseGen * mult));
+            let finalRed = Math.min(200, Math.floor(baseRed * mult));
+            let final2x = Math.min(200, Math.floor(base2x * mult));
+            let final4x = Math.min(200, Math.floor(base4x * mult));
+            
+            // Kích thước nút bắn tối ưu theo dòng máy máy to/nhỏ
+            let fireBtn = 38 + (seed % 15); 
+            if (deviceName.includes("Max") || deviceName.includes("Ultra") || deviceName.includes("Plus") || deviceName.includes("Pro+")) {
+                fireBtn += 4; 
+            }
 
-            // DPI / Tốc độ con trỏ
+            // Tính toán thông số chiều rộng DPI / Tốc độ con trỏ hệ thống
             let dpiOutput = 0;
-            if (isIOS) {
-                dpiOutput = 100 + (seed % 21); // Tốc độ con trỏ iOS (100 - 120)
+            let isApple = brandSelect.value === 'apple';
+            if (isApple) {
+                dpiOutput = 105 + (seed % 16); // Thang tốc độ con trỏ chuột iOS (105 - 120)
             } else {
-                let ramVal = parseInt(ramString.replace('GB',''));
-                let baseDPI = 411; 
-                if (ramVal <= 4) baseDPI += 50 + (seed % 40);      // Máy yếu tăng ít
-                else if (ramVal <= 8) baseDPI += 100 + (seed % 80); // Máy trung tăng vừa
-                else baseDPI += 150 + (seed % 150);                // Máy khỏe tăng mạnh
+                let ramValue = parseInt(ramString.replace('GB','')) || 4;
+                let baseDPI = 411;
+                if (ramValue <= 4) baseDPI += 40 + (seed % 30);
+                else if (ramValue <= 8) baseDPI += 90 + (seed % 60);
+                else baseDPI += 140 + (seed % 110);
                 dpiOutput = baseDPI;
             }
 
             return {
-                gen: Math.floor(gen), red: Math.floor(red), s2x: Math.floor(s2x), s4x: Math.floor(s4x),
-                fire: Math.floor(fireBtn), dpi: Math.floor(dpiOutput)
+                gen: finalGen, red: finalRed, s2x: final2x, s4x: final4x,
+                fire: fireBtn, dpi: dpiOutput
             };
         }
 
-        // CHẠY PHÂN TÍCH
+        // BẤM NÚT TRÍCH XUẤT THÔNG SỐ AI
         document.getElementById('btn-calc-ai').addEventListener('click', () => {
             let dev = document.getElementById('ai-device').value;
             let ram = aiRam.value;
-            if (!dev || ram === 'none' || aiRom.value === 'none') { alert("Vui lòng chọn đầy đủ Dòng Máy và RAM/ROM!"); return; }
+            let dist = document.getElementById('ai-distance').value;
+            if (!dev || ram === 'none' || aiRom.value === 'none') { 
+                alert("Vui lòng thiết lập cấu hình Tên Máy và RAM/ROM chính xác!"); 
+                return; 
+            }
 
-            let isIOS = aiOs.value === 'ios';
-            let stats = generateFixedStats(dev, ram, isIOS);
+            let stats = generateDeterministicStats(dev, ram, dist);
+            let isApple = brandSelect.value === 'apple';
 
             document.getElementById('r-gen').innerText = stats.gen;
             document.getElementById('r-red').innerText = stats.red;
@@ -435,14 +515,14 @@
             document.getElementById('r-4x').innerText = stats.s4x;
             document.getElementById('r-fire').innerText = stats.fire + "%";
             
-            if (isIOS) {
-                document.getElementById('lbl-dpi').innerText = "Tốc độ con trỏ";
+            if (isApple) {
+                document.getElementById('lbl-dpi').innerText = "Tốc Độ Con Trỏ";
                 document.getElementById('r-dpi').innerText = stats.dpi;
                 document.getElementById('g-ios-ptr').innerText = stats.dpi;
                 document.getElementById('guide-box-ios').style.display = 'block';
                 document.getElementById('guide-box-android').style.display = 'none';
             } else {
-                document.getElementById('lbl-dpi').innerText = "Mức DPI Hệ Thống";
+                document.getElementById('lbl-dpi').innerText = "Chiều Rộng DPI";
                 document.getElementById('r-dpi').innerText = stats.dpi;
                 document.getElementById('g-and-dpi').innerText = stats.dpi;
                 document.getElementById('guide-box-ios').style.display = 'none';
@@ -452,38 +532,123 @@
             document.getElementById('ai-result-box').style.display = 'block';
         });
 
-        // KHỞI CHẠY TỐI ƯU (Đã fix lỗi tắt nút)
+        // GIẢ LẬP ĐỘ NHẠY QUÉT CẢM ỨNG LIÊN TỤC QUA REQUESTANIMATIONFRAME (TOUCH CALIBRATION)
+        let calibrationLoopId = null;
+        function runTouchCalibration() {
+            if (!document.getElementById('opt-touch').checked) {
+                if (calibrationLoopId) cancelAnimationFrame(calibrationLoopId);
+                return;
+            }
+            // Tạo tiến trình đồ họa giả lập để giữ luồng cảm ứng của trình duyệt hoạt động tối đa
+            let dummy = Math.sin(Date.now() * 0.001);
+            calibrationLoopId = requestAnimationFrame(runTouchCalibration);
+        }
+        document.getElementById('opt-touch').addEventListener('change', runTouchCalibration);
+
+        // KHỞI CHẠY THỰC CHIẾN - DEEP LINK ĐIỀU HƯỚNG MỞ THẲNG GAME THẬT
         document.getElementById('btn-khoichay').addEventListener('click', () => {
             document.getElementById('btn-khoichay').style.display = 'none';
             document.getElementById('processing-status').style.display = 'block';
+            
+            // Giả lập dọn dẹp bộ nhớ RAM rác cục bộ của trang web
+            if (window.gc) window.gc(); 
+
             setTimeout(() => {
                 document.getElementById('processing-status').style.display = 'none';
                 document.getElementById('success-status').style.display = 'block';
+                
                 setTimeout(() => { 
+                    let gameScheme = document.getElementById('game-version').value;
                     document.getElementById('btn-khoichay').style.display = 'block'; 
                     document.getElementById('success-status').style.display = 'none';
-                    // Đã gỡ bỏ dòng code reset .switch input để giữ nguyên trạng thái BẬT
-                }, 3500);
-            }, Math.floor(Math.random()*1500)+2000);
+                    
+                    // Thực thi kích hoạt Deep Link gọi hệ điều hành bật mở game thật
+                    window.location.href = gameScheme;
+                }, 1500);
+            }, Math.floor(Math.random() * 1000) + 1500); // Đợi tải ma trận xử lý 1.5s - 2.5s
         });
 
-        // HỆ THỐNG PRO VIP (HIEUDERPTRAI009 / hieudeptrai009)
+        // XÁC THỰC CỔNG BẢO MẬT PRO VIP 2 LỚP
+        // Lớp 1: HIEUDERPTRAI009
         document.getElementById('btn-pro-1').addEventListener('click', () => {
             if (document.getElementById('pass-pro-1').value === 'HIEUDERPTRAI009') {
                 document.getElementById('err-pro-1').style.display = 'none';
                 document.getElementById('auth-layer-1').style.display = 'none';
                 document.getElementById('auth-layer-2').style.display = 'block';
-            } else { document.getElementById('err-pro-1').style.display = 'block'; }
+            } else { 
+                document.getElementById('err-pro-1').style.display = 'block'; 
+            }
         });
 
+        // Lớp 2: hieudeptrai009
         document.getElementById('btn-pro-2').addEventListener('click', () => {
             if (document.getElementById('pass-pro-2').value === 'hieudeptrai009') {
                 document.getElementById('pro-buy-section').style.display = 'none';
                 document.getElementById('pro-success-section').style.display = 'block';
-                document.getElementById('pro-badge').innerHTML = '<b style="color:#ffd700;">PRO VIP ĐÃ MỞ KHÓA</b>';
+                document.getElementById('pro-badge').innerHTML = '<b style="color:var(--gold);">👑 TÀI KHOẢN PRO VIP MAX ACTIVE</b>';
                 document.getElementById('file-locked').style.display = 'none';
                 document.getElementById('file-unlocked').style.display = 'block';
-            } else { document.getElementById('err-pro-2').style.display = 'block'; }
+            } else { 
+                document.getElementById('err-pro-2').style.display = 'block'; 
+            }
+        });
+
+        // WEB AUDIO API - KHỞI ĐỘNG CƠ TAY VĂN MINH (DEEP MECHANICAL CLICK)
+        let audioCtx = null;
+        let warmupInterval = null;
+        let isWarmupRunning = false;
+
+        function emitPremiumMechanicalClick() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            let oscillator = audioCtx.createOscillator();
+            let gainNode = audioCtx.createGain();
+            let filterNode = audioCtx.createBiquadFilter();
+            
+            oscillator.type = 'sine';
+            // Tạo dải tần số cơ học trầm đặc trưng chuột cao cấp (320Hz xuống 40Hz)
+            oscillator.frequency.setValueAtTime(320, audioCtx.currentTime); 
+            oscillator.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.04);
+            
+            // Bộ lọc Lowpass triệt tiêu hoàn toàn âm bíp cao chói tai
+            filterNode.type = 'lowpass';
+            filterNode.frequency.setValueAtTime(500, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            
+            oscillator.connect(filterNode);
+            filterNode.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.04);
+        }
+
+        document.getElementById('btn-warmup').addEventListener('click', () => {
+            isWarmupRunning = !isWarmupRunning;
+            const btn = document.getElementById('btn-warmup');
+            
+            if (isWarmupRunning) {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                // Nhịp điệu chuẩn xác nhịp độ bắn 550ms một lần click nhịp định vị
+                warmupInterval = setInterval(emitPremiumMechanicalClick, 550);
+                btn.style.background = 'var(--cyan)';
+                btn.style.color = '#000';
+                btn.innerText = '⏸️ TẮT LUYỆN TẬP NHỊP ĐIỆU';
+            } else {
+                clearInterval(warmupInterval);
+                btn.style.background = 'rgba(255,255,255,0.06)';
+                btn.style.color = '#fff';
+                btn.innerText = '▶️ BẬT LUYỆN TẬP NHỊP ĐIỆU';
+            }
         });
     </script>
 </body>
