@@ -16,13 +16,13 @@
 
     <div id="start-screen">
         <div class="welcome-btn">CHẠM ĐỂ VÀO APP</div>
-        <p style="font-size: 14px; color: #aaa; margin-top: 15px;">(Bắt buộc chạm để kích hoạt âm thanh trên iOS)</p>
+        <p style="font-size: 14px; color: #aaa; margin-top: 15px;">(Bắt buộc chạm để kích hoạt hệ thống)</p>
     </div>
 
     <div id="app-screen">
         <h1 style="color: #00adb5; font-size: 28px; margin-bottom: 10px;">ĐỘ NHẠY CHUẨN</h1>
         <p style="color: #ccc; font-size: 16px;">Ứng dụng lối tắt màn hình chính.</p>
-        <a class="btn" href="app.mobileconfig" download>CÀI ĐẶT APP RA MÀN HÌNH</a>
+        <button class="btn" id="install-btn">CÀI ĐẶT APP RA MÀN HÌNH</button>
     </div>
 
     <audio id="bg-music" loop>
@@ -33,11 +33,22 @@
         const startScreen = document.getElementById('start-screen');
         const appScreen = document.getElementById('app-screen');
         const audio = document.getElementById('bg-music');
+        const installBtn = document.getElementById('install-btn');
         
         startScreen.addEventListener('click', () => {
-            audio.play().catch(e => console.log("Lỗi nhạc:", e));
+            // ĐÃ SỬA LỖI 2: Thêm Promise để bắt lỗi nếu trình duyệt chặn tự động phát nhạc
+            audio.play().then(() => {
+                console.log("Nhạc nền đã kích hoạt");
+            }).catch(e => {
+                console.log("iOS chặn nhạc hoặc file lỗi:", e);
+            });
             startScreen.style.display = 'none';
             appScreen.style.display = 'block';
+        });
+
+        // ĐÃ SỬA LỖI 3: Dùng window.location.href để ép Safari kích hoạt Trình cài đặt cấu hình thay vì tải file text
+        installBtn.addEventListener('click', () => {
+            window.location.href = './app.mobileconfig';
         });
     </script>
 </body>
