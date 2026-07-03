@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DoNhayChuan Pro</title>
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #0a0a1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 165, 0, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 50, 50, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(0, 150, 255, 0.15) 0%, transparent 40%);
+            animation: auraShift 25s ease-in-out infinite alternate;
+            filter: blur(30px);
+            pointer-events: none;
+        }
+        @keyframes auraShift {
+            0% {
+                transform: translate(-5%, -5%) scale(1);
+            }
+            25% {
+                transform: translate(5%, 0%) scale(1.1);
+            }
+            50% {
+                transform: translate(0%, 5%) scale(0.9);
+            }
+            75% {
+                transform: translate(-5%, 0%) scale(1.05);
+            }
+            100% {
+                transform: translate(5%, -5%) scale(1);
+            }
+        }
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* ========== CONTAINER ========== */
+        .container {
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(18px) saturate(1.8);
+            -webkit-backdrop-filter: blur(18px) saturate(1.8);
+            border-radius: 48px;
+            padding: 28px 24px;
+            width: 100%;
+            max-width: 540px;
+            min-width: 320px;
+            border: 2px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 80px rgba(255, 165, 0, 0.15);
+            position: relative;
+            z-index: 2;
+            max-height: 96vh;
+            overflow-y: auto;
+        }
+
+        /* ========== HEADER ========== */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .app-header .title {
+            color: #fff;
+            font-size: 26px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff8c00, #ff2d55, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 165, 0, 0.4);
+            user-select: none;
+            white-space: nowrap;
+        }
+        .app-header .heroes {
+            display: flex;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 4px 12px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            flex-shrink: 0;
+        }
+        .heroes span {
+            padding: 2px 6px;
+            border-radius: 30px;
+        }
+        .heroes .naruto {
+            color: #ff8c00;
+        }
+        .heroes .goku {
+            color: #ff2d55;
+        }
+        .heroes .luffy {
+            color: #00bfff;
+        }
+
+        .app-sub {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+            padding-bottom: 12px;
+        }
+        .pro-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #0a0a1a;
+            font-weight: 800;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        .pro-badge.free {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        /* ========== TABS ========== */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            flex: 1 1 auto;
+            padding: 10px 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            min-width: 60px;
+        }
+        .tab-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ff8c00;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.1);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ========== INPUTS & BUTTONS ========== */
+        input,
+        button {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 20px;
+            border: none;
+            font-size: 16px;
+            margin-top: 8px;
+            transition: 0.3s;
+        }
+        input {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        input:focus {
+            border-color: #ff8c00;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff8c00, #ff2d55);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 28px rgba(255, 44, 85, 0.4);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+        .error {
+            color: #ff6b6b;
+            display: none;
+            margin-top: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* ========== DEVICE LIST ========== */
+        .device-list {
+            min-height: 180px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 4px;
+            margin-top: 8px;
+        }
+        .device-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .device-list::-webkit-scrollbar-thumb {
+            background: #ff8c00;
+            border-radius: 10px;
+        }
+
+        .device-item {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 14px 18px;
+            border-radius: 18px;
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .device-item:active {
+            background: rgba(255, 215, 0, 0.12);
+            transform: scale(0.97);
+        }
+        .device-item .name {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .device-item .arrow {
+            color: #ff8c00;
+            font-size: 20px;
+        }
+
+        /* ========== DETAIL CARD ========== */
+        .detail-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 18px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.12);
+        }
+        .detail-card .model {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .detail-card .sub {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-row .label {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+        }
+        .detail-row .value {
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .value.gold {
+            color: #ffd700;
+        }
+        .value.blue {
+            color: #00bfff;
+        }
+        .value.red {
+            color: #ff2d55;
+        }
+        .value.green {
+            color: #55efc4;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #ff8c00;
+            font-size: 15px;
+            padding: 6px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* ========== TOGGLES ========== */
+        .toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .toggle-item .label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .toggle-item .desc {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+        }
+        .switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .switch.active {
+            background: linear-gradient(135deg, #ff8c00, #ff2d55);
+        }
+        .switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .switch.active::after {
+            left: 25px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .status-badge.on {
+            background: #55efc4;
+            color: #0a0a1a;
+        }
+        .status-badge.off {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        /* ========== PRO CARD ========== */
+        .pro-card {
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .pro-card .price {
+            font-size: 32px;
+            font-weight: 900;
+            color: #ffd700;
+        }
+        .pro-card .sub {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        .bank-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 14px;
+            margin: 12px 0;
+            text-align: left;
+        }
+        .bank-info .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        .bank-info .row .label {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .bank-info .row .value {
+            color: #fff;
+            font-weight: 600;
+        }
+        .qr-placeholder {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 12px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .qr-placeholder img {
+            max-width: 180px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+        }
+        .qr-placeholder .hint {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .pro-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .pro-feature {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 10px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 215, 0, 0.06);
+        }
+        .pro-feature .icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .btn-pro {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #0a0a1a;
+            font-weight: 800;
+            padding: 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            transition: 0.3s;
+            box-shadow: 0 8px 28px rgba(255, 215, 0, 0.3);
+        }
+        .btn-pro:active {
+            transform: scale(0.96);
+        }
+
+        /* ========== NOTIFICATION ========== */
+        .notification {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 14px;
+            max-width: 90%;
+            z-index: 999;
+            display: none;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+        .notification.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ========== DEVICE SELECTOR & SEARCH ========== */
+        .device-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .device-type-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .device-type-btn.active {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ff8c00;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.1);
+        }
+        #searchInput {
+            margin-top: 4px;
+            padding: 12px 16px;
+            width: 100%;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            font-size: 14px;
+        }
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color: #ff8c00;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 10px;
+            margin-top: 16px;
+            border-top: 1px solid rgba(255, 215, 0, 0.08);
+            padding-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== SAO NỀN ===== -->
+    <div class="stars" id="starfield"></div>
+
+    <!-- ===== CONTAINER CHÍNH ===== -->
+    <div class="container" id="app">
+        <!-- HEADER -->
+        <div class="app-header">
+            <span class="title" id="appTitle">DoNhayChuan <span class="pro-badge free" id="proBadge">FREE</span></span>
+            <div class="heroes">
+                <span class="naruto">🍥 Naruto</span>
+                <span class="goku">🔥 Goku</span>
+                <span class="luffy">🏴‍☠️ Luffy</span>
+            </div>
+        </div>
+        <div class="app-sub">⚡ Độ nhạy chuẩn · Tối ưu toàn diện</div>
+
+        <!-- MÀN HÌNH LOGIN -->
+        <div id="loginScreen">
+            <input type="password" id="passwordInput" placeholder="🔑 Nhập mật khẩu ứng dụng..." autocomplete="off">
+            <button class="btn-primary" id="loginBtn">Mở khóa</button>
+            <div class="error" id="loginError">❌ Sai mật khẩu, thử lại!</div>
+        </div>
+
+        <!-- ỨNG DỤNG CHÍNH -->
+        <div id="mainApp" class="hidden">
+            <!-- TABS -->
+            <div class="tabs">
+                <div class="tab-btn active" data-tab="sensitivity">📊 Độ nhạy</div>
+                <div class="tab-btn" data-tab="optimize">⚡ Tối ưu</div>
+                <div class="tab-btn" data-tab="pro">🌟 Pro</div>
+            </div>
+
+            <!-- TAB ĐỘ NHẠY -->
+            <div id="tab-sensitivity" class="tab-content active">
+                <div class="device-selector">
+                    <button class="device-type-btn active" data-type="iphone">📱 iPhone</button>
+                    <button class="device-type-btn" data-type="android">🤖 Android</button>
+                </div>
+                <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm máy (ví dụ: Galaxy S24, Xiaomi 14, ...)" autocomplete="off">
+                <div id="listView" class="device-list"></div>
+                <div id="detailView" class="hidden">
+                    <button class="back-btn" id="backBtn">‹ Quay lại</button>
+                    <div class="detail-card" id="detailCard"></div>
+                </div>
+            </div>
+
+            <!-- TAB TỐI ƯU -->
+            <div id="tab-optimize" class="tab-content">
+                <div style="color:rgba(255,255,255,0.7); font-size:13px; margin-bottom:10px;">🎮 Bật/tắt các tính năng tối ưu:</div>
+                <div id="toggleContainer"></div>
+                <div style="margin-top:12px; color:rgba(255,255,255,0.3); font-size:11px; text-align:center;">* Các tính năng được áp dụng ngay khi bật</div>
+            </div>
+
+            <!-- TAB PRO -->
+            <div id="tab-pro" class="tab-content">
+                <div id="proContent"></div>
+            </div>
+        </div>
+
+        <div class="footer">⛩️ DoNhayChuan · v5.0 · 2025</div>
+    </div>
+
+    <!-- THÔNG BÁO -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // ============================================================
+        // 1. SAO NỀN
+        // ============================================================
+        (function createStars() {
+            const starfield = document.getElementById('starfield');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const s = Math.random() * 4 + 2;
+                star.style.width = s + 'px';
+                star.style.height = s + 'px';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                starfield.appendChild(star);
+            }
+        })();
+
+        // ============================================================
+        // 2. DỮ LIỆU THIẾT BỊ
+        // ============================================================
+        const iphoneDevices = [
+            { name: 'iPhone 6', screen: 4.7, ram: 1, perf: 1200 },
+            { name: 'iPhone 7', screen: 4.7, ram: 2, perf: 3300 },
+            { name: 'iPhone 8 Plus', screen: 5.5, ram: 3, perf: 3800 },
+            { name: 'iPhone X', screen: 5.8, ram: 3, perf: 4200 },
+            { name: 'iPhone 11 Pro Max', screen: 6.5, ram: 4, perf: 5100 },
+            { name: 'iPhone 12', screen: 6.1, ram: 4, perf: 5300 },
+            { name: 'iPhone 13 Pro Max', screen: 6.7, ram: 6, perf: 5700 },
+            { name: 'iPhone 14 Pro Max', screen: 6.7, ram: 6, perf: 6200 },
+            { name: 'iPhone 15 Pro Max', screen: 6.7, ram: 8, perf: 6800 },
+            { name: 'iPhone 16 Pro Max', screen: 6.9, ram: 8, perf: 7200 },
+            { name: 'iPhone 17 Pro Max', screen: 6.9, ram: 12, perf: 8000 }
+        ];
+
+        const androidDevices = [
+            // Samsung
+            { name: 'Samsung Galaxy S24 Ultra', screen: 6.8, ram: 12, perf: 8000 },
+            { name: 'Samsung Galaxy S24+', screen: 6.7, ram: 12, perf: 7800 },
+            { name: 'Samsung Galaxy S24', screen: 6.2, ram: 8, perf: 7500 },
+            { name: 'Samsung Galaxy S23 Ultra', screen: 6.8, ram: 8, perf: 7200 },
+            { name: 'Samsung Galaxy S23+', screen: 6.6, ram: 8, perf: 7000 },
+            { name: 'Samsung Galaxy S23', screen: 6.1, ram: 8, perf: 6800 },
+            { name: 'Samsung Galaxy A55', screen: 6.6, ram: 8, perf: 4500 },
+            { name: 'Samsung Galaxy A35', screen: 6.6, ram: 6, perf: 4000 },
+            { name: 'Samsung Galaxy A15', screen: 6.5, ram: 4, perf: 3000 },
+            { name: 'Samsung Galaxy Z Fold5', screen: 7.6, ram: 12, perf: 7200 },
+            { name: 'Samsung Galaxy Z Flip5', screen: 6.7, ram: 8, perf: 6500 },
+            // Xiaomi
+            { name: 'Xiaomi 14 Pro', screen: 6.73, ram: 12, perf: 7800 },
+            { name: 'Xiaomi 14', screen: 6.36, ram: 8, perf: 7600 },
+            { name: 'Xiaomi 13 Pro', screen: 6.73, ram: 12, perf: 7400 },
+            { name: 'Xiaomi 13', screen: 6.36, ram: 8, perf: 7200 },
+            { name: 'Xiaomi 12T Pro', screen: 6.67, ram: 8, perf: 6200 },
+            { name: 'Redmi Note 13 Pro+', screen: 6.67, ram: 8, perf: 5200 },
+            { name: 'Redmi Note 13 Pro', screen: 6.67, ram: 6, perf: 4800 },
+            { name: 'Redmi Note 12', screen: 6.67, ram: 4, perf: 3800 },
+            { name: 'POCO F5', screen: 6.67, ram: 8, perf: 5800 },
+            { name: 'POCO X6 Pro', screen: 6.67, ram: 8, perf: 6000 },
+            { name: 'POCO M6 Pro', screen: 6.67, ram: 6, perf: 4200 },
+            // Oppo
+            { name: 'Oppo Find X7 Ultra', screen: 6.82, ram: 12, perf: 7900 },
+            { name: 'Oppo Find X7', screen: 6.78, ram: 8, perf: 7400 },
+            { name: 'Oppo Find X6 Pro', screen: 6.82, ram: 12, perf: 7300 },
+            { name: 'Oppo Reno 11 Pro', screen: 6.7, ram: 8, perf: 4800 },
+            { name: 'Oppo Reno 11', screen: 6.7, ram: 6, perf: 4500 },
+            { name: 'Oppo A78', screen: 6.5, ram: 4, perf: 3200 },
+            // Realme
+            { name: 'Realme GT 5 Pro', screen: 6.78, ram: 12, perf: 7700 },
+            { name: 'Realme GT Neo 5', screen: 6.74, ram: 8, perf: 5800 },
+            { name: 'Realme 12 Pro+', screen: 6.7, ram: 8, perf: 5000 },
+            { name: 'Realme 12 Pro', screen: 6.7, ram: 6, perf: 4700 },
+            { name: 'Realme C67', screen: 6.72, ram: 4, perf: 2800 },
+            // iQOO
+            { name: 'iQOO 12 Pro', screen: 6.78, ram: 12, perf: 7900 },
+            { name: 'iQOO 12', screen: 6.78, ram: 8, perf: 7500 },
+            { name: 'iQOO 11', screen: 6.78, ram: 8, perf: 7200 },
+            { name: 'iQOO Z9', screen: 6.78, ram: 8, perf: 5200 },
+            { name: 'iQOO Z7', screen: 6.64, ram: 6, perf: 4200 },
+            // OnePlus
+            { name: 'OnePlus 12', screen: 6.82, ram: 12, perf: 7800 },
+            { name: 'OnePlus 12R', screen: 6.78, ram: 8, perf: 7400 },
+            { name: 'OnePlus 11', screen: 6.7, ram: 8, perf: 7200 },
+            { name: 'OnePlus Nord 4', screen: 6.74, ram: 8, perf: 5000 },
+            // Vivo
+            { name: 'Vivo X100 Pro', screen: 6.78, ram: 12, perf: 7600 },
+            { name: 'Vivo X100', screen: 6.78, ram: 8, perf: 7300 },
+            { name: 'Vivo V30 Pro', screen: 6.78, ram: 8, perf: 4800 },
+            { name: 'Vivo V30', screen: 6.78, ram: 6, perf: 4500 },
+            // Google Pixel
+            { name: 'Google Pixel 8 Pro', screen: 6.7, ram: 12, perf: 6800 },
+            { name: 'Google Pixel 8', screen: 6.2, ram: 8, perf: 6500 },
+            { name: 'Google Pixel 7 Pro', screen: 6.7, ram: 12, perf: 6000 },
+            // Sony
+            { name: 'Sony Xperia 1 V', screen: 6.5, ram: 12, perf: 6500 },
+            { name: 'Sony Xperia 5 V', screen: 6.1, ram: 8, perf: 6000 },
+            // Nokia
+            { name: 'Nokia G60', screen: 6.58, ram: 6, perf: 3200 },
+            { name: 'Nokia X30', screen: 6.43, ram: 6, perf: 3500 }
+        ];
+
+        // ============================================================
+        // 3. CÔNG THỨC TÍNH ĐỘ NHẠY
+        // ============================================================
+        function calcSensitivity(screen, ram, perf) {
+            let base = 50 + (screen * 8) + (ram * 4) + (perf / 380);
+            let general = Math.min(200, Math.max(50, Math.round(base)));
+            return {
+                general: general,
+                redDot: Math.min(200, general + 8),
+                twoX: Math.min(200, general - 2),
+                fourX: Math.min(200, general - 12),
+                sniper: Math.min(200, general - 20),
+                dpi: Math.min(240, Math.max(120, Math.round(140 + screen * 6))),
+                fire: Math.min(60, Math.max(28, 60 - Math.round(screen * 2.5)))
+            };
+        }
+
+        // ============================================================
+        // 4. XÁC THỰC
+        // ============================================================
+        const APP_PASSWORD = 'bohieudaycon09';
+        const PRO_PASSWORD = 'hieudeptrai009';
+
+        // ============================================================
+        // 5. DOM REFS
+        // ============================================================
+        const loginScreen = document.getElementById('loginScreen');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const mainApp = document.getElementById('mainApp');
+        const listView = document.getElementById('listView');
+        const detailView = document.getElementById('detailView');
+        const detailCard = document.getElementById('detailCard');
+        const backBtn = document.getElementById('backBtn');
+        const searchInput = document.getElementById('searchInput');
+        const typeBtns = document.querySelectorAll('.device-type-btn');
+        const proBadge = document.getElementById('proBadge');
+        const notification = document.getElementById('notification');
+
+        // ============================================================
+        // 6. STATE
+        // ============================================================
+        let currentType = 'iphone';
+        let searchText = '';
+        let filteredDevices = [];
+        let currentTab = 'sensitivity';
+
+        // Toggle states
+        const toggleData = [
+            { id: 'fixrung', label: 'FIX RUNG', icon: '🔧', desc: 'Giảm rung khi bắn', pro: false },
+            { id: 'giamlo', label: 'GIẢM LỐ', icon: '⬇️', desc: 'Giảm độ giật', pro: false },
+            { id: 'nhetam', label: 'NHẸ TÂM', icon: '🎯', desc: 'Hỗ trợ ngắm nhẹ', pro: false },
+            { id: 'damtam', label: 'ĐẦM TÂM', icon: '💪', desc: 'Bám mục tiêu mạnh', pro: true },
+            { id: 'tangfps', label: 'TĂNG FPS', icon: '⚡', desc: 'Tối ưu khung hình', pro: true },
+            { id: 'camung', label: 'TỐI ƯU CẢM ỨNG', icon: '👆', desc: 'Tăng độ nhạy chạm', pro: true },
+            { id: 'mang', label: 'TỐI ƯU HOÁ MẠNG', icon: '🌐', desc: 'Giảm ping', pro: true }
+        ];
+        let toggleStates = {};
+        toggleData.forEach(t => toggleStates[t.id] = false);
+
+        // ============================================================
+        // 7. HÀM HIỂN THỊ THÔNG BÁO
+        // ============================================================
+        function showNotification(msg) {
+            notification.textContent = msg;
+            notification.classList.add('show');
+            clearTimeout(notification._timeout);
+            notification._timeout = setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+
+        // ============================================================
+        // 8. LOGIN
+        // ============================================================
+        loginBtn.addEventListener('click', function() {
+            const pwd = passwordInput.value.trim();
+            if (pwd === APP_PASSWORD) {
+                loginScreen.style.display = 'none';
+                mainApp.classList.remove('hidden');
+                renderAll();
+                updateProBadge();
+            } else {
+                loginError.style.display = 'block';
+                passwordInput.value = '';
+            }
+        });
+        passwordInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+        passwordInput.addEventListener('input', function() {
+            loginError.style.display = 'none';
+        });
+
+        // ============================================================
+        // 9. TABS
+        // ============================================================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                const tabId = this.dataset.tab;
+                document.getElementById('tab-' + tabId).classList.add('active');
+                currentTab = tabId;
+                if (tabId === 'pro') renderPro();
+            });
+        });
+
+        // ============================================================
+        // 10. DEVICE TYPE & SEARCH
+        // ============================================================
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                typeBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentType = this.dataset.type;
+                // Ẩn detail và hiện list
+                detailView.classList.add('hidden');
+                listView.style.display = 'block';
+                renderList();
+            });
+        });
+
+        searchInput.addEventListener('input', function() {
+            searchText = this.value.trim().toLowerCase();
+            detailView.classList.add('hidden');
+            listView.style.display = 'block';
+            renderList();
+        });
+
+        // ============================================================
+        // 11. RENDER LIST
+        // ============================================================
+        function renderList() {
+            const source = (currentType === 'iphone') ? iphoneDevices : androidDevices;
+            const filtered = source.filter(dev => dev.name.toLowerCase().includes(searchText));
+            filteredDevices = filtered;
+
+            listView.innerHTML = '';
+            if (filtered.length === 0) {
+                listView.innerHTML =
+                    `<div style="color:rgba(255,255,255,0.3); text-align:center; padding:20px;">🔍 Không tìm thấy máy phù hợp</div>`;
+                return;
+            }
+
+            filtered.forEach((dev, idx) => {
+                const div = document.createElement('div');
+                div.className = 'device-item';
+                div.innerHTML = `<span class="name">${dev.name}</span><span class="arrow">›</span>`;
+                div.addEventListener('click', () => showDetail(idx));
+                listView.appendChild(div);
+            });
+        }
+
+        // ============================================================
+        // 12. SHOW DETAIL
+        // ============================================================
+        function showDetail(index) {
+            if (!filteredDevices.length || index < 0 || index >= filteredDevices.length) return;
+            const dev = filteredDevices[index];
+            const s = calcSensitivity(dev.screen, dev.ram, dev.perf);
+
+            detailCard.innerHTML = `
+                <div class="model">${dev.name}</div>
+                <div class="sub">${dev.screen}″ · ${dev.ram}GB RAM</div>
+                <div class="detail-row"><span class="label">🎯 Độ nhạy tổng</span><span class="value gold">${s.general}%</span></div>
+                <div class="detail-row"><span class="label">🔴 Red Dot</span><span class="value blue">${s.redDot}%</span></div>
+                <div class="detail-row"><span class="label">🔭 2x Scope</span><span class="value">${s.twoX}%</span></div>
+                <div class="detail-row"><span class="label">🔭 4x Scope</span><span class="value">${s.fourX}%</span></div>
+                <div class="detail-row"><span class="label">🎯 Sniper</span><span class="value red">${s.sniper}%</span></div>
+                <div class="detail-row"><span class="label">🖱️ DPI khuyên</span><span class="value green">${s.dpi}</span></div>
+                <div class="detail-row"><span class="label">👆 Nút bắn</span><span class="value gold">${s.fire} mm</span></div>
+                <div style="margin-top:12px;padding:10px;background:rgba(255,215,0,0.06);border-radius:16px;border-left:4px solid #ff8c00;color:rgba(255,255,255,0.7);font-size:12px;">
+                    💥 Vào game → Cài đặt → Độ nhạy → chỉnh theo số trên.
+                </div>
+            `;
+            listView.style.display = 'none';
+            detailView.classList.remove('hidden');
+        }
+
+        backBtn.addEventListener('click', function() {
+            detailView.classList.add('hidden');
+            listView.style.display = 'block';
+        });
+
+        // ============================================================
+        // 13. RENDER TOGGLES
+        // ============================================================
+        function renderToggles() {
+            const container = document.getElementById('toggleContainer');
+            container.innerHTML = '';
+            const isPro = localStorage.getItem('donhaychuan_pro') === 'true';
+
+            toggleData.forEach(t => {
+                const proLock = t.pro && !isPro;
+                const div = document.createElement('div');
+                div.className = 'toggle-item';
+                div.style.opacity = proLock ? '0.5' : '1';
+                div.innerHTML = `
+                    <div>
+                        <span style="margin-right:8px;">${t.icon}</span>
+                        <span class="label">${t.label} ${proLock ? '🔒' : ''}</span>
+                        <span class="status-badge ${toggleStates[t.id] ? 'on' : 'off'}" id="badge-${t.id}">${toggleStates[t.id] ? 'BẬT' : 'TẮT'}</span>
+                        <div class="desc">${t.desc} ${proLock ? '(cần Pro)' : ''}</div>
+                    </div>
+                    <div class="switch ${toggleStates[t.id] && !proLock ? 'active' : ''}" data-id="${t.id}" data-pro="${t.pro}" style="${proLock ? 'pointer-events:none;' : ''}"></div>
+                `;
+                container.appendChild(div);
+            });
+
+            container.querySelectorAll('.switch').forEach(el => {
+                el.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const isProFeature = this.dataset.pro === 'true';
+                    const isPro = localStorage.getItem('donhaychuan_pro') === 'true';
+                    if (isProFeature && !isPro) {
+                        showNotification('⭐ Vui lòng nâng cấp Pro để dùng tính năng này!');
+                        return;
+                    }
+                    toggleStates[id] = !toggleStates[id];
+                    this.classList.toggle('active');
+                    const badge = document.getElementById('badge-' + id);
+                    badge.textContent = toggleStates[id] ? 'BẬT' : 'TẮT';
+                    badge.className = 'status-badge ' + (toggleStates[id] ? 'on' : 'off');
+                    showNotification(`${id.toUpperCase()} ${toggleStates[id] ? 'đã bật ✅' : 'đã tắt ❌'}`);
+                    this.style.transform = 'scale(0.9)';
+                    setTimeout(() => this.style.transform = 'scale(1)', 150);
+                });
+            });
+        }
+
+        // ============================================================
+        // 14. RENDER PRO
+        // ============================================================
+        function renderPro() {
+            const container = document.getElementById('proContent');
+            const isPro = localStorage.getItem('donhaychuan_pro') === 'true';
+
+            if (isPro) {
+                container.innerHTML = `
+                    <div class="pro-card" style="border-color:#ffd700;">
+                        <div style="font-size:48px;">👑</div>
+                        <div style="color:#ffd700;font-size:24px;font-weight:800;margin:8px 0;">PRO ACTIVE</div>
+                        <div style="color:rgba(255,255,255,0.6);font-size:14px;">Cảm ơn bạn đã ủng hộ! Các tính năng Pro đã được mở khóa toàn bộ.</div>
+                        <button class="btn-pro" id="deactivateProBtn" style="background:#ff6b6b;color:#fff;">Đăng xuất Pro</button>
+                    </div>
+                `;
+                document.getElementById('deactivateProBtn').addEventListener('click', function() {
+                    localStorage.removeItem('donhaychuan_pro');
+                    renderPro();
+                    renderToggles();
+                    updateProBadge();
+                    showNotification('Đã đăng xuất tài khoản Pro');
+                });
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="pro-card">
+                    <div style="font-size:28px;">🌟</div>
+                    <div class="price">150.000đ <span style="font-size:16px;color:rgba(255,255,255,0.5);">/ năm</span></div>
+                    <div class="sub">Nâng cấp lên Pro để mở khóa toàn bộ tính năng cao cấp</div>
+                    <div class="pro-features">
+                        <div class="pro-feature"><span class="icon">🔓</span> Mở khóa 4 tính năng Pro</div>
+                        <div class="pro-feature"><span class="icon">🚀</span> Tối ưu FPS & mạng</div>
+                        <div class="pro-feature"><span class="icon">🎯</span> Đầm tâm & cảm ứng</div>
+                        <div class="pro-feature"><span class="icon">📊</span> Phân tích chuyên sâu</div>
+                    </div>
+                    <div class="bank-info">
+                        <div class="row"><span class="label">Ngân hàng / Ví</span><span class="value">ZaloPay</span></div>
+                        <div class="row"><span class="label">Số tài khoản</span><span class="value">0395734228</span></div>
+                        <div class="row"><span class="label">Chủ tài khoản</span><span class="value">NGUYEN KHAC HIEU</span></div>
+                        <div class="row"><span class="label">Số tiền</span><span class="value" style="color:#ffd700;">150.000 VND</span></div>
+                        <div class="row"><span class="label">Nội dung</span><span class="value" style="font-size:12px;">nap Pro DoNhayChuan</span></div>
+                    </div>
+                    <div class="qr-placeholder">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=NGUYEN%20KHAC%20HIEU%20-%200395734228" alt="Mã QR thanh toán">
+                        <div class="hint">📱 Mở ZaloPay, chọn chuyển tiền qua mã QR</div>
+                    </div>
+                    <button class="btn-pro" id="confirmPayBtn">🔑 Đã thanh toán, nhập mật khẩu Pro</button>
+                </div>
+            `;
+
+            document.getElementById('confirmPayBtn').addEventListener('click', function() {
+                const userPwd = prompt('Vui lòng nhập mật khẩu Pro để mở khóa:');
+                if (userPwd === null) return;
+                if (userPwd === PRO_PASSWORD) {
+                    localStorage.setItem('donhaychuan_pro', 'true');
+                    showNotification('✅ Kích hoạt Pro thành công!');
+                    renderPro();
+                    renderToggles();
+                    updateProBadge();
+                } else {
+                    alert('Mật khẩu không đúng!');
+                    showNotification('❌ Mật khẩu không đúng!');
+                }
+            });
+        }
+
+        // ============================================================
+        // 15. CẬP NHẬT BADGE PRO
+        // ============================================================
+        function updateProBadge() {
+            const isPro = localStorage.getItem('donhaychuan_pro') === 'true';
+            proBadge.textContent = isPro ? 'PRO' : 'FREE';
+            proBadge.className = 'pro-badge ' + (isPro ? '' : 'free');
+        }
+
+        // ============================================================
+        // 16. RENDER ALL
+        // ============================================================
+        function renderAll() {
+            renderList();
+            renderToggles();
+            renderPro();
+        }
+
+        // ============================================================
+        // 17. KHỞI TẠO LẦN ĐẦU
+        // ============================================================
+        // Mặc định: login chưa được xác thực, chỉ hiển thị màn hình login
+        // Khi đăng nhập thành công, gọi renderAll()
+        // (đã được gọi trong login handler)
+        // Ngoài ra, nếu người dùng đã login trước đó (trong cùng phiên) thì có thể bỏ qua
+        // Nhưng do không có session nên để mặc định yêu cầu login.
+
+        // Lưu ý: xóa localStorage proRequests nếu có
+        localStorage.removeItem('proRequests');
+
+        // ============================================================
+        // 18. TẠO SAO BAN ĐẦU (đã có ở đầu script)
+        // ============================================================
+        console.log('DoNhayChuan Pro v5.0 loaded successfully.');
+    </script>
+</body>
+</html>
