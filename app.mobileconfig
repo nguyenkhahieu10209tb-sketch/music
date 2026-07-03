@@ -11,12 +11,16 @@
             <true/>
             <key>Label</key>
             <string>Độ Nhạy Chuẩn</string>
+            
             <key>PayloadDescription</key>
-            <string>Cấu hình Web Clip</string>
+            <string>Thêm lối tắt Độ Nhạy Chuẩn vào màn hình chính</string>
+            
             <key>PayloadDisplayName</key>
-            <string>Độ Nhạy Chuẩn</string>
+            <string>Web Clip Độ Nhạy Chuẩn</string>
+            
             <key>PayloadIdentifier</key>
-            <string>com.apple.webclip.managed.E39C4B78-5E24-4B2E-8E5C-8D4C0E0A6F45</string>
+            <string>com.bohieuday.webclip.managed</string>
+            
             <key>PayloadType</key>
             <string>com.apple.webclip.managed</string>
             <key>PayloadUUID</key>
@@ -29,10 +33,18 @@
             <string>https://do-nhay-chuan-bohieuday.netlify.app</string>
         </dict>
     </array>
+    
+    <key>PayloadDescription</key>
+    <string>Cấu hình này sẽ cài đặt ứng dụng Độ Nhạy Chuẩn ra màn hình chính của bạn một cách an toàn.</string>
+    
     <key>PayloadDisplayName</key>
     <string>Cấu hình Độ Nhạy Chuẩn</string>
     <key>PayloadIdentifier</key>
     <string>com.bohieuday.profile.webclip</string>
+    
+    <key>PayloadOrganization</key>
+    <string>Bo Hieu Day</string>
+    
     <key>PayloadRemovalDisallowed</key>
     <false/>
     <key>PayloadType</key>
