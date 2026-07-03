@@ -18,7 +18,7 @@
             <key>PayloadIdentifier</key>
             <string>com.bohieuday.webclip.managed</string>
             <key>PayloadType</key>
-            <string>com.apple.webclip.managed</string>
+            <string>com.apple.webClip.managed</string>
             <key>PayloadUUID</key>
             <string>E39C4B78-5E24-4B2E-8E5C-8D4C0E0A6F45</string>
             <key>PayloadVersion</key>
@@ -26,7 +26,7 @@
             <key>Precomposed</key>
             <true/>
             <key>URL</key>
-            <string>https://do-nhay-chuan-bohieuday.netlify.app</string>
+            <string>https://do-nhay-chuan-bohieuday.netlify.app/?mode=app</string>
         </dict>
     </array>
     <key>PayloadDescription</key>
