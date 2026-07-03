@@ -2,354 +2,440 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>DoNhayChuan Pro</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        /* ========== CƠ BẢN ========== */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        :root {
+            --bg-dark: #0f111a;
+            --primary: #ff4757;
+            --accent: #ff7f50;
+            --blue-glow: #00adb5;
+            --card-bg: rgba(30, 32, 44, 0.85);
+            --text-light: #f1f2f6;
+        }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
         body {
-            background: #0a0a1a; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-            padding: 16px; position: relative; overflow: hidden; user-select: none; -webkit-user-select: none;
+            background: radial-gradient(circle at 50% 0%, #2a1525 0%, var(--bg-dark) 60%);
+            color: var(--text-light); margin: 0; padding: 0; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden; user-select: none; -webkit-user-select: none;
         }
-        
-        /* Hiệu ứng nền */
-        body::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.2) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 45, 85, 0.2) 0%, transparent 40%),
-                        radial-gradient(circle at 50% 80%, rgba(0, 191, 255, 0.15) 0%, transparent 40%);
-            animation: auraShift 20s ease-in-out infinite alternate; filter: blur(40px); pointer-events: none;
-        }
-        @keyframes auraShift {
-            0% { transform: translate(-5%, -5%) scale(1); }
-            100% { transform: translate(5%, 5%) scale(1.05); }
-        }
-        .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-        .star { position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50%; animation: twinkle 2s infinite alternate; }
-        @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+        /* Hạt sao rơi - Stars */
+        .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; background: transparent url('data:image/svg+xml;utf8,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="1" fill="white" opacity="0.3"/><circle cx="150" cy="80" r="1.5" fill="white" opacity="0.5"/><circle cx="70" cy="160" r="1" fill="white" opacity="0.2"/></svg>') repeat; animation: moveStars 60s linear infinite; }
+        @keyframes moveStars { from { background-position: 0 0; } to { background-position: -10000px 5000px; } }
 
-        /* ========== UI CHÍNH ========== */
-        .container {
-            background: rgba(10, 10, 26, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-radius: 32px; padding: 24px; width: 100%; max-width: 480px;
-            border: 1px solid rgba(255, 140, 0, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-            position: relative; z-index: 2; max-height: 95vh; overflow-y: auto; display: none;
+        .container { padding: 20px; width: 100%; max-width: 450px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
+        .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; justify-content: center; }
+        .active-screen { display: flex; }
+
+        .title-gradient { font-size: 32px; font-weight: 800; margin-bottom: 5px; background: linear-gradient(90deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .btn {
+            background: linear-gradient(45deg, var(--primary), var(--accent)); color: white; border: none;
+            padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold; width: 100%;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); transition: transform 0.1s; margin-top: 15px;
         }
-        .container.show { display: block; animation: fadeIn 0.4s ease; }
+        .btn:active { transform: scale(0.95); }
+        .btn-blue { background: linear-gradient(45deg, #0052d4, #4364f7, #6fb1fc); box-shadow: 0 5px 15px rgba(67, 100, 247, 0.4); }
+
+        /* Lock / Pass Screen */
+        .input-group { width: 100%; margin-top: 20px; }
+        .pass-input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: white; font-size: 16px; text-align: center; outline: none; }
+
+        /* Main App Tabs */
+        .header { text-align: center; margin-top: 20px; margin-bottom: 20px; }
+        .tab-menu { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; margin-bottom: 20px; width: 100%; }
+        .tab-btn { flex: 1 1 45%; padding: 12px; border-radius: 10px; background: #1a1c23; border: 1px solid #2a2d39; color: #888; font-weight: bold; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 5px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: #2a2d39; color: var(--accent); border-color: var(--accent); }
+        
+        .tab-content { background: var(--card-bg); border-radius: 15px; padding: 20px; width: 100%; display: none; border: 1px solid #2a2d39; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Màn hình chờ (Bypass Apple Autoplay) */
-        #startScreen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a1a;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; cursor: pointer;
-        }
-        .welcome-btn {
-            padding: 20px 40px; background: linear-gradient(135deg, #ff8c00, #ff2d55);
-            color: white; font-size: 20px; font-weight: 800; border-radius: 50px;
-            box-shadow: 0 0 25px rgba(255, 45, 85, 0.5); animation: pulse 1.5s infinite; text-transform: uppercase;
-        }
+        /* Select boxes */
+        select { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; background: #111; color: white; border: 1px solid #444; font-size: 15px; outline: none; }
+
+        /* File Result Box */
+        .file-result { margin-top: 20px; background: #14151c; padding: 15px; border-radius: 12px; border: 1px solid #333; display: none; }
+        .file-icon { font-size: 24px; margin-bottom: 10px; }
+        .file-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #fff; word-break: break-all; }
+        .file-info { font-size: 12px; color: #888; margin-bottom: 15px; }
+
+        /* Locked State */
+        .locked-overlay { text-align: center; padding: 30px 10px; }
+        .locked-overlay h3 { color: #ff4757; }
+
+        /* Sens Result */
+        .sens-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .sens-item { background: #1a1c23; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333; }
+        .sens-item span { display: block; font-size: 11px; color: #888; }
+        .sens-item strong { font-size: 18px; color: var(--blue-glow); }
+
+        /* Toggles */
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2a2d39; }
+        .toggle-row:last-child { border-bottom: none; }
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--blue-glow); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Status & Processing */
+        #processing-status { display: none; text-align: center; margin-top: 20px; font-weight: bold; color: var(--accent); }
+        .spinner { border: 3px solid rgba(255,255,255,0.1); width: 30px; height: 30px; border-radius: 50%; border-left-color: var(--accent); animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #success-status { display: none; text-align: center; margin-top: 20px; color: #2ed573; font-weight: bold; font-size: 18px; animation: pulse 1s infinite; }
+        
+        .pulse-btn { padding: 22px 45px; background: #ff4757; color: white; font-size: 20px; font-weight: bold; border-radius: 50px; box-shadow: 0 4px 20px rgba(255, 71, 87, 0.5); animation: pulse 1.5s infinite; cursor: pointer; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* Header & Tabs */
-        .header-title { color: #fff; font-size: 26px; font-weight: 900; background: linear-gradient(135deg, #ff8c00, #ff2d55); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
-        .pro-badge { display: inline-block; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800; padding: 3px 12px; border-radius: 20px; font-size: 11px; margin-left: 8px; vertical-align: middle; }
-        .pro-badge.free { background: rgba(255, 255, 255, 0.2); color: #fff; }
-        .tabs { display: flex; gap: 8px; margin: 20px 0 16px 0; }
-        .tab-btn { flex: 1; padding: 12px 0; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; color: rgba(255, 255, 255, 0.6); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; text-align: center; }
-        .tab-btn.active { background: rgba(255, 140, 0, 0.15); border-color: #ff8c00; color: #fff; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-
-        /* Inputs & Buttons */
-        input, select, button { width: 100%; padding: 15px; border-radius: 16px; border: none; font-size: 15px; margin-top: 10px; }
-        input, select { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.15); outline: none; }
-        input:focus, select:focus { border-color: #ff8c00; }
-        .btn-primary { background: linear-gradient(135deg, #ff8c00, #ff2d55); color: #fff; font-weight: 800; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 45, 85, 0.3); transition: transform 0.1s; }
-        .btn-primary:active { transform: scale(0.96); }
-
-        /* File Card & Toggles */
-        .file-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 16px; margin-top: 16px; }
-        .toggle-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: rgba(255, 255, 255, 0.05); border-radius: 16px; margin-bottom: 8px; }
-        .switch { position: relative; width: 48px; height: 26px; background: rgba(255, 255, 255, 0.2); border-radius: 30px; cursor: pointer; transition: 0.3s; }
-        .switch.active { background: linear-gradient(135deg, #ff8c00, #ff2d55); }
-        .switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: 0.3s; }
-        .switch.active::after { left: 25px; }
-
-        /* Pro & Noti */
-        .pro-card { background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 24px; padding: 20px; text-align: center; }
-        .qr-box { background: #fff; padding: 10px; border-radius: 16px; display: inline-block; margin-top: 10px; }
-        .qr-box img { max-width: 150px; display: block; }
-        .notification { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid #ff8c00; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 9999; display: none; white-space: nowrap; }
-        .notification.show { display: block; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { bottom: -20px; opacity: 0; } to { bottom: 24px; opacity: 1; } }
+        /* PRO Section */
+        .pro-box { background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 69, 0, 0.1)); border: 1px solid #ffd700; border-radius: 12px; padding: 15px; text-align: center; margin-top: 15px; }
+        
     </style>
 </head>
 <body>
+    <div class="stars"></div>
 
-    <div id="startScreen">
-        <div class="welcome-btn">CHẠM ĐỂ VÀO APP</div>
-        <p style="color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 20px;">(Bắt buộc để kích hoạt hệ thống âm thanh)</p>
+    <!-- 1. MÀN HÌNH CÀI ĐẶT (WEB) -->
+    <div id="install-screen" class="screen container">
+        <h1 class="title-gradient">DoNhayChuan Pro</h1>
+        <p style="color: #aaa; font-size: 15px;">Hệ thống Web Tệp File Tối Ưu</p>
+        <button class="btn" id="install-btn">CÀI ĐẶT APP RA MÀN HÌNH</button>
+        <p id="instruction" style="display:none; color:#ffeb3b; background:rgba(255,235,59,0.1); padding:10px; border-radius:8px; border:1px dashed #ffeb3b; margin-top:20px; font-size:14px;">📥 <b>Đã tải cấu hình!</b><br>Vào Cài đặt > Đã tải về hồ sơ để hoàn tất.</p>
     </div>
 
-    <div class="stars" id="starfield"></div>
+    <!-- 2. MÀN HÌNH CHẠM VÀO APP (STANDALONE) -->
+    <div id="start-screen" class="screen">
+        <div class="pulse-btn" id="enter-btn">CHẠM ĐỂ VÀO APP</div>
+        <p style="font-size: 14px; color: #888; margin-top: 20px;">(Bắt buộc để kích hoạt hệ thống âm thanh)</p>
+    </div>
 
-    <div class="container" id="appContainer">
-        <div>
-            <span class="header-title">DoNhayChuan <span class="pro-badge free" id="proBadge">FREE</span></span>
-            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">Hệ thống Web Tệp File Tối Ưu</p>
+    <!-- 3. MÀN HÌNH MẬT KHẨU -->
+    <div id="login-screen" class="screen container">
+        <h1 class="title-gradient">DoNhayChuan Pro</h1>
+        <p>Nhập mã để giải mã hệ thống</p>
+        <div class="input-group">
+            <input type="password" id="pass-input" class="pass-input" placeholder="Nhập mật khẩu...">
+        </div>
+        <button class="btn" id="login-btn">MỞ KHÓA APP</button>
+        <p id="login-error" style="color: #ff4757; display: none; margin-top: 10px; font-weight: bold;">❌ Mật khẩu không chính xác!</p>
+    </div>
+
+    <!-- 4. GIAO DIỆN CHÍNH APP -->
+    <div id="main-screen" class="screen container" style="justify-content: flex-start;">
+        <div class="header">
+            <h1 class="title-gradient" style="font-size: 26px;">DoNhayChuan Pro</h1>
+            <p style="margin:0; font-size:12px; color:#888;">Hệ thống Web Tệp File Tối Ưu</p>
         </div>
 
-        <div id="loginScreen" style="margin-top: 20px;">
-            <input type="password" id="pwdInput" placeholder="🔑 Nhập mật khẩu hệ thống..." autocomplete="off">
-            <button class="btn-primary" id="loginBtn">MỞ KHÓA APP</button>
-            <p id="loginErr" style="color: #ff4757; font-size: 13px; margin-top: 10px; display: none;">❌ Mật khẩu không chính xác!</p>
+        <div class="tab-menu">
+            <div class="tab-btn active" data-tab="tab-file">📂 Tệp File</div>
+            <div class="tab-btn" data-tab="tab-sens">🎯 Độ Nhạy</div>
+            <div class="tab-btn" data-tab="tab-opt">⚡ Tối Ưu</div>
+            <div class="tab-btn" data-tab="tab-pro">🌟 PRO VIP</div>
         </div>
 
-        <div id="mainApp" style="display: none;">
-            <div class="tabs">
-                <div class="tab-btn active" data-tab="files">📂 Tệp File</div>
-                <div class="tab-btn" data-tab="optimize">⚡ Tối Ưu</div>
-                <div class="tab-btn" data-tab="pro">🌟 PRO</div>
+        <!-- TAB 1: TỆP FILE -->
+        <div id="tab-file" class="tab-content active">
+            <div id="file-locked" class="locked-overlay">
+                <h3>🔒 TÍNH NĂNG BỊ KHÓA</h3>
+                <p style="color:#aaa; font-size:14px;">Bạn cần nâng cấp bản PRO để sử dụng kho Tệp File tối ưu chuyên sâu.</p>
+                <button class="btn" onclick="document.querySelector('[data-tab=tab-pro]').click()">MỞ KHÓA PRO</button>
             </div>
-
-            <div id="tab-files" class="tab-content active">
-                <select id="deviceType">
-                    <option value="iphone">📱 Apple iPhone</option>
-                    <option value="android">🤖 Android (Samsung dòng A, Xiaomi...)</option>
-                    <option value="ipad">平板 Apple iPad (Pro, Air, Mini)</option>
+            
+            <div id="file-unlocked" style="display: none;">
+                <label style="font-size: 13px; color: #888;">Chọn nền tảng:</label>
+                <select id="file-os">
+                    <option value="none">-- Chọn hệ điều hành --</option>
+                    <option value="ios">📱 Apple iPhone</option>
+                    <option value="android">🤖 Android (Samsung, Xiaomi...)</option>
                 </select>
-                <select id="deviceModel" style="margin-top: 12px;"></select>
 
-                <div class="file-card">
-                    <div style="display: flex; gap: 12px; align-items: center;">
-                        <span style="font-size: 32px;">📄</span>
-                        <div>
-                            <div id="fileName" style="color: #fff; font-weight: bold; font-size: 15px;">Đang tải...</div>
-                            <div id="fileSize" style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 4px;">...</div>
-                        </div>
-                    </div>
-                    <button class="btn-primary" id="downloadBtn">📥 TẢI CẤU HÌNH VỀ MÁY</button>
+                <div id="file-device-wrap" style="display:none; margin-top:15px;">
+                    <label style="font-size: 13px; color: #888;">Chọn dòng máy:</label>
+                    <select id="file-device"></select>
+                </div>
+
+                <div id="file-result-box" class="file-result">
+                    <div class="file-icon">📄</div>
+                    <div class="file-name" id="file-name-text">filename</div>
+                    <div class="file-info" id="file-info-text">Dung lượng: -- | Định dạng: --</div>
+                    <button class="btn" style="background: linear-gradient(90deg, #ff7f50, #ff4757);">📥 TẢI CẤU HÌNH VỀ MÁY</button>
                 </div>
             </div>
+        </div>
 
-            <div id="tab-optimize" class="tab-content">
-                <div id="toggleList"></div>
+        <!-- TAB 2: ĐỘ NHẠY -->
+        <div id="tab-sens" class="tab-content">
+            <label style="font-size: 13px; color: #888;">1. Chọn dòng máy:</label>
+            <select id="sens-os">
+                <option value="none">-- Chọn thiết bị --</option>
+                <option value="ios">📱 Apple iPhone</option>
+                <option value="ipad">💻 Apple iPad (Tất cả)</option>
+                <option value="android">🤖 Android (Tất cả)</option>
+            </select>
+            
+            <select id="sens-device" style="display:none;"></select>
+
+            <div id="sens-specs" style="display:none;">
+                <label style="font-size: 13px; color: #888; display:block; margin-top:15px;">2. Chọn RAM:</label>
+                <select id="sens-ram"></select>
+
+                <label style="font-size: 13px; color: #888; display:block; margin-top:15px;">3. Chọn ROM (Dung lượng):</label>
+                <select id="sens-rom"></select>
+
+                <button class="btn btn-blue" id="btn-calc-sens" style="margin-top:20px;">XÁC NHẬN TÍNH TOÁN</button>
             </div>
 
-            <div id="tab-pro" class="tab-content">
-                <div id="proView"></div>
+            <div id="sens-result-box" style="display:none; margin-top:20px; border-top: 1px solid #333; padding-top: 15px;">
+                <h3 style="color:#00adb5; text-align:center; margin-bottom:10px;">✅ CẤU HÌNH ĐỀ XUẤT</h3>
+                <div class="sens-grid">
+                    <div class="sens-item"><span>Nhìn xung quanh</span><strong id="r-gen">0</strong></div>
+                    <div class="sens-item"><span>Red Dot Sight</span><strong id="r-red">0</strong></div>
+                    <div class="sens-item"><span>Ống ngắm 2x</span><strong id="r-2x">0</strong></div>
+                    <div class="sens-item"><span>Ống ngắm 4x</span><strong id="r-4x">0</strong></div>
+                    <div class="sens-item"><span>Nút bắn (%)</span><strong id="r-fire">0%</strong></div>
+                    <div class="sens-item"><span>DPI (Độ rộng)</span><strong id="r-dpi">0</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: TỐI ƯU -->
+        <div id="tab-opt" class="tab-content">
+            <h3 style="color:var(--blue-glow); margin-top:0;">⚡ Tùy chỉnh hệ thống</h3>
+            <div class="toggle-row">
+                <span>Đầm tâm (Anti-Shake)</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+                <span>Tăng FPS (90/120Hz)</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+                <span>Tối ưu cảm ứng (Touch Booster)</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+                <span>Giảm Ping (Mạng ổn định)</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            
+            <button class="btn" id="btn-khoichay" style="background: #00adb5; margin-top: 25px;">🚀 KHỞI CHẠY</button>
+
+            <div id="processing-status">
+                <div class="spinner"></div>
+                ĐANG XỬ LÝ DỮ LIỆU MÁY...
+            </div>
+            <div id="success-status">ĐÃ KÍCH HOẠT 🎉🎉</div>
+        </div>
+
+        <!-- TAB 4: PRO -->
+        <div id="tab-pro" class="tab-content">
+            <h3 style="color:#ffd700; text-align:center; margin-top:0;">🌟 TRẠNG THÁI TÀI KHOẢN</h3>
+            <div style="background:#1a1a1a; padding:15px; border-radius:10px; text-align:center;">
+                <p id="pro-status-text" style="color:#aaa; margin:0;">Phiên bản hiện tại: <b>FREE</b></p>
+            </div>
+            
+            <div class="pro-box">
+                <h4 style="color:#ffd700; margin:0 0 10px 0;">KÍCH HOẠT BẢN PRO</h4>
+                <p style="font-size:13px; color:#ddd;">Mở khóa toàn bộ Tệp File Tối Ưu cấp độ chuyên gia.</p>
+                <div style="background:#fff; padding:10px; border-radius:8px; display:inline-block; margin-bottom:10px;">
+                    <!-- Mã QR giả lập bằng CSS/Chữ cho an toàn token, người dùng quét mã ZaloPay thật qua STK -->
+                    <div style="width:120px; height:120px; background:#eee; display:flex; align-items:center; justify-content:center; color:#000; font-weight:bold; font-size:12px; border:2px solid #0088ff;">QR ZALOPAY</div>
+                </div>
+                <p style="font-size:14px; margin:5px 0;"><b>ZaloPay:</b> 0395734228</p>
+                <p style="font-size:14px; margin:5px 0;"><b>Tên:</b> Nguyễn Khắc Hiếu</p>
+                <p style="font-size:12px; color:#ff4757; margin-top:10px;"><i>(Sau khi chuyển khoản, liên hệ Admin để nhận mật khẩu PRO)</i></p>
             </div>
         </div>
     </div>
 
-    <audio id="bgMusic" loop>
+    <!-- Nhạc nền -->
+    <audio id="bg-music" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="notification" id="noti"></div>
-
     <script>
-        // --- CẤU HÌNH DỮ LIỆU ---
-        const PWD_APP = 'bohieudaycon09';
-        const PWD_PRO = 'hieudeptrai009';
+        // KIỂM TRA CHẾ ĐỘ APP
+        const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches || window.location.search.includes('mode=app');
+        
+        const installScreen = document.getElementById('install-screen');
+        const startScreen = document.getElementById('start-screen');
+        const loginScreen = document.getElementById('login-screen');
+        const mainScreen = document.getElementById('main-screen');
+        const audio = document.getElementById('bg-music');
 
-        const devices = {
-            iphone: [
-                { id: 'i14pm', name: 'iPhone 14 Pro Max', file: 'ios_14pm_tweak.mobileconfig', size: '14.2 KB' },
-                { id: 'i15pm', name: 'iPhone 15 Pro Max', file: 'ios_15pm_tweak.mobileconfig', size: '14.5 KB' },
-                { id: 'i16pm', name: 'iPhone 16 Pro Max', file: 'ios_16pm_tweak.mobileconfig', size: '15.1 KB' }
-            ],
-            android: [
-                { id: 'a05', name: 'Samsung Galaxy A05', file: 'android_a05_reg.xml', size: '11.8 KB' },
-                { id: 'a15', name: 'Samsung Galaxy A15', file: 'android_a15_reg.xml', size: '12.0 KB' },
-                { id: 'a35', name: 'Samsung Galaxy A35', file: 'android_a35_reg.xml', size: '12.9 KB' },
-                { id: 'a55', name: 'Samsung Galaxy A55', file: 'android_a55_reg.xml', size: '13.5 KB' }
-            ],
-            ipad: [
-                { id: 'ip_pro', name: 'iPad Pro (M1/M2/M4)', file: 'ipad_pro_aim.xml', size: '18.2 KB' },
-                { id: 'ip_air', name: 'iPad Air (Gen 4/5/M2)', file: 'ipad_air_aim.xml', size: '17.5 KB' },
-                { id: 'ip_mini', name: 'iPad Mini (6/7)', file: 'ipad_mini_aim.xml', size: '16.1 KB' },
-                { id: 'ip_gen', name: 'iPad Thường (Gen 9/10)', file: 'ipad_gen_aim.xml', size: '15.8 KB' }
-            ]
-        };
+        if (isStandalone) { startScreen.classList.add('active-screen'); } 
+        else { installScreen.classList.add('active-screen'); }
 
-        const toggles = [
-            { id: 'rung', name: 'Fix Rung Màn Hình', pro: false },
-            { id: 'lo', name: 'Giảm Lố Tâm Ngắm', pro: false },
-            { id: 'dam', name: 'Đầm Tâm Chống Giật 🔒', pro: true },
-            { id: 'fps', name: 'Tối Ưu FPS 120Hz 🔒', pro: true },
-            { id: 'cam', name: 'Tối Ưu Cảm Ứng 🔒', pro: true },
-            { id: 'net', name: 'Tối Ưu Mạng (Ping) 🔒', pro: true }
-        ];
+        // Cài đặt app
+        document.getElementById('install-btn').addEventListener('click', () => {
+            window.location.href = './app.mobileconfig';
+            document.getElementById('instruction').style.display = 'block';
+        });
 
-        // --- KHỞI TẠO ---
-        const startScreen = document.getElementById('startScreen');
-        const bgMusic = document.getElementById('bgMusic');
-        const appContainer = document.getElementById('appContainer');
-        const noti = document.getElementById('noti');
-        let isProAccount = false;
+        // Bắt đầu vào app (Âm thanh)
+        document.getElementById('enter-btn').addEventListener('click', () => {
+            audio.play().catch(e => console.log(e));
+            startScreen.classList.remove('active-screen');
+            loginScreen.classList.add('active-screen');
+        });
 
-        // Xử lý hạt sao
-        for(let i=0; i<30; i++) {
-            let s = document.createElement('div');
-            s.className = 'star';
-            s.style.width = s.style.height = (Math.random()*3+1)+'px';
-            s.style.top = Math.random()*100+'%';
-            s.style.left = Math.random()*100+'%';
-            s.style.animationDelay = Math.random()*2+'s';
-            document.getElementById('starfield').appendChild(s);
-        }
+        // Đăng nhập
+        let isPro = false;
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const pass = document.getElementById('pass-input').value;
+            const err = document.getElementById('login-error');
+            if (pass === 'bohieudaycon09') {
+                isPro = false;
+                loginScreen.classList.remove('active-screen');
+                mainScreen.classList.add('active-screen');
+                setupApp();
+            } else if (pass === 'hieudeptrai009') {
+                isPro = true;
+                loginScreen.classList.remove('active-screen');
+                mainScreen.classList.add('active-screen');
+                document.getElementById('file-locked').style.display = 'none';
+                document.getElementById('file-unlocked').style.display = 'block';
+                document.getElementById('pro-status-text').innerHTML = 'Phiên bản hiện tại: <b style="color:#ffd700;">PRO VIP</b>';
+                setupApp();
+            } else { err.style.display = 'block'; }
+        });
 
-        // Xử lý Bypass Audio Apple
-        startScreen.onclick = () => {
-            bgMusic.play().catch(e => console.log('Chờ tương tác...'));
-            startScreen.style.display = 'none';
-            appContainer.classList.add('show');
-        };
-
-        // --- ĐĂNG NHẬP ---
-        document.getElementById('loginBtn').onclick = () => {
-            const val = document.getElementById('pwdInput').value.trim();
-            if(val === PWD_APP) { initApp(false); }
-            else if(val === PWD_PRO) { initApp(true); }
-            else { document.getElementById('loginErr').style.display = 'block'; }
-        };
-
-        function initApp(proStatus) {
-            isProAccount = proStatus;
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            
-            if(isProAccount) {
-                document.getElementById('proBadge').textContent = 'PRO';
-                document.getElementById('proBadge').classList.remove('free');
-            }
-            
-            buildFileTab();
-            buildToggles();
-            buildProTab();
-        }
-
-        // --- TABS CHUYỂN HƯỚNG ---
+        // Xử lý Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.onclick = () => {
+            btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
-                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-            };
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
         });
 
-        // --- TAB 1: WEB FILE ---
-        const typeSel = document.getElementById('deviceType');
-        const modSel = document.getElementById('deviceModel');
-        
-        function buildFileTab() {
-            typeSel.onchange = updateModels;
-            modSel.onchange = updateFileInfo;
-            updateModels();
-        }
-
-        function updateModels() {
-            modSel.innerHTML = '';
-            devices[typeSel.value].forEach(m => {
-                modSel.innerHTML += `<option value="${m.id}">${m.name}</option>`;
-            });
-            updateFileInfo();
-        }
-
-        function updateFileInfo() {
-            let item = devices[typeSel.value].find(m => m.id === modSel.value);
-            document.getElementById('fileName').textContent = item.file;
-            document.getElementById('fileSize').textContent = `Dung lượng: ${item.size} · Định dạng: Hệ thống`;
-        }
-
-        document.getElementById('downloadBtn').onclick = () => {
-            showNoti(`📥 Đang nạp tệp: ${document.getElementById('fileName').textContent}`);
-            setTimeout(() => showNoti('✅ Tải tệp thành công! Vui lòng cài đặt.'), 1500);
+        // Dữ liệu Thiết bị
+        const dataApple = ["iPhone 11", "iPhone 11 Pro", "iPhone 11 Pro Max", "iPhone 12", "iPhone 12 Pro", "iPhone 12 Pro Max", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max", "iPhone 14", "iPhone 14 Plus", "iPhone 14 Pro", "iPhone 14 Pro Max", "iPhone 15", "iPhone 15 Plus", "iPhone 15 Pro", "iPhone 15 Pro Max", "iPhone 16 Series"];
+        const dataIpad = ["iPad Pro (M4/M2/M1)", "iPad Air (M2/Gen 5/4)", "iPad Mini (Gen 6/7)", "iPad (Gen 9/10)"];
+        const dataAndroid = {
+            "Samsung (Giá rẻ/Tầm trung)": ["Galaxy A05/A05s", "Galaxy A15", "Galaxy A25", "Galaxy A35", "Galaxy A55", "Galaxy M15/M35", "Galaxy F15/F55"],
+            "Samsung (Cao cấp)": ["Galaxy S23/S23 FE", "Galaxy S24/S24+", "Galaxy S24 Ultra", "Galaxy Z Fold 5/6", "Galaxy Z Flip 5/6"],
+            "Xiaomi/Redmi/POCO": ["Redmi Note 13/14 Series", "POCO X6/X6 Pro", "POCO F6", "Xiaomi 13/14 Series"],
+            "Oppo/Realme": ["Oppo Reno 11/12", "Oppo Find X7", "Realme 12/13 Pro", "Realme GT5/GT6"],
+            "Gaming/Khác": ["ROG Phone Series", "RedMagic Series", "Vivo X100", "iQOO 12/Neo 9"]
         };
+        const dataRAM = ["2GB", "3GB", "4GB", "6GB", "8GB", "12GB", "16GB", "24GB"];
+        const dataROM = ["8GB", "16GB", "32GB", "64GB", "128GB", "256GB", "512GB", "1TB", "2TB"];
 
-        // --- TAB 2: TỐI ƯU ---
-        function buildToggles() {
-            const list = document.getElementById('toggleList');
-            list.innerHTML = '';
-            toggles.forEach(t => {
-                const locked = t.pro && !isProAccount;
-                list.innerHTML += `
-                    <div class="toggle-item" style="opacity: ${locked ? '0.5' : '1'}">
-                        <span style="color:#fff; font-weight:600; font-size:14px;">${t.name}</span>
-                        <div class="switch" onclick="toggleSwitch(this, ${t.pro}, ${locked})"></div>
-                    </div>
-                `;
-            });
-        }
-
-        window.toggleSwitch = (el, isProFeat, isLocked) => {
-            if(isLocked) return showNoti('⭐ Tính năng yêu cầu mã PRO!');
-            el.classList.toggle('active');
-            showNoti(el.classList.contains('active') ? '✅ Đã BẬT hệ thống' : '❌ Đã TẮT hệ thống');
-        };
-
-        // --- TAB 3: PRO ---
-        function buildProTab() {
-            const view = document.getElementById('proView');
-            if(isProAccount) {
-                view.innerHTML = `
-                    <div class="pro-card" style="border-color:#ffd700;">
-                        <div style="font-size:40px;">👑</div>
-                        <div style="color:#ffd700; font-size:20px; font-weight:800; margin:10px 0;">TRẠNG THÁI PRO MỞ KHÓA</div>
-                        <p style="color:rgba(255,255,255,0.6); font-size:13px;">Hệ thống tối ưu hóa và liên kết tệp tin đã được mở khóa toàn diện cho Nguyễn Khắc Hiếu.</p>
-                    </div>`;
+        // Hàm điền Option
+        function fillOptions(selectElement, dataArray, isGroup = false) {
+            selectElement.innerHTML = '<option value="none">-- Vui lòng chọn --</option>';
+            if (isGroup) {
+                for (const group in dataArray) {
+                    let optgroup = document.createElement('optgroup');
+                    optgroup.label = group;
+                    dataArray[group].forEach(item => {
+                        let opt = document.createElement('option'); opt.value = item; opt.innerText = item;
+                        optgroup.appendChild(opt);
+                    });
+                    selectElement.appendChild(optgroup);
+                }
             } else {
-                view.innerHTML = `
-                    <div class="pro-card">
-                        <div style="font-size:28px; font-weight:900; color:#ffd700;">150.000đ</div>
-                        <p style="color:rgba(255,255,255,0.5); font-size:12px; margin-bottom:15px;">Sử dụng vĩnh viễn mọi tính năng</p>
-                        
-                        <div style="background:rgba(0,0,0,0.5); padding:12px; border-radius:12px; text-align:left; font-size:14px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                                <span style="color:rgba(255,255,255,0.5);">Ví:</span><strong style="color:#fff;">ZaloPay</strong>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                                <span style="color:rgba(255,255,255,0.5);">STK:</span><strong style="color:#fff;">0395734228</strong>
-                            </div>
-                            <div style="display:flex; justify-content:space-between;">
-                                <span style="color:rgba(255,255,255,0.5);">Tên:</span><strong style="color:#fff;">NGUYEN KHAC HIEU</strong>
-                            </div>
-                        </div>
-                        
-                        <div class="qr-box">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ZaloPay-0395734228-NGUYEN_KHAC_HIEU" alt="QR">
-                        </div>
-                        
-                        <button class="btn-primary" onclick="enterProCode()" style="margin-top:15px;">🔑 NHẬP MÃ KÍCH HOẠT PRO</button>
-                    </div>`;
+                dataArray.forEach(item => {
+                    let opt = document.createElement('option'); opt.value = item; opt.innerText = item;
+                    selectElement.appendChild(opt);
+                });
             }
         }
 
-        window.enterProCode = () => {
-            if(prompt('Nhập mã PRO của bạn:') === PWD_PRO) {
-                isProAccount = true;
-                document.getElementById('proBadge').textContent = 'PRO';
-                document.getElementById('proBadge').classList.remove('free');
-                buildToggles();
-                buildProTab();
-                showNoti('✅ Kích hoạt PRO thành công!');
-            } else {
-                alert('Mã không hợp lệ!');
-            }
-        };
+        // Logic Tab 1: File
+        const fileOs = document.getElementById('file-os');
+        const fileDevice = document.getElementById('file-device');
+        const fileWrap = document.getElementById('file-device-wrap');
+        const fileResult = document.getElementById('file-result-box');
 
-        // Hàm tiện ích thông báo
-        let notiTimer;
-        function showNoti(msg) {
-            noti.textContent = msg;
-            noti.classList.add('show');
-            clearTimeout(notiTimer);
-            notiTimer = setTimeout(() => noti.classList.remove('show'), 2500);
+        fileOs.addEventListener('change', () => {
+            fileResult.style.display = 'none';
+            if (fileOs.value === 'none') { fileWrap.style.display = 'none'; return; }
+            fileWrap.style.display = 'block';
+            if (fileOs.value === 'ios') fillOptions(fileDevice, dataApple);
+            if (fileOs.value === 'android') fillOptions(fileDevice, dataAndroid, true);
+        });
+
+        fileDevice.addEventListener('change', () => {
+            if (fileDevice.value === 'none') { fileResult.style.display = 'none'; return; }
+            let code = fileDevice.value.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            let fileName = fileOs.value === 'ios' ? `ios_${code}_tweak.mobileconfig` : `android_${code}_reg.xml`;
+            let fileSize = (Math.random() * (25 - 10) + 10).toFixed(1) + " KB";
+            
+            document.getElementById('file-name-text').innerText = fileName;
+            document.getElementById('file-info-text').innerText = `Dung lượng: ${fileSize} | Định dạng: Hệ thống`;
+            fileResult.style.display = 'block';
+        });
+
+        // Logic Tab 2: Độ Nhạy
+        const sensOs = document.getElementById('sens-os');
+        const sensDevice = document.getElementById('sens-device');
+        const sensSpecs = document.getElementById('sens-specs');
+        const sensRam = document.getElementById('sens-ram');
+        const sensRom = document.getElementById('sens-rom');
+
+        fillOptions(sensRam, dataRAM);
+        fillOptions(sensRom, dataROM);
+
+        sensOs.addEventListener('change', () => {
+            document.getElementById('sens-result-box').style.display = 'none';
+            if (sensOs.value === 'none') { sensDevice.style.display = 'none'; sensSpecs.style.display = 'none'; return; }
+            sensDevice.style.display = 'block';
+            if (sensOs.value === 'ios') fillOptions(sensDevice, dataApple);
+            if (sensOs.value === 'ipad') fillOptions(sensDevice, dataIpad);
+            if (sensOs.value === 'android') fillOptions(sensDevice, dataAndroid, true);
+        });
+
+        sensDevice.addEventListener('change', () => {
+            sensSpecs.style.display = sensDevice.value !== 'none' ? 'block' : 'none';
+        });
+
+        document.getElementById('btn-calc-sens').addEventListener('click', () => {
+            if (sensRam.value === 'none' || sensRom.value === 'none') { alert("Vui lòng chọn đầy đủ RAM và ROM!"); return; }
+            // Thuật toán cấp độ nhạy (0 - 200)
+            document.getElementById('r-gen').innerText = Math.floor(Math.random() * 51) + 150; // 150-200
+            document.getElementById('r-red').innerText = Math.floor(Math.random() * 101) + 100; // 100-200
+            document.getElementById('r-2x').innerText = Math.floor(Math.random() * 101) + 100; // 100-200
+            document.getElementById('r-4x').innerText = Math.floor(Math.random() * 101) + 100; // 100-200
+            document.getElementById('r-fire').innerText = Math.floor(Math.random() * 26) + 40 + "%"; // 40-65%
+            document.getElementById('r-dpi').innerText = Math.floor(Math.random() * 501) + 400; // 400-900 DPI
+            document.getElementById('sens-result-box').style.display = 'block';
+        });
+
+        // Logic Tab 3: Khởi chạy
+        const btnKhoiChay = document.getElementById('btn-khoichay');
+        const procStatus = document.getElementById('processing-status');
+        const succStatus = document.getElementById('success-status');
+
+        btnKhoiChay.addEventListener('click', () => {
+            btnKhoiChay.style.display = 'none';
+            procStatus.style.display = 'block';
+            succStatus.style.display = 'none';
+            
+            let loadTime = Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000; // 3-5 seconds
+            
+            setTimeout(() => {
+                procStatus.style.display = 'none';
+                succStatus.style.display = 'block';
+                setTimeout(() => { 
+                    btnKhoiChay.style.display = 'block'; 
+                    succStatus.style.display = 'none';
+                    // Reset toggles
+                    document.querySelectorAll('.switch input').forEach(inp => inp.checked = false);
+                }, 4000);
+            }, loadTime);
+        });
+
+        function setupApp() {
+            // Hàm khởi tạo phụ nếu cần
         }
     </script>
 </body>
