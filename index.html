@@ -2,162 +2,355 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Độ Nhạy Chuẩn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DoNhayChuan Pro</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        * { box-sizing: border-box; }
+        /* ========== CƠ BẢN ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            text-align: center;
-            background: #121212;
-            color: white;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            user-select: none;
-            -webkit-user-select: none;
+            background: #0a0a1a; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 16px; position: relative; overflow: hidden; user-select: none; -webkit-user-select: none;
         }
-        .container { padding: 20px; max-width: 95%; width: 400px; overflow-y: auto; max-height: 100vh; }
-        .btn {
-            display: inline-block;
-            padding: 16px 35px;
-            background: #00adb5;
-            color: white;
-            text-decoration: none;
-            border-radius: 35px;
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: 15px;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0, 173, 181, 0.4);
-            transition: transform 0.1s, background 0.2s;
-            width: 100%;
-        }
-        .btn:active { transform: scale(0.96); background: #008c93; }
         
-        #install-screen { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-        #instruction { font-size: 14px; color: #ffeb3b; display: none; margin-top: 20px; line-height: 1.5; background: rgba(255, 235, 59, 0.1); padding: 12px; border-radius: 10px; border: 1px dashed #ffeb3b; }
+        /* Hiệu ứng nền */
+        body::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.2) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 45, 85, 0.2) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 80%, rgba(0, 191, 255, 0.15) 0%, transparent 40%);
+            animation: auraShift 20s ease-in-out infinite alternate; filter: blur(40px); pointer-events: none;
+        }
+        @keyframes auraShift {
+            0% { transform: translate(-5%, -5%) scale(1); }
+            100% { transform: translate(5%, 5%) scale(1.05); }
+        }
+        .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50%; animation: twinkle 2s infinite alternate; }
+        @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
 
-        #start-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #121212; display: none; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999; cursor: pointer;
+        /* ========== UI CHÍNH ========== */
+        .container {
+            background: rgba(10, 10, 26, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 32px; padding: 24px; width: 100%; max-width: 480px;
+            border: 1px solid rgba(255, 140, 0, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            position: relative; z-index: 2; max-height: 95vh; overflow-y: auto; display: none;
+        }
+        .container.show { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Màn hình chờ (Bypass Apple Autoplay) */
+        #startScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a1a;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; cursor: pointer;
         }
         .welcome-btn {
-            padding: 22px 45px; background: #ff4757; color: white; font-size: 20px;
-            font-weight: bold; border-radius: 50px; box-shadow: 0 4px 20px rgba(255, 71, 87, 0.5);
-            animation: pulse 1.5s infinite; text-transform: uppercase; letter-spacing: 1px;
+            padding: 20px 40px; background: linear-gradient(135deg, #ff8c00, #ff2d55);
+            color: white; font-size: 20px; font-weight: 800; border-radius: 50px;
+            box-shadow: 0 0 25px rgba(255, 45, 85, 0.5); animation: pulse 1.5s infinite; text-transform: uppercase;
         }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        #app-screen { display: none; flex-direction: column; align-items: center; width: 100%; }
-        .status-box { background: rgba(0, 173, 181, 0.05); border: 1px solid rgba(0, 173, 181, 0.3); padding: 15px; border-radius: 15px; margin-top: 15px; width: 100%; }
-        
-        /* KHU VỰC GIAO DIỆN APP CỦA BẠN (Tự tùy biến thêm tại đây) */
-        .app-panel {
-            background: #1e1e1e;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-            width: 100%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            text-align: left;
-        }
-        .panel-title { color: #00adb5; font-size: 18px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 8px; }
-        .setting-item { margin-bottom: 15px; }
-        .setting-item label { display: block; font-size: 14px; color: #ccc; margin-bottom: 5px; }
-        .setting-item input[type="range"] { width: 100%; accent-color: #00adb5; }
+        /* Header & Tabs */
+        .header-title { color: #fff; font-size: 26px; font-weight: 900; background: linear-gradient(135deg, #ff8c00, #ff2d55); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+        .pro-badge { display: inline-block; background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800; padding: 3px 12px; border-radius: 20px; font-size: 11px; margin-left: 8px; vertical-align: middle; }
+        .pro-badge.free { background: rgba(255, 255, 255, 0.2); color: #fff; }
+        .tabs { display: flex; gap: 8px; margin: 20px 0 16px 0; }
+        .tab-btn { flex: 1; padding: 12px 0; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; color: rgba(255, 255, 255, 0.6); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s; text-align: center; }
+        .tab-btn.active { background: rgba(255, 140, 0, 0.15); border-color: #ff8c00; color: #fff; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        /* Inputs & Buttons */
+        input, select, button { width: 100%; padding: 15px; border-radius: 16px; border: none; font-size: 15px; margin-top: 10px; }
+        input, select { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.15); outline: none; }
+        input:focus, select:focus { border-color: #ff8c00; }
+        .btn-primary { background: linear-gradient(135deg, #ff8c00, #ff2d55); color: #fff; font-weight: 800; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 45, 85, 0.3); transition: transform 0.1s; }
+        .btn-primary:active { transform: scale(0.96); }
+
+        /* File Card & Toggles */
+        .file-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 16px; margin-top: 16px; }
+        .toggle-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: rgba(255, 255, 255, 0.05); border-radius: 16px; margin-bottom: 8px; }
+        .switch { position: relative; width: 48px; height: 26px; background: rgba(255, 255, 255, 0.2); border-radius: 30px; cursor: pointer; transition: 0.3s; }
+        .switch.active { background: linear-gradient(135deg, #ff8c00, #ff2d55); }
+        .switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: 0.3s; }
+        .switch.active::after { left: 25px; }
+
+        /* Pro & Noti */
+        .pro-card { background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 24px; padding: 20px; text-align: center; }
+        .qr-box { background: #fff; padding: 10px; border-radius: 16px; display: inline-block; margin-top: 10px; }
+        .qr-box img { max-width: 150px; display: block; }
+        .notification { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid #ff8c00; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 9999; display: none; white-space: nowrap; }
+        .notification.show { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { bottom: -20px; opacity: 0; } to { bottom: 24px; opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="install-screen" class="container">
-        <h1 style="color: #00adb5; font-size: 32px; margin-bottom: 5px; letter-spacing: 1px;">ĐỘ NHẠY CHUẨN</h1>
-        <p style="color: #aaa; font-size: 15px; margin-top: 5px;">Ứng dụng tối ưu hóa màn hình chính.</p>
-        
-        <button class="btn" id="install-btn">CÀI ĐẶT APP RA MÀN HÌNH</button>
-        
-        <div id="instruction">
-            📥 <b>Đã tải cấu hình!</b><br>
-            Vào <b>Cài đặt</b> > <b>Đã tải về hồ sơ</b> trên iPhone để hoàn tất cài đặt ra màn hình chính.
-        </div>
-    </div>
-
-    <div id="start-screen">
+    <div id="startScreen">
         <div class="welcome-btn">CHẠM ĐỂ VÀO APP</div>
-        <p style="font-size: 14px; color: #888; margin-top: 20px;">(Bắt buộc chạm để kích hoạt hệ thống âm thanh)</p>
+        <p style="color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 20px;">(Bắt buộc để kích hoạt hệ thống âm thanh)</p>
     </div>
 
-    <div id="app-screen" class="container">
-        <h1 style="color: #00adb5; font-size: 28px; margin-bottom: 0;">ĐỘ NHẠY CHUẨN</h1>
-        <p style="color: #00adb5; font-size: 11px; letter-spacing: 3px; font-weight: bold; margin: 5px 0 0 0;">• SYSTEM ACTIVE •</p>
-        
-        <div class="status-box">
-            <p style="margin: 0; font-size: 15px; color: #fff; font-weight: 500;">🎵 Nhạc nền đang phát...</p>
+    <div class="stars" id="starfield"></div>
+
+    <div class="container" id="appContainer">
+        <div>
+            <span class="header-title">DoNhayChuan <span class="pro-badge free" id="proBadge">FREE</span></span>
+            <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">Hệ thống Web Tệp File Tối Ưu</p>
         </div>
 
-        <div class="app-panel">
-            <div class="panel-title">🎛️ BẢNG ĐIỀU CHỈNH ĐỘ NHẠY</div>
-            
-            <div class="setting-item">
-                <label>Độ nhạy nhìn xung quanh (General): <span style="color:#00adb5; font-weight:bold;">95%</span></label>
-                <input type="range" min="0" max="100" value="95">
-            </div>
-
-            <div class="setting-item">
-                <label>Red Dot Sight: <span style="color:#00adb5; font-weight:bold;">88%</span></label>
-                <input type="range" min="0" max="100" value="88">
-            </div>
-
-            <div class="setting-item">
-                <label>Ống ngắm 2x (2x Scope): <span style="color:#00adb5; font-weight:bold;">82%</span></label>
-                <input type="range" min="0" max="100" value="82">
-            </div>
-
-            <button class="btn" style="margin-top: 10px;">ÁP DỤNG CẤU HÌNH</button>
-        </div>
+        <div id="loginScreen" style="margin-top: 20px;">
+            <input type="password" id="pwdInput" placeholder="🔑 Nhập mật khẩu hệ thống..." autocomplete="off">
+            <button class="btn-primary" id="loginBtn">MỞ KHÓA APP</button>
+            <p id="loginErr" style="color: #ff4757; font-size: 13px; margin-top: 10px; display: none;">❌ Mật khẩu không chính xác!</p>
         </div>
 
-    <audio id="bg-music" loop>
+        <div id="mainApp" style="display: none;">
+            <div class="tabs">
+                <div class="tab-btn active" data-tab="files">📂 Tệp File</div>
+                <div class="tab-btn" data-tab="optimize">⚡ Tối Ưu</div>
+                <div class="tab-btn" data-tab="pro">🌟 PRO</div>
+            </div>
+
+            <div id="tab-files" class="tab-content active">
+                <select id="deviceType">
+                    <option value="iphone">📱 Apple iPhone</option>
+                    <option value="android">🤖 Android (Samsung dòng A, Xiaomi...)</option>
+                    <option value="ipad">平板 Apple iPad (Pro, Air, Mini)</option>
+                </select>
+                <select id="deviceModel" style="margin-top: 12px;"></select>
+
+                <div class="file-card">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <span style="font-size: 32px;">📄</span>
+                        <div>
+                            <div id="fileName" style="color: #fff; font-weight: bold; font-size: 15px;">Đang tải...</div>
+                            <div id="fileSize" style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 4px;">...</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" id="downloadBtn">📥 TẢI CẤU HÌNH VỀ MÁY</button>
+                </div>
+            </div>
+
+            <div id="tab-optimize" class="tab-content">
+                <div id="toggleList"></div>
+            </div>
+
+            <div id="tab-pro" class="tab-content">
+                <div id="proView"></div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
+    <div class="notification" id="noti"></div>
+
     <script>
-        const isStandalone = window.navigator.standalone || 
-                             window.matchMedia('(display-mode: standalone)').matches || 
-                             window.location.search.includes('mode=app');
+        // --- CẤU HÌNH DỮ LIỆU ---
+        const PWD_APP = 'bohieudaycon09';
+        const PWD_PRO = 'hieudeptrai009';
 
-        const installScreen = document.getElementById('install-screen');
-        const startScreen = document.getElementById('start-screen');
-        const appScreen = document.getElementById('app-screen');
-        const audio = document.getElementById('bg-music');
-        const installBtn = document.getElementById('install-btn');
-        const instruction = document.getElementById('instruction');
+        const devices = {
+            iphone: [
+                { id: 'i14pm', name: 'iPhone 14 Pro Max', file: 'ios_14pm_tweak.mobileconfig', size: '14.2 KB' },
+                { id: 'i15pm', name: 'iPhone 15 Pro Max', file: 'ios_15pm_tweak.mobileconfig', size: '14.5 KB' },
+                { id: 'i16pm', name: 'iPhone 16 Pro Max', file: 'ios_16pm_tweak.mobileconfig', size: '15.1 KB' }
+            ],
+            android: [
+                { id: 'a05', name: 'Samsung Galaxy A05', file: 'android_a05_reg.xml', size: '11.8 KB' },
+                { id: 'a15', name: 'Samsung Galaxy A15', file: 'android_a15_reg.xml', size: '12.0 KB' },
+                { id: 'a35', name: 'Samsung Galaxy A35', file: 'android_a35_reg.xml', size: '12.9 KB' },
+                { id: 'a55', name: 'Samsung Galaxy A55', file: 'android_a55_reg.xml', size: '13.5 KB' }
+            ],
+            ipad: [
+                { id: 'ip_pro', name: 'iPad Pro (M1/M2/M4)', file: 'ipad_pro_aim.xml', size: '18.2 KB' },
+                { id: 'ip_air', name: 'iPad Air (Gen 4/5/M2)', file: 'ipad_air_aim.xml', size: '17.5 KB' },
+                { id: 'ip_mini', name: 'iPad Mini (6/7)', file: 'ipad_mini_aim.xml', size: '16.1 KB' },
+                { id: 'ip_gen', name: 'iPad Thường (Gen 9/10)', file: 'ipad_gen_aim.xml', size: '15.8 KB' }
+            ]
+        };
 
-        if (isStandalone) {
-            startScreen.style.display = 'flex';
-        } else {
-            installScreen.style.display = 'flex';
+        const toggles = [
+            { id: 'rung', name: 'Fix Rung Màn Hình', pro: false },
+            { id: 'lo', name: 'Giảm Lố Tâm Ngắm', pro: false },
+            { id: 'dam', name: 'Đầm Tâm Chống Giật 🔒', pro: true },
+            { id: 'fps', name: 'Tối Ưu FPS 120Hz 🔒', pro: true },
+            { id: 'cam', name: 'Tối Ưu Cảm Ứng 🔒', pro: true },
+            { id: 'net', name: 'Tối Ưu Mạng (Ping) 🔒', pro: true }
+        ];
+
+        // --- KHỞI TẠO ---
+        const startScreen = document.getElementById('startScreen');
+        const bgMusic = document.getElementById('bgMusic');
+        const appContainer = document.getElementById('appContainer');
+        const noti = document.getElementById('noti');
+        let isProAccount = false;
+
+        // Xử lý hạt sao
+        for(let i=0; i<30; i++) {
+            let s = document.createElement('div');
+            s.className = 'star';
+            s.style.width = s.style.height = (Math.random()*3+1)+'px';
+            s.style.top = Math.random()*100+'%';
+            s.style.left = Math.random()*100+'%';
+            s.style.animationDelay = Math.random()*2+'s';
+            document.getElementById('starfield').appendChild(s);
         }
 
-        startScreen.addEventListener('click', () => {
-            audio.play().catch(e => console.log("Lỗi âm thanh:", e));
+        // Xử lý Bypass Audio Apple
+        startScreen.onclick = () => {
+            bgMusic.play().catch(e => console.log('Chờ tương tác...'));
             startScreen.style.display = 'none';
-            appScreen.style.display = 'flex';
+            appContainer.classList.add('show');
+        };
+
+        // --- ĐĂNG NHẬP ---
+        document.getElementById('loginBtn').onclick = () => {
+            const val = document.getElementById('pwdInput').value.trim();
+            if(val === PWD_APP) { initApp(false); }
+            else if(val === PWD_PRO) { initApp(true); }
+            else { document.getElementById('loginErr').style.display = 'block'; }
+        };
+
+        function initApp(proStatus) {
+            isProAccount = proStatus;
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            
+            if(isProAccount) {
+                document.getElementById('proBadge').textContent = 'PRO';
+                document.getElementById('proBadge').classList.remove('free');
+            }
+            
+            buildFileTab();
+            buildToggles();
+            buildProTab();
+        }
+
+        // --- TABS CHUYỂN HƯỚNG ---
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            };
         });
 
-        installBtn.addEventListener('click', () => {
-            window.location.href = './app.mobileconfig';
-            instruction.style.display = 'block';
-        });
+        // --- TAB 1: WEB FILE ---
+        const typeSel = document.getElementById('deviceType');
+        const modSel = document.getElementById('deviceModel');
+        
+        function buildFileTab() {
+            typeSel.onchange = updateModels;
+            modSel.onchange = updateFileInfo;
+            updateModels();
+        }
+
+        function updateModels() {
+            modSel.innerHTML = '';
+            devices[typeSel.value].forEach(m => {
+                modSel.innerHTML += `<option value="${m.id}">${m.name}</option>`;
+            });
+            updateFileInfo();
+        }
+
+        function updateFileInfo() {
+            let item = devices[typeSel.value].find(m => m.id === modSel.value);
+            document.getElementById('fileName').textContent = item.file;
+            document.getElementById('fileSize').textContent = `Dung lượng: ${item.size} · Định dạng: Hệ thống`;
+        }
+
+        document.getElementById('downloadBtn').onclick = () => {
+            showNoti(`📥 Đang nạp tệp: ${document.getElementById('fileName').textContent}`);
+            setTimeout(() => showNoti('✅ Tải tệp thành công! Vui lòng cài đặt.'), 1500);
+        };
+
+        // --- TAB 2: TỐI ƯU ---
+        function buildToggles() {
+            const list = document.getElementById('toggleList');
+            list.innerHTML = '';
+            toggles.forEach(t => {
+                const locked = t.pro && !isProAccount;
+                list.innerHTML += `
+                    <div class="toggle-item" style="opacity: ${locked ? '0.5' : '1'}">
+                        <span style="color:#fff; font-weight:600; font-size:14px;">${t.name}</span>
+                        <div class="switch" onclick="toggleSwitch(this, ${t.pro}, ${locked})"></div>
+                    </div>
+                `;
+            });
+        }
+
+        window.toggleSwitch = (el, isProFeat, isLocked) => {
+            if(isLocked) return showNoti('⭐ Tính năng yêu cầu mã PRO!');
+            el.classList.toggle('active');
+            showNoti(el.classList.contains('active') ? '✅ Đã BẬT hệ thống' : '❌ Đã TẮT hệ thống');
+        };
+
+        // --- TAB 3: PRO ---
+        function buildProTab() {
+            const view = document.getElementById('proView');
+            if(isProAccount) {
+                view.innerHTML = `
+                    <div class="pro-card" style="border-color:#ffd700;">
+                        <div style="font-size:40px;">👑</div>
+                        <div style="color:#ffd700; font-size:20px; font-weight:800; margin:10px 0;">TRẠNG THÁI PRO MỞ KHÓA</div>
+                        <p style="color:rgba(255,255,255,0.6); font-size:13px;">Hệ thống tối ưu hóa và liên kết tệp tin đã được mở khóa toàn diện cho Nguyễn Khắc Hiếu.</p>
+                    </div>`;
+            } else {
+                view.innerHTML = `
+                    <div class="pro-card">
+                        <div style="font-size:28px; font-weight:900; color:#ffd700;">150.000đ</div>
+                        <p style="color:rgba(255,255,255,0.5); font-size:12px; margin-bottom:15px;">Sử dụng vĩnh viễn mọi tính năng</p>
+                        
+                        <div style="background:rgba(0,0,0,0.5); padding:12px; border-radius:12px; text-align:left; font-size:14px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span style="color:rgba(255,255,255,0.5);">Ví:</span><strong style="color:#fff;">ZaloPay</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span style="color:rgba(255,255,255,0.5);">STK:</span><strong style="color:#fff;">0395734228</strong>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span style="color:rgba(255,255,255,0.5);">Tên:</span><strong style="color:#fff;">NGUYEN KHAC HIEU</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="qr-box">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ZaloPay-0395734228-NGUYEN_KHAC_HIEU" alt="QR">
+                        </div>
+                        
+                        <button class="btn-primary" onclick="enterProCode()" style="margin-top:15px;">🔑 NHẬP MÃ KÍCH HOẠT PRO</button>
+                    </div>`;
+            }
+        }
+
+        window.enterProCode = () => {
+            if(prompt('Nhập mã PRO của bạn:') === PWD_PRO) {
+                isProAccount = true;
+                document.getElementById('proBadge').textContent = 'PRO';
+                document.getElementById('proBadge').classList.remove('free');
+                buildToggles();
+                buildProTab();
+                showNoti('✅ Kích hoạt PRO thành công!');
+            } else {
+                alert('Mã không hợp lệ!');
+            }
+        };
+
+        // Hàm tiện ích thông báo
+        let notiTimer;
+        function showNoti(msg) {
+            noti.textContent = msg;
+            noti.classList.add('show');
+            clearTimeout(notiTimer);
+            notiTimer = setTimeout(() => noti.classList.remove('show'), 2500);
+        }
     </script>
 </body>
 </html>
