@@ -1096,6 +1096,4 @@
         // 18. TẠO SAO BAN ĐẦU (đã có ở đầu script)
         // ============================================================
         console.log('DoNhayChuan Pro v5.0 loaded successfully.');
-    </script>
-</body>
-</html>
+  <button id="playMusicBtn" style="padding: 12px 24px; font-size: 16px; font-weight: bold; background: linear-gradient(135deg, #ff5722, #ff9800); color: white; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0px 4px 10px rgba(255, 87, 34, 0.4); display: block; margin: 20px auto; position: relative; z-index: 9999;">🎵 Bật nhạc nền</button><audio id="bgMusic" loop preload="auto" style="display:none;"><source src="ScreenRecording_07-02-2026%2021-47-57_1%20(online-audio-converter.com).mp3" type="audio/mpeg"></audio><script>(function(){const bg=document.getElementById('bgMusic'),btn=document.getElementById('playMusicBtn');if(btn&&bg){btn.addEventListener('click',function(){if(bg.paused){bg.play().then(()=>{btn.innerHTML='🔇 Tắt nhạc nền';setTimeout(()=>{btn.style.display='none';},3000);}).catch(e=>{alert('⚠️ Bấm lại nút lần nữa để kích hoạt nhạc!');});}else{bg.pause();btn.innerHTML='🎵 Bật nhạc nền';}});}})();</script></body></html>
