@@ -10,13 +10,13 @@
             <key>IsRemovable</key>
             <true/>
             <key>Label</key>
-            <string>Độ Nhạy Chuẩn</string>
+            <string>DoNhayChuan Pro</string>
             <key>PayloadDescription</key>
-            <string>Thêm lối tắt Độ Nhạy Chuẩn vào màn hình chính</string>
+            <string>Lối tắt cài đặt Web Clip DoNhayChuan Pro</string>
             <key>PayloadDisplayName</key>
-            <string>Web Clip Độ Nhạy Chuẩn</string>
+            <string>Web Clip DoNhayChuan Pro</string>
             <key>PayloadIdentifier</key>
-            <string>com.bohieuday.webclip.managed</string>
+            <string>com.donhaychuan.pro.webclip</string>
             <key>PayloadType</key>
             <string>com.apple.webClip.managed</string>
             <key>PayloadUUID</key>
@@ -26,17 +26,21 @@
             <key>Precomposed</key>
             <true/>
             <key>URL</key>
-            <string>https://do-nhay-chuan-bohieuday.netlify.app/?mode=app</string>
+            <string>https://nguyenkhahieu10209tb-sketch.github.io/music/?mode=app</string>
+            <key>Icon</key>
+            <data>
+            iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==
+            </data>
         </dict>
     </array>
     <key>PayloadDescription</key>
-    <string>Cấu hình này sẽ cài đặt ứng dụng Độ Nhạy Chuẩn ra màn hình chính.</string>
+    <string>Cấu hình này sẽ cài đặt giao diện điều khiển DoNhayChuan Pro ra màn hình chính của bạn.</string>
     <key>PayloadDisplayName</key>
-    <string>Cấu hình Độ Nhạy Chuẩn</string>
+    <string>Cấu hình DoNhayChuan Pro</string>
     <key>PayloadIdentifier</key>
-    <string>com.bohieuday.profile.webclip</string>
+    <string>com.donhaychuan.pro.profile</string>
     <key>PayloadOrganization</key>
-    <string>Bo Hieu Day</string>
+    <string>Nguyen Khac Hieu</string>
     <key>PayloadRemovalDisallowed</key>
     <false/>
     <key>PayloadType</key>
