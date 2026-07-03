@@ -3,253 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DoNhayChuan Pro</title>
+    <title>DoNhayChuan Pro VIP</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+
         :root {
-            --bg-dark: #0f111a;
-            --primary: #ff4757;
-            --accent: #ff7f50;
-            --blue-glow: #00adb5;
-            --card-bg: rgba(30, 32, 44, 0.85);
-            --text-light: #f1f2f6;
+            --primary: #ff2a5f;
+            --accent: #ff7e67;
+            --cyan: #00f2fe;
+            --blue: #4facfe;
+            --glass-bg: rgba(20, 22, 35, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+
+        * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+
         body {
-            background: radial-gradient(circle at 50% 0%, #2a1525 0%, var(--bg-dark) 60%);
-            color: var(--text-light); margin: 0; padding: 0; height: 100vh;
+            margin: 0; padding: 0; height: 100vh;
+            background: #090a0f;
+            color: #fff;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             overflow: hidden; user-select: none; -webkit-user-select: none;
         }
-        /* Hạt sao rơi - Stars */
-        .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; background: transparent url('data:image/svg+xml;utf8,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="1" fill="white" opacity="0.3"/><circle cx="150" cy="80" r="1.5" fill="white" opacity="0.5"/><circle cx="70" cy="160" r="1" fill="white" opacity="0.2"/></svg>') repeat; animation: moveStars 60s linear infinite; }
-        @keyframes moveStars { from { background-position: 0 0; } to { background-position: -10000px 5000px; } }
 
-        .container { padding: 20px; width: 100%; max-width: 450px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
-        .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; justify-content: center; }
-        .active-screen { display: flex; }
-
-        .title-gradient { font-size: 32px; font-weight: 800; margin-bottom: 5px; background: linear-gradient(90deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .btn {
-            background: linear-gradient(45deg, var(--primary), var(--accent)); color: white; border: none;
-            padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold; width: 100%;
-            cursor: pointer; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); transition: transform 0.1s; margin-top: 15px;
+        /* Animated Background Orbs */
+        .bg-orbs {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;
         }
-        .btn:active { transform: scale(0.95); }
-        .btn-blue { background: linear-gradient(45deg, #0052d4, #4364f7, #6fb1fc); box-shadow: 0 5px 15px rgba(67, 100, 247, 0.4); }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5;
+            animation: float 10s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -100px; left: -100px; }
+        .orb-2 { width: 250px; height: 250px; background: var(--blue); bottom: -50px; right: -50px; animation-delay: -5s; }
+        
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(50px) scale(1.2); }
+        }
 
-        /* Lock / Pass Screen */
-        .input-group { width: 100%; margin-top: 20px; }
-        .pass-input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: white; font-size: 16px; text-align: center; outline: none; }
+        /* Nút Bật/Tắt Nhạc */
+        #music-toggle {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 50%;
+            width: 45px; height: 45px; display: none; align-items: center; justify-content: center;
+            font-size: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        #music-toggle:active { transform: scale(0.9); }
 
-        /* Main App Tabs */
-        .header { text-align: center; margin-top: 20px; margin-bottom: 20px; }
+        .container { padding: 20px; width: 100%; max-width: 450px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: none; }
+        .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; justify-content: center; }
+        .active-screen { display: flex; animation: fadeIn 0.5s ease-out; }
+
+        .title-gradient {
+            font-size: 34px; font-weight: 800; text-align: center; margin-bottom: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0px 5px 20px rgba(255, 42, 95, 0.4);
+        }
+
+        /* Glassmorphism Buttons & Inputs */
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none;
+            padding: 16px; border-radius: 15px; font-size: 16px; font-weight: 800; width: 100%;
+            cursor: pointer; box-shadow: 0 8px 25px rgba(255, 42, 95, 0.4); transition: 0.2s; margin-top: 15px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn:active { transform: scale(0.95); box-shadow: 0 4px 10px rgba(255, 42, 95, 0.3); }
+        .btn-cyan { background: linear-gradient(135deg, var(--blue), var(--cyan)); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4); }
+
+        input[type="password"], input[type="text"], select {
+            width: 100%; padding: 15px; margin-top: 15px; border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3); color: white; border: 1px solid var(--glass-border);
+            font-size: 15px; outline: none; backdrop-filter: blur(10px); transition: 0.3s;
+        }
+        input:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 242, 254, 0.3); }
+        option { background: #111; color: #fff; }
+
+        /* Modern Tabs */
         .tab-menu { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; margin-bottom: 20px; width: 100%; }
-        .tab-btn { flex: 1 1 45%; padding: 12px; border-radius: 10px; background: #1a1c23; border: 1px solid #2a2d39; color: #888; font-weight: bold; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 5px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active { background: #2a2d39; color: var(--accent); border-color: var(--accent); }
+        .tab-btn {
+            flex: 1 1 45%; padding: 14px; border-radius: 12px; background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border); color: #aaa; font-weight: 600; font-size: 13px;
+            display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);
+        }
+        .tab-btn.active { background: rgba(255,255,255,0.1); color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 15px rgba(0,242,254,0.2); }
         
-        .tab-content { background: var(--card-bg); border-radius: 15px; padding: 20px; width: 100%; display: none; border: 1px solid #2a2d39; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .tab-content.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content {
+            background: var(--glass-bg); backdrop-filter: blur(20px); border-radius: 20px;
+            padding: 25px; width: 100%; display: none; border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .tab-content.active { display: block; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        /* Select boxes */
-        select { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; background: #111; color: white; border: 1px solid #444; font-size: 15px; outline: none; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* File Result Box */
-        .file-result { margin-top: 20px; background: #14151c; padding: 15px; border-radius: 12px; border: 1px solid #333; display: none; }
-        .file-icon { font-size: 24px; margin-bottom: 10px; }
-        .file-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #fff; word-break: break-all; }
-        .file-info { font-size: 12px; color: #888; margin-bottom: 15px; }
+        /* Lock Screen inside File Tab */
+        .locked-overlay { text-align: center; padding: 20px 0; }
+        .locked-icon { font-size: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,42,95,0.6)); }
 
-        /* Locked State */
-        .locked-overlay { text-align: center; padding: 30px 10px; }
-        .locked-overlay h3 { color: #ff4757; }
+        /* Sens Result Grid */
+        .sens-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .sens-item { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .sens-item span { display: block; font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+        .sens-item strong { font-size: 20px; color: var(--cyan); text-shadow: 0 0 8px rgba(0,242,254,0.5); font-weight: 800; }
 
-        /* Sens Result */
-        .sens-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .sens-item { background: #1a1c23; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333; }
-        .sens-item span { display: block; font-size: 11px; color: #888; }
-        .sens-item strong { font-size: 18px; color: var(--blue-glow); }
-
-        /* Toggles */
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2a2d39; }
+        /* Beautiful Toggles */
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .toggle-row:last-child { border-bottom: none; }
-        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--blue-glow); }
-        input:checked + .slider:before { transform: translateX(22px); }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+        input:checked + .slider:before { transform: translateX(24px); }
 
-        /* Status & Processing */
-        #processing-status { display: none; text-align: center; margin-top: 20px; font-weight: bold; color: var(--accent); }
-        .spinner { border: 3px solid rgba(255,255,255,0.1); width: 30px; height: 30px; border-radius: 50%; border-left-color: var(--accent); animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #success-status { display: none; text-align: center; margin-top: 20px; color: #2ed573; font-weight: bold; font-size: 18px; animation: pulse 1s infinite; }
+        /* PRO Password Section */
+        .pro-box { background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 15px; padding: 20px; text-align: center; margin-top: 15px; }
+        .qr-wrapper { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 15px 0; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .qr-img { width: 150px; height: 150px; display: block; }
         
-        .pulse-btn { padding: 22px 45px; background: #ff4757; color: white; font-size: 20px; font-weight: bold; border-radius: 50px; box-shadow: 0 4px 20px rgba(255, 71, 87, 0.5); animation: pulse 1.5s infinite; cursor: pointer; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .layer-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px dashed var(--accent); }
 
-        /* PRO Section */
-        .pro-box { background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 69, 0, 0.1)); border: 1px solid #ffd700; border-radius: 12px; padding: 15px; text-align: center; margin-top: 15px; }
+        #processing-status, #success-status { display: none; text-align: center; margin-top: 20px; font-weight: bold; }
+        .spinner { border: 3px solid rgba(255,255,255,0.1); width: 35px; height: 35px; border-radius: 50%; border-left-color: var(--cyan); animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         
+        .pulse-btn { padding: 22px 45px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; font-size: 20px; font-weight: 800; border-radius: 50px; border:none; box-shadow: 0 0 30px rgba(255, 42, 95, 0.6); animation: pulse 1.5s infinite; cursor: pointer; text-transform: uppercase; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 42, 95, 0.8); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
 
-    <!-- 1. MÀN HÌNH CÀI ĐẶT (WEB) -->
+    <!-- NÚT BẬT TẮT NHẠC (Yêu cầu 1) -->
+    <div id="music-toggle">🔊</div>
+
+    <!-- 1. MÀN HÌNH CÀI ĐẶT -->
     <div id="install-screen" class="screen container">
         <h1 class="title-gradient">DoNhayChuan Pro</h1>
-        <p style="color: #aaa; font-size: 15px;">Hệ thống Web Tệp File Tối Ưu</p>
-        <button class="btn" id="install-btn">CÀI ĐẶT APP RA MÀN HÌNH</button>
-        <p id="instruction" style="display:none; color:#ffeb3b; background:rgba(255,235,59,0.1); padding:10px; border-radius:8px; border:1px dashed #ffeb3b; margin-top:20px; font-size:14px;">📥 <b>Đã tải cấu hình!</b><br>Vào Cài đặt > Đã tải về hồ sơ để hoàn tất.</p>
+        <p style="color: #bbb; text-align:center;">Hệ thống Tối Ưu Hóa Giao Diện Đỉnh Cao</p>
+        <button class="btn" id="install-btn">CÀI ĐẶT RA MÀN HÌNH</button>
+        <p id="instruction" style="display:none; color:#ffd700; background:rgba(255,215,0,0.1); padding:15px; border-radius:12px; border:1px dashed #ffd700; margin-top:20px; font-size:14px; text-align:center;">
+            📥 <b>Đã xuất cấu hình!</b><br>Vào Cài đặt > Đã tải về hồ sơ để kích hoạt.
+        </p>
     </div>
 
-    <!-- 2. MÀN HÌNH CHẠM VÀO APP (STANDALONE) -->
+    <!-- 2. MÀN HÌNH VÀO APP -->
     <div id="start-screen" class="screen">
-        <div class="pulse-btn" id="enter-btn">CHẠM ĐỂ VÀO APP</div>
-        <p style="font-size: 14px; color: #888; margin-top: 20px;">(Bắt buộc để kích hoạt hệ thống âm thanh)</p>
+        <button class="pulse-btn" id="enter-btn">CHẠM ĐỂ VÀO APP</button>
+        <p style="font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 25px;">Hệ thống yêu cầu tương tác để kết nối Audio</p>
     </div>
 
-    <!-- 3. MÀN HÌNH MẬT KHẨU -->
+    <!-- 3. ĐĂNG NHẬP CƠ BẢN -->
     <div id="login-screen" class="screen container">
-        <h1 class="title-gradient">DoNhayChuan Pro</h1>
-        <p>Nhập mã để giải mã hệ thống</p>
-        <div class="input-group">
-            <input type="password" id="pass-input" class="pass-input" placeholder="Nhập mật khẩu...">
-        </div>
-        <button class="btn" id="login-btn">MỞ KHÓA APP</button>
-        <p id="login-error" style="color: #ff4757; display: none; margin-top: 10px; font-weight: bold;">❌ Mật khẩu không chính xác!</p>
+        <h1 class="title-gradient">ĐĂNG NHẬP</h1>
+        <p style="text-align:center; color:#bbb;">Nhập mã cơ sở để vào hệ thống</p>
+        <input type="password" id="pass-input" placeholder="Nhập mật khẩu (bohieudaycon09)...">
+        <button class="btn btn-cyan" id="login-btn">TRUY CẬP</button>
+        <p id="login-error" style="color: var(--primary); display: none; text-align:center; margin-top: 15px; font-weight: bold;">❌ Mật khẩu không chính xác!</p>
     </div>
 
-    <!-- 4. GIAO DIỆN CHÍNH APP -->
-    <div id="main-screen" class="screen container" style="justify-content: flex-start;">
-        <div class="header">
-            <h1 class="title-gradient" style="font-size: 26px;">DoNhayChuan Pro</h1>
-            <p style="margin:0; font-size:12px; color:#888;">Hệ thống Web Tệp File Tối Ưu</p>
-        </div>
+    <!-- 4. GIAO DIỆN CHÍNH (Đã nâng cấp Đẹp Mắt) -->
+    <div id="main-screen" class="screen container" style="justify-content: flex-start; padding-top:40px;">
+        <h1 class="title-gradient" style="font-size: 28px; margin-bottom: 25px;">DoNhayChuan Pro</h1>
 
         <div class="tab-menu">
-            <div class="tab-btn active" data-tab="tab-file">📂 Tệp File</div>
-            <div class="tab-btn" data-tab="tab-sens">🎯 Độ Nhạy</div>
-            <div class="tab-btn" data-tab="tab-opt">⚡ Tối Ưu</div>
+            <div class="tab-btn active" data-tab="tab-file">📂 TỆP FILE</div>
+            <div class="tab-btn" data-tab="tab-sens">🎯 ĐỘ NHẠY</div>
+            <div class="tab-btn" data-tab="tab-opt">⚡ TỐI ƯU</div>
             <div class="tab-btn" data-tab="tab-pro">🌟 PRO VIP</div>
         </div>
 
         <!-- TAB 1: TỆP FILE -->
         <div id="tab-file" class="tab-content active">
             <div id="file-locked" class="locked-overlay">
-                <h3>🔒 TÍNH NĂNG BỊ KHÓA</h3>
-                <p style="color:#aaa; font-size:14px;">Bạn cần nâng cấp bản PRO để sử dụng kho Tệp File tối ưu chuyên sâu.</p>
-                <button class="btn" onclick="document.querySelector('[data-tab=tab-pro]').click()">MỞ KHÓA PRO</button>
+                <div class="locked-icon">🔒</div>
+                <h3 style="color: var(--primary); margin: 0 0 10px 0;">TỆP ĐÃ BỊ KHÓA</h3>
+                <p style="color:#bbb; font-size:14px; line-height:1.5;">Hệ thống Tệp File Tối Ưu chỉ dành riêng cho thành viên PRO VIP.</p>
+                <button class="btn" onclick="document.querySelector('[data-tab=tab-pro]').click()">ĐI TỚI MỞ KHÓA PRO</button>
             </div>
             
             <div id="file-unlocked" style="display: none;">
-                <label style="font-size: 13px; color: #888;">Chọn nền tảng:</label>
+                <label style="font-size: 13px; color: var(--cyan); font-weight:bold;">1. Chọn nền tảng HĐH:</label>
                 <select id="file-os">
-                    <option value="none">-- Chọn hệ điều hành --</option>
-                    <option value="ios">📱 Apple iPhone</option>
-                    <option value="android">🤖 Android (Samsung, Xiaomi...)</option>
+                    <option value="none">-- Chạm để chọn --</option>
+                    <option value="ios">📱 HỆ SINH THÁI iPHONE</option>
+                    <option value="android">🤖 HỆ SINH THÁI ANDROID</option>
                 </select>
 
-                <div id="file-device-wrap" style="display:none; margin-top:15px;">
-                    <label style="font-size: 13px; color: #888;">Chọn dòng máy:</label>
+                <div id="file-device-wrap" style="display:none; margin-top:20px;">
+                    <label style="font-size: 13px; color: var(--cyan); font-weight:bold;">2. Chọn dòng máy của bạn:</label>
                     <select id="file-device"></select>
                 </div>
 
-                <div id="file-result-box" class="file-result">
-                    <div class="file-icon">📄</div>
-                    <div class="file-name" id="file-name-text">filename</div>
-                    <div class="file-info" id="file-info-text">Dung lượng: -- | Định dạng: --</div>
-                    <button class="btn" style="background: linear-gradient(90deg, #ff7f50, #ff4757);">📥 TẢI CẤU HÌNH VỀ MÁY</button>
+                <div id="file-result-box" style="margin-top: 25px; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); display: none;">
+                    <div style="font-size: 30px; text-align:center; margin-bottom: 10px;">📄</div>
+                    <div id="file-name-text" style="font-weight: bold; font-size: 15px; color: #fff; text-align:center; word-break: break-all;">filename</div>
+                    <div id="file-info-text" style="font-size: 12px; color: #aaa; text-align:center; margin: 10px 0 20px 0;">Dung lượng: -- | Định dạng: --</div>
+                    <button class="btn btn-cyan">📥 TẢI XUỐNG CẤU HÌNH</button>
                 </div>
             </div>
         </div>
 
         <!-- TAB 2: ĐỘ NHẠY -->
         <div id="tab-sens" class="tab-content">
-            <label style="font-size: 13px; color: #888;">1. Chọn dòng máy:</label>
+            <label style="font-size: 13px; color: var(--cyan); font-weight:bold;">Thiết bị phân tích:</label>
             <select id="sens-os">
-                <option value="none">-- Chọn thiết bị --</option>
-                <option value="ios">📱 Apple iPhone</option>
-                <option value="ipad">💻 Apple iPad (Tất cả)</option>
-                <option value="android">🤖 Android (Tất cả)</option>
+                <option value="none">-- Phân loại thiết bị --</option>
+                <option value="ios">📱 Điện thoại iPhone</option>
+                <option value="ipad">💻 Máy tính bảng iPad</option>
+                <option value="android">🤖 Điện thoại Android</option>
             </select>
             
             <select id="sens-device" style="display:none;"></select>
 
             <div id="sens-specs" style="display:none;">
-                <label style="font-size: 13px; color: #888; display:block; margin-top:15px;">2. Chọn RAM:</label>
-                <select id="sens-ram"></select>
-
-                <label style="font-size: 13px; color: #888; display:block; margin-top:15px;">3. Chọn ROM (Dung lượng):</label>
+                <select id="sens-ram" style="margin-top:20px;"></select>
                 <select id="sens-rom"></select>
-
-                <button class="btn btn-blue" id="btn-calc-sens" style="margin-top:20px;">XÁC NHẬN TÍNH TOÁN</button>
+                <button class="btn btn-cyan" id="btn-calc-sens" style="margin-top:25px;">🛠 PHÂN TÍCH DỮ LIỆU</button>
             </div>
 
-            <div id="sens-result-box" style="display:none; margin-top:20px; border-top: 1px solid #333; padding-top: 15px;">
-                <h3 style="color:#00adb5; text-align:center; margin-bottom:10px;">✅ CẤU HÌNH ĐỀ XUẤT</h3>
+            <div id="sens-result-box" style="display:none; margin-top:25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                <h3 style="color:var(--cyan); text-align:center; margin:0 0 15px 0;">⚡ KẾT QUẢ ĐỘ NHẠY ⚡</h3>
                 <div class="sens-grid">
                     <div class="sens-item"><span>Nhìn xung quanh</span><strong id="r-gen">0</strong></div>
                     <div class="sens-item"><span>Red Dot Sight</span><strong id="r-red">0</strong></div>
                     <div class="sens-item"><span>Ống ngắm 2x</span><strong id="r-2x">0</strong></div>
                     <div class="sens-item"><span>Ống ngắm 4x</span><strong id="r-4x">0</strong></div>
-                    <div class="sens-item"><span>Nút bắn (%)</span><strong id="r-fire">0%</strong></div>
-                    <div class="sens-item"><span>DPI (Độ rộng)</span><strong id="r-dpi">0</strong></div>
+                    <div class="sens-item"><span>Nút bắn (%)</span><strong id="r-fire" style="color:var(--primary);">0%</strong></div>
+                    <div class="sens-item"><span>DPI Đề xuất</span><strong id="r-dpi" style="color:var(--primary);">0</strong></div>
                 </div>
             </div>
         </div>
 
         <!-- TAB 3: TỐI ƯU -->
         <div id="tab-opt" class="tab-content">
-            <h3 style="color:var(--blue-glow); margin-top:0;">⚡ Tùy chỉnh hệ thống</h3>
-            <div class="toggle-row">
-                <span>Đầm tâm (Anti-Shake)</span>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span>Tăng FPS (90/120Hz)</span>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span>Tối ưu cảm ứng (Touch Booster)</span>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span>Giảm Ping (Mạng ổn định)</span>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-            </div>
+            <h3 style="color:var(--cyan); margin:0 0 15px 0; text-align:center;">HỆ THỐNG TINH CHỈNH</h3>
+            <div class="toggle-row"><span>🎯 Đầm tâm (Anti-Shake)</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="toggle-row"><span>🚀 Tăng FPS (Mở khóa 120Hz)</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="toggle-row"><span>👆 Tối ưu Touch Booster</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+            <div class="toggle-row"><span>🌐 Ổn định Ping (Mạng)</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
             
-            <button class="btn" id="btn-khoichay" style="background: #00adb5; margin-top: 25px;">🚀 KHỞI CHẠY</button>
+            <button class="btn btn-cyan" id="btn-khoichay" style="margin-top: 30px;">🔥 KHỞI CHẠY HỆ THỐNG</button>
 
             <div id="processing-status">
                 <div class="spinner"></div>
-                ĐANG XỬ LÝ DỮ LIỆU MÁY...
+                <div style="color:var(--cyan);">ĐANG XỬ LÝ DỮ LIỆU MÁY...</div>
             </div>
-            <div id="success-status">ĐÃ KÍCH HOẠT 🎉🎉</div>
+            <div id="success-status">
+                <div style="font-size: 40px; margin-bottom:10px;">🎉🎉</div>
+                <div style="color:#00f2fe; font-size:20px;">ĐÃ KÍCH HOẠT THÀNH CÔNG</div>
+            </div>
         </div>
 
-        <!-- TAB 4: PRO -->
+        <!-- TAB 4: PRO (Mã QR & Bảo mật 2 Lớp) -->
         <div id="tab-pro" class="tab-content">
-            <h3 style="color:#ffd700; text-align:center; margin-top:0;">🌟 TRẠNG THÁI TÀI KHOẢN</h3>
-            <div style="background:#1a1a1a; padding:15px; border-radius:10px; text-align:center;">
-                <p id="pro-status-text" style="color:#aaa; margin:0;">Phiên bản hiện tại: <b>FREE</b></p>
+            <div id="pro-status-header" style="background:rgba(0,0,0,0.5); padding:15px; border-radius:12px; text-align:center; border: 1px solid rgba(255,255,255,0.05);">
+                <p style="margin:0; font-size: 14px; color:#bbb;">Trạng thái tài khoản: <strong id="pro-badge" style="color:#aaa;">GÓI FREE CƠ BẢN</strong></p>
             </div>
             
-            <div class="pro-box">
-                <h4 style="color:#ffd700; margin:0 0 10px 0;">KÍCH HOẠT BẢN PRO</h4>
-                <p style="font-size:13px; color:#ddd;">Mở khóa toàn bộ Tệp File Tối Ưu cấp độ chuyên gia.</p>
-                <div style="background:#fff; padding:10px; border-radius:8px; display:inline-block; margin-bottom:10px;">
-                    <!-- Mã QR giả lập bằng CSS/Chữ cho an toàn token, người dùng quét mã ZaloPay thật qua STK -->
-                    <div style="width:120px; height:120px; background:#eee; display:flex; align-items:center; justify-content:center; color:#000; font-weight:bold; font-size:12px; border:2px solid #0088ff;">QR ZALOPAY</div>
+            <div id="pro-buy-section" class="pro-box">
+                <h3 style="color:#ffd700; margin:0 0 15px 0; font-size:20px;">👑 MUA BẢN PRO VIP</h3>
+                <p style="font-size:13px; color:#ccc; line-height:1.5;">Quét mã QR qua ZaloPay để thanh toán. Sau khi thành công, liên hệ Admin nhận bộ 2 Mật Khẩu Kích Hoạt.</p>
+                
+                <!-- MÃ QR THẬT (Yêu cầu 4) -->
+                <div class="qr-wrapper">
+                    <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ZaloPay:0395734228" alt="QR ZaloPay">
                 </div>
-                <p style="font-size:14px; margin:5px 0;"><b>ZaloPay:</b> 0395734228</p>
-                <p style="font-size:14px; margin:5px 0;"><b>Tên:</b> Nguyễn Khắc Hiếu</p>
-                <p style="font-size:12px; color:#ff4757; margin-top:10px;"><i>(Sau khi chuyển khoản, liên hệ Admin để nhận mật khẩu PRO)</i></p>
+                
+                <div style="font-size:14px; color:#fff; background:rgba(0,0,0,0.4); padding:10px; border-radius:8px;">
+                    <p style="margin:5px 0;">Ngân hàng: <b>ZaloPay</b></p>
+                    <p style="margin:5px 0;">STK: <b style="color:var(--cyan);">0395734228</b></p>
+                    <p style="margin:5px 0;">Tên: <b>Nguyễn Khắc Hiếu</b></p>
+                </div>
+
+                <!-- BẢO MẬT 2 LỚP (Yêu cầu 4) -->
+                <div id="auth-layer-1" class="layer-box">
+                    <p style="color:#ffd700; font-weight:bold; margin:0 0 10px 0;">BƯỚC 1: XÁC THỰC LỚP 1</p>
+                    <input type="text" id="pass-pro-1" placeholder="Nhập Mật Khẩu Lớp 1...">
+                    <button class="btn" id="btn-pro-1" style="padding:12px; font-size:14px;">XÁC NHẬN</button>
+                    <p id="err-pro-1" style="color:var(--primary); font-size:12px; display:none; margin-top:10px;">❌ Sai mật khẩu lớp 1!</p>
+                </div>
+
+                <div id="auth-layer-2" class="layer-box" style="display:none; border-color:var(--cyan);">
+                    <p style="color:var(--cyan); font-weight:bold; margin:0 0 10px 0;">BƯỚC 2: MỞ KHÓA LÕI HỆ THỐNG</p>
+                    <input type="password" id="pass-pro-2" placeholder="Nhập Mật Khẩu Lớp 2...">
+                    <button class="btn btn-cyan" id="btn-pro-2" style="padding:12px; font-size:14px;">KÍCH HOẠT PRO</button>
+                    <p id="err-pro-2" style="color:var(--primary); font-size:12px; display:none; margin-top:10px;">❌ Sai mật khẩu lớp 2!</p>
+                </div>
+            </div>
+
+            <!-- MÀN HÌNH SAU KHI KÍCH HOẠT THÀNH CÔNG -->
+            <div id="pro-success-section" style="display:none; text-align:center; padding: 30px 0;">
+                <div style="font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 20px #ffd700);">👑</div>
+                <h2 style="color:#ffd700; margin:0 0 10px 0;">CHÀO MỪNG PRO VIP</h2>
+                <p style="color:#ccc; font-size:14px;">Kho Tệp File Tối Ưu đã được mở khóa hoàn toàn. Hãy quay lại mục Tệp File để trải nghiệm sức mạnh!</p>
             </div>
         </div>
     </div>
@@ -260,53 +317,61 @@
     </audio>
 
     <script>
-        // KIỂM TRA CHẾ ĐỘ APP
+        // KIỂM TRA WEB APP
         const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches || window.location.search.includes('mode=app');
         
         const installScreen = document.getElementById('install-screen');
         const startScreen = document.getElementById('start-screen');
         const loginScreen = document.getElementById('login-screen');
         const mainScreen = document.getElementById('main-screen');
+        
+        // NHẠC VÀ NÚT TOGGLE
         const audio = document.getElementById('bg-music');
+        const musicToggle = document.getElementById('music-toggle');
+        let isMusicPlaying = false;
 
         if (isStandalone) { startScreen.classList.add('active-screen'); } 
         else { installScreen.classList.add('active-screen'); }
 
-        // Cài đặt app
         document.getElementById('install-btn').addEventListener('click', () => {
             window.location.href = './app.mobileconfig';
             document.getElementById('instruction').style.display = 'block';
         });
 
-        // Bắt đầu vào app (Âm thanh)
+        // VÀO APP VÀ BẬT NHẠC
         document.getElementById('enter-btn').addEventListener('click', () => {
-            audio.play().catch(e => console.log(e));
+            audio.play().then(() => {
+                isMusicPlaying = true;
+                musicToggle.style.display = 'flex'; // Hiện nút nhạc
+            }).catch(e => console.log(e));
             startScreen.classList.remove('active-screen');
             loginScreen.classList.add('active-screen');
         });
 
-        // Đăng nhập
-        let isPro = false;
-        document.getElementById('login-btn').addEventListener('click', () => {
-            const pass = document.getElementById('pass-input').value;
-            const err = document.getElementById('login-error');
-            if (pass === 'bohieudaycon09') {
-                isPro = false;
-                loginScreen.classList.remove('active-screen');
-                mainScreen.classList.add('active-screen');
-                setupApp();
-            } else if (pass === 'hieudeptrai009') {
-                isPro = true;
-                loginScreen.classList.remove('active-screen');
-                mainScreen.classList.add('active-screen');
-                document.getElementById('file-locked').style.display = 'none';
-                document.getElementById('file-unlocked').style.display = 'block';
-                document.getElementById('pro-status-text').innerHTML = 'Phiên bản hiện tại: <b style="color:#ffd700;">PRO VIP</b>';
-                setupApp();
-            } else { err.style.display = 'block'; }
+        // LOGIC NÚT TẮT/BẬT NHẠC
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                audio.pause();
+                musicToggle.innerText = '🔇';
+                isMusicPlaying = false;
+            } else {
+                audio.play();
+                musicToggle.innerText = '🔊';
+                isMusicPlaying = true;
+            }
         });
 
-        // Xử lý Tabs
+        // ĐĂNG NHẬP CƠ BẢN
+        document.getElementById('login-btn').addEventListener('click', () => {
+            if (document.getElementById('pass-input').value === 'bohieudaycon09') {
+                loginScreen.classList.remove('active-screen');
+                mainScreen.classList.add('active-screen');
+            } else { 
+                document.getElementById('login-error').style.display = 'block'; 
+            }
+        });
+
+        // CHUYỂN TAB CÓ HIỆU ỨNG
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -316,127 +381,112 @@
             });
         });
 
-        // Dữ liệu Thiết bị
-        const dataApple = ["iPhone 11", "iPhone 11 Pro", "iPhone 11 Pro Max", "iPhone 12", "iPhone 12 Pro", "iPhone 12 Pro Max", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max", "iPhone 14", "iPhone 14 Plus", "iPhone 14 Pro", "iPhone 14 Pro Max", "iPhone 15", "iPhone 15 Plus", "iPhone 15 Pro", "iPhone 15 Pro Max", "iPhone 16 Series"];
+        // DỮ LIỆU THIẾT BỊ (ĐÃ BỔ SUNG ĐẦY ĐỦ iPHONE 6 -> XS MAX)
+        const dataApple = [
+            "iPhone 6 / 6 Plus", "iPhone 6s / 6s Plus", "iPhone 7 / 7 Plus", "iPhone 8 / 8 Plus",
+            "iPhone X", "iPhone XR", "iPhone XS / XS Max",
+            "iPhone 11", "iPhone 11 Pro", "iPhone 11 Pro Max",
+            "iPhone 12", "iPhone 12 Pro", "iPhone 12 Pro Max",
+            "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max",
+            "iPhone 14", "iPhone 14 Plus", "iPhone 14 Pro", "iPhone 14 Pro Max",
+            "iPhone 15", "iPhone 15 Plus", "iPhone 15 Pro", "iPhone 15 Pro Max",
+            "iPhone 16 Series"
+        ];
         const dataIpad = ["iPad Pro (M4/M2/M1)", "iPad Air (M2/Gen 5/4)", "iPad Mini (Gen 6/7)", "iPad (Gen 9/10)"];
         const dataAndroid = {
-            "Samsung (Giá rẻ/Tầm trung)": ["Galaxy A05/A05s", "Galaxy A15", "Galaxy A25", "Galaxy A35", "Galaxy A55", "Galaxy M15/M35", "Galaxy F15/F55"],
-            "Samsung (Cao cấp)": ["Galaxy S23/S23 FE", "Galaxy S24/S24+", "Galaxy S24 Ultra", "Galaxy Z Fold 5/6", "Galaxy Z Flip 5/6"],
-            "Xiaomi/Redmi/POCO": ["Redmi Note 13/14 Series", "POCO X6/X6 Pro", "POCO F6", "Xiaomi 13/14 Series"],
-            "Oppo/Realme": ["Oppo Reno 11/12", "Oppo Find X7", "Realme 12/13 Pro", "Realme GT5/GT6"],
-            "Gaming/Khác": ["ROG Phone Series", "RedMagic Series", "Vivo X100", "iQOO 12/Neo 9"]
+            "Samsung (A/M/F Series)": ["Galaxy A05/A05s", "Galaxy A15", "Galaxy A25", "Galaxy A35", "Galaxy A55", "Galaxy M15/M55", "Galaxy F15/F55"],
+            "Samsung (S/Z Cao Cấp)": ["Galaxy S23/S23 FE", "Galaxy S24/S24+", "Galaxy S24 Ultra", "Galaxy Z Fold 5/6", "Galaxy Z Flip 5/6"],
+            "Xiaomi & Redmi": ["Redmi Note 12/13 Series", "POCO X5/X6 Pro", "POCO F5/F6", "Xiaomi 13/14 Ultra"],
+            "Oppo & Realme": ["Oppo Reno 10/11/12", "Oppo Find X6/X7", "Realme 11/12/13 Pro", "Realme GT5/GT6"],
+            "Gaming Phone": ["ROG Phone 7/8", "RedMagic 8/9 Pro", "Vivo X100 Pro", "iQOO 12"]
         };
-        const dataRAM = ["2GB", "3GB", "4GB", "6GB", "8GB", "12GB", "16GB", "24GB"];
-        const dataROM = ["8GB", "16GB", "32GB", "64GB", "128GB", "256GB", "512GB", "1TB", "2TB"];
+        const dataRAM = ["RAM: 2GB", "RAM: 3GB", "RAM: 4GB", "RAM: 6GB", "RAM: 8GB", "RAM: 12GB", "RAM: 16GB", "RAM: 24GB"];
+        const dataROM = ["ROM: 8GB", "ROM: 16GB", "ROM: 32GB", "ROM: 64GB", "ROM: 128GB", "ROM: 256GB", "ROM: 512GB", "ROM: 1TB", "ROM: 2TB"];
 
-        // Hàm điền Option
-        function fillOptions(selectElement, dataArray, isGroup = false) {
-            selectElement.innerHTML = '<option value="none">-- Vui lòng chọn --</option>';
+        function fillOptions(sel, arr, isGroup = false) {
+            sel.innerHTML = '<option value="none">-- Vui lòng chọn --</option>';
             if (isGroup) {
-                for (const group in dataArray) {
-                    let optgroup = document.createElement('optgroup');
-                    optgroup.label = group;
-                    dataArray[group].forEach(item => {
-                        let opt = document.createElement('option'); opt.value = item; opt.innerText = item;
-                        optgroup.appendChild(opt);
-                    });
-                    selectElement.appendChild(optgroup);
+                for (let g in arr) {
+                    let og = document.createElement('optgroup'); og.label = g;
+                    arr[g].forEach(i => { let o = document.createElement('option'); o.value = i; o.innerText = i; og.appendChild(o); });
+                    sel.appendChild(og);
                 }
             } else {
-                dataArray.forEach(item => {
-                    let opt = document.createElement('option'); opt.value = item; opt.innerText = item;
-                    selectElement.appendChild(opt);
-                });
+                arr.forEach(i => { let o = document.createElement('option'); o.value = i; o.innerText = i; sel.appendChild(o); });
             }
         }
 
-        // Logic Tab 1: File
-        const fileOs = document.getElementById('file-os');
-        const fileDevice = document.getElementById('file-device');
-        const fileWrap = document.getElementById('file-device-wrap');
-        const fileResult = document.getElementById('file-result-box');
-
-        fileOs.addEventListener('change', () => {
-            fileResult.style.display = 'none';
-            if (fileOs.value === 'none') { fileWrap.style.display = 'none'; return; }
-            fileWrap.style.display = 'block';
-            if (fileOs.value === 'ios') fillOptions(fileDevice, dataApple);
-            if (fileOs.value === 'android') fillOptions(fileDevice, dataAndroid, true);
+        // TỆP FILE LOGIC
+        const fOs = document.getElementById('file-os'), fDev = document.getElementById('file-device'), fWrap = document.getElementById('file-device-wrap'), fRes = document.getElementById('file-result-box');
+        fOs.addEventListener('change', () => {
+            fRes.style.display = 'none';
+            if (fOs.value === 'none') { fWrap.style.display = 'none'; return; }
+            fWrap.style.display = 'block';
+            if (fOs.value === 'ios') fillOptions(fDev, dataApple); else fillOptions(fDev, dataAndroid, true);
+        });
+        fDev.addEventListener('change', () => {
+            if (fDev.value === 'none') { fRes.style.display = 'none'; return; }
+            let c = fDev.value.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            document.getElementById('file-name-text').innerText = fOs.value === 'ios' ? `ios_vip_${c}.mobileconfig` : `android_vip_${c}.xml`;
+            document.getElementById('file-info-text').innerText = `Dung lượng: ${(Math.random()*(20-8)+8).toFixed(1)} KB | Hệ thống Lõi`;
+            fRes.style.display = 'block';
         });
 
-        fileDevice.addEventListener('change', () => {
-            if (fileDevice.value === 'none') { fileResult.style.display = 'none'; return; }
-            let code = fileDevice.value.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            let fileName = fileOs.value === 'ios' ? `ios_${code}_tweak.mobileconfig` : `android_${code}_reg.xml`;
-            let fileSize = (Math.random() * (25 - 10) + 10).toFixed(1) + " KB";
-            
-            document.getElementById('file-name-text').innerText = fileName;
-            document.getElementById('file-info-text').innerText = `Dung lượng: ${fileSize} | Định dạng: Hệ thống`;
-            fileResult.style.display = 'block';
-        });
-
-        // Logic Tab 2: Độ Nhạy
-        const sensOs = document.getElementById('sens-os');
-        const sensDevice = document.getElementById('sens-device');
-        const sensSpecs = document.getElementById('sens-specs');
-        const sensRam = document.getElementById('sens-ram');
-        const sensRom = document.getElementById('sens-rom');
-
-        fillOptions(sensRam, dataRAM);
-        fillOptions(sensRom, dataROM);
-
-        sensOs.addEventListener('change', () => {
+        // ĐỘ NHẠY LOGIC
+        const sOs = document.getElementById('sens-os'), sDev = document.getElementById('sens-device'), sSpecs = document.getElementById('sens-specs');
+        fillOptions(document.getElementById('sens-ram'), dataRAM); fillOptions(document.getElementById('sens-rom'), dataROM);
+        sOs.addEventListener('change', () => {
             document.getElementById('sens-result-box').style.display = 'none';
-            if (sensOs.value === 'none') { sensDevice.style.display = 'none'; sensSpecs.style.display = 'none'; return; }
-            sensDevice.style.display = 'block';
-            if (sensOs.value === 'ios') fillOptions(sensDevice, dataApple);
-            if (sensOs.value === 'ipad') fillOptions(sensDevice, dataIpad);
-            if (sensOs.value === 'android') fillOptions(sensDevice, dataAndroid, true);
+            if (sOs.value === 'none') { sDev.style.display = 'none'; sSpecs.style.display = 'none'; return; }
+            sDev.style.display = 'block';
+            if (sOs.value === 'ios') fillOptions(sDev, dataApple); else if (sOs.value === 'ipad') fillOptions(sDev, dataIpad); else fillOptions(sDev, dataAndroid, true);
         });
-
-        sensDevice.addEventListener('change', () => {
-            sensSpecs.style.display = sensDevice.value !== 'none' ? 'block' : 'none';
-        });
-
+        sDev.addEventListener('change', () => { sSpecs.style.display = sDev.value !== 'none' ? 'block' : 'none'; });
         document.getElementById('btn-calc-sens').addEventListener('click', () => {
-            if (sensRam.value === 'none' || sensRom.value === 'none') { alert("Vui lòng chọn đầy đủ RAM và ROM!"); return; }
-            // Thuật toán cấp độ nhạy (0 - 200)
-            document.getElementById('r-gen').innerText = Math.floor(Math.random() * 51) + 150; // 150-200
-            document.getElementById('r-red').innerText = Math.floor(Math.random() * 101) + 100; // 100-200
-            document.getElementById('r-2x').innerText = Math.floor(Math.random() * 101) + 100; // 100-200
-            document.getElementById('r-4x').innerText = Math.floor(Math.random() * 101) + 100; // 100-200
-            document.getElementById('r-fire').innerText = Math.floor(Math.random() * 26) + 40 + "%"; // 40-65%
-            document.getElementById('r-dpi').innerText = Math.floor(Math.random() * 501) + 400; // 400-900 DPI
+            if (document.getElementById('sens-ram').value === 'none' || document.getElementById('sens-rom').value === 'none') { alert("Vui lòng chọn RAM/ROM!"); return; }
+            document.getElementById('r-gen').innerText = Math.floor(Math.random()*51)+150;
+            document.getElementById('r-red').innerText = Math.floor(Math.random()*101)+100;
+            document.getElementById('r-2x').innerText = Math.floor(Math.random()*101)+100;
+            document.getElementById('r-4x').innerText = Math.floor(Math.random()*101)+100;
+            document.getElementById('r-fire').innerText = Math.floor(Math.random()*26)+40 + "%";
+            document.getElementById('r-dpi').innerText = Math.floor(Math.random()*501)+400;
             document.getElementById('sens-result-box').style.display = 'block';
         });
 
-        // Logic Tab 3: Khởi chạy
-        const btnKhoiChay = document.getElementById('btn-khoichay');
-        const procStatus = document.getElementById('processing-status');
-        const succStatus = document.getElementById('success-status');
-
-        btnKhoiChay.addEventListener('click', () => {
-            btnKhoiChay.style.display = 'none';
-            procStatus.style.display = 'block';
-            succStatus.style.display = 'none';
-            
-            let loadTime = Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000; // 3-5 seconds
-            
+        // KHỞI CHẠY LOGIC
+        document.getElementById('btn-khoichay').addEventListener('click', () => {
+            document.getElementById('btn-khoichay').style.display = 'none';
+            document.getElementById('processing-status').style.display = 'block';
             setTimeout(() => {
-                procStatus.style.display = 'none';
-                succStatus.style.display = 'block';
+                document.getElementById('processing-status').style.display = 'none';
+                document.getElementById('success-status').style.display = 'block';
                 setTimeout(() => { 
-                    btnKhoiChay.style.display = 'block'; 
-                    succStatus.style.display = 'none';
-                    // Reset toggles
-                    document.querySelectorAll('.switch input').forEach(inp => inp.checked = false);
+                    document.getElementById('btn-khoichay').style.display = 'block'; 
+                    document.getElementById('success-status').style.display = 'none';
+                    document.querySelectorAll('.switch input').forEach(i => i.checked = false);
                 }, 4000);
-            }, loadTime);
+            }, Math.floor(Math.random()*2000)+3000);
         });
 
-        function setupApp() {
-            // Hàm khởi tạo phụ nếu cần
-        }
+        // HỆ THỐNG MẬT KHẨU PRO 2 LỚP (Yêu cầu 4)
+        document.getElementById('btn-pro-1').addEventListener('click', () => {
+            if (document.getElementById('pass-pro-1').value === 'HIEUDERPTRAI009') {
+                document.getElementById('err-pro-1').style.display = 'none';
+                document.getElementById('auth-layer-1').style.display = 'none';
+                document.getElementById('auth-layer-2').style.display = 'block';
+            } else { document.getElementById('err-pro-1').style.display = 'block'; }
+        });
+
+        document.getElementById('btn-pro-2').addEventListener('click', () => {
+            if (document.getElementById('pass-pro-2').value === 'hieudeptrai009') {
+                // KÍCH HOẠT THÀNH CÔNG! MỞ KHÓA TỆP FILE!
+                document.getElementById('pro-buy-section').style.display = 'none';
+                document.getElementById('pro-success-section').style.display = 'block';
+                document.getElementById('pro-badge').innerHTML = '<b style="color:#ffd700;">PRO VIP MAX</b>';
+                document.getElementById('file-locked').style.display = 'none';
+                document.getElementById('file-unlocked').style.display = 'block';
+            } else { document.getElementById('err-pro-2').style.display = 'block'; }
+        });
     </script>
 </body>
 </html>
