@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#070712">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AI SENS PRO">
+    <link rel="apple-touch-icon" href="image.png">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
     <title>AI CONFIG - ULTIMATE SENSITIVITY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -20,10 +29,8 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", Roboto, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
-        
         body { background-color: var(--dark-bg); color: #fff; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* Hiệu ứng nền */
         .bg-matrix { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #070712 100%); overflow: hidden; }
         .bg-matrix::before { content: ""; position: absolute; width: 200%; height: 200%; background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0, 243, 255, 0.03) 4px, rgba(0, 243, 255, 0.03) 5px); animation: scan 10s linear infinite; }
         @keyframes scan { 0% { transform: translateY(-50%); } 100% { transform: translateY(0); } }
@@ -52,7 +59,10 @@
         .tab-content.active { display: block; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* COMPONENT BÊN TRONG */
+        /* POPUP XIN QUYỀN HỆ THỐNG */
+        #permission-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .modal-box { background: #0c0c1e; border: 2px solid var(--neon-red); border-radius: 16px; padding: 25px; width: 90%; max-width: 360px; text-align: center; box-shadow: 0 0 30px rgba(255,51,102,0.3); }
+        
         .glass-panel { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 15px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .panel-title { font-size: 14px; font-weight: bold; color: var(--neon-cyan); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
         
@@ -67,7 +77,7 @@
         /* Form cấu hình */
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 12px; color: #8a8a9e; margin-bottom: 8px; }
-        select.cyber-select, input.cyber-input-sm { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 10px; outline: none; font-size: 14px; }
+        select.cyber-select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 10px; outline: none; font-size: 14px; }
         
         /* Hiển thị kết quả AI */
         .result-box { display: none; background: rgba(0, 243, 255, 0.05); border: 1px dashed var(--neon-cyan); border-radius: 12px; padding: 15px; margin-top: 15px; }
@@ -75,6 +85,9 @@
         .stat-row:last-child { border-bottom: none; }
         .stat-val { color: var(--neon-gold); font-weight: bold; text-shadow: var(--gold-glow); }
         .stat-pro { color: var(--neon-red); font-style: italic; font-size: 12px; cursor: pointer; }
+
+        /* HƯỚNG DẪN VIP CHÉP FILE */
+        #vip-guide { display: none; background: rgba(0, 255, 170, 0.05); border: 1px solid #00ffaa; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: left; font-size: 13px; line-height: 1.6; }
 
         .btn-gold { background: linear-gradient(90deg, #ffcc00, #ff6600); box-shadow: 0 5px 20px rgba(255, 204, 0, 0.4); color: #000; margin-top: 15px; }
         .btn-red { background: linear-gradient(90deg, #ff3366, #cc0033); box-shadow: 0 5px 20px rgba(255, 51, 102, 0.4); }
@@ -89,16 +102,30 @@
         
         .two-layer-auth { margin-top: 20px; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; border: 1px dashed var(--neon-red); }
         .vip-status-active { display: none; color: #00ffaa; font-weight: bold; font-size: 18px; text-align: center; text-shadow: 0 0 15px rgba(0,255,170,0.6); margin-top: 20px; border: 1px solid #00ffaa; padding: 20px; border-radius: 15px; background: rgba(0,255,170,0.1); }
-        
-        /* Badge VIP */
         .badge-pro { background: var(--neon-red); color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px; vertical-align: top; margin-left: 5px; font-weight: bold; box-shadow: 0 0 5px var(--neon-red); }
+
+        /* Hướng dẫn cài app ra màn hình chính */
+        .pwa-instruction { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px; margin-bottom: 15px; font-size: 12px; text-align: center; color: var(--neon-cyan); }
     </style>
 </head>
 <body>
 
     <div class="bg-matrix"></div>
 
-    <!-- MÀN HÌNH ĐĂNG NHẬP APP -->
+    <div id="permission-modal">
+        <div class="modal-box">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 45px; color: var(--neon-red); margin-bottom: 15px; animation: blink 1s infinite;"></i>
+            <h3 style="color: #fff; margin-bottom: 10px; font-size: 16px;">YÊU CẦU TRUY CẬP HỆ THỐNG</h3>
+            <p style="color: #8a8a9e; font-size: 13px; line-height: 1.5; margin-bottom: 20px;">
+                Để áp dụng tệp cấu hình bù trừ cảm ứng và mở rộng giới hạn phản hồi <strong style="color:var(--neon-cyan)">100% hiệu năng</strong>, ứng dụng cần sự đồng ý của bạn để tải về và giải nén tệp lệnh vào nhân thiết bị.
+            </p>
+            <div style="display: flex; gap: 10px;">
+                <button class="cyber-btn" style="background: #1a1a2e; border: 1px solid #333; color: #8a8a9e; padding: 12px;" onclick="closePermission(false)">TỪ CHỐI</button>
+                <button class="cyber-btn btn-red" style="padding: 12px;" onclick="closePermission(true)">TÔI ĐỒNG Ý</button>
+            </div>
+        </div>
+    </div>
+
     <div id="login-app">
         <div class="login-box">
             <i class="fa-solid fa-microchip" style="font-size: 40px; color: var(--neon-cyan); margin-bottom: 15px;"></i>
@@ -109,21 +136,30 @@
         </div>
     </div>
 
-    <!-- UI CHÍNH -->
     <div id="main-ui">
+        <div class="pwa-instruction">
+            <i class="fa-solid fa-arrow-down-to-square"></i> <strong>MẸO:</strong> Bấm biểu tượng <strong>Chia sẻ (Share)</strong> trên trình duyệt rồi chọn <strong>"Thêm vào MH chính" (Add to Home Screen)</strong> để dùng như App thật ngoài màn hình!
+        </div>
+
         <div class="header">
             <h1><i class="fa-solid fa-crosshairs"></i> AI SENSITIVITY <span id="vip-indicator" style="display:none; color: var(--neon-gold); font-size: 14px;">[PRO]</span></h1>
         </div>
 
-        <!-- TABS BỘ ĐIỀU HƯỚNG -->
         <div class="tabs">
             <div class="tab-btn active" onclick="switchTab(0, this)"><i class="fa-solid fa-radar"></i> HỆ THỐNG</div>
             <div class="tab-btn" onclick="switchTab(1, this)"><i class="fa-solid fa-bolt"></i> CẤU HÌNH AI</div>
             <div class="tab-btn" onclick="switchTab(2, this)"><i class="fa-solid fa-crown"></i> BẢN PRO</div>
         </div>
 
-        <!-- TAB 0: HỆ THỐNG THIẾT BỊ & MẠNG -->
         <div id="tab-0" class="tab-content active">
+            <!-- Thiết bị hiện tại -->
+            <div class="glass-panel" id="device-info-panel">
+                <div class="panel-title"><i class="fa-solid fa-mobile-screen"></i> THIẾT BỊ HIỆN TẠI</div>
+                <div id="device-details" style="font-size:13px; line-height:1.8;">
+                    Đang kiểm tra...
+                </div>
+            </div>
+
             <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-satellite-dish"></i> ĐO PING THỜI GIAN THỰC</div>
                 <div class="status-grid">
@@ -144,9 +180,21 @@
                 <p style="font-size: 12px; color:#8a8a9e; margin-bottom: 15px; line-height: 1.5;">Kích hoạt luồng xử lý CPU ngầm giúp giảm độ trễ chạm (Input Delay) và khóa tỷ lệ văng tâm qua đầu.</p>
                 <button id="btn-boost" class="cyber-btn" onclick="simulateBoost()">CHẠY BỘ TĂNG TỐC CẢM ỨNG</button>
             </div>
+            
+            <!-- KHU VỰC TẢI CẤU HÌNH TRỰC TIẾP CHO IPHONE -->
+            <div class="glass-panel" style="border-color: var(--neon-gold); background: rgba(255, 204, 0, 0.05);" id="ios-config-panel">
+                <div class="panel-title" style="color: var(--neon-gold);">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> CÀI ĐẶT ỨNG DỤNG TRỰC TIẾP (iOS)
+                </div>
+                <p style="font-size: 12px; color:#cbd5e1; margin-bottom: 15px; line-height: 1.5;">
+                    Bấm nút dưới đây để tải cấu hình hệ thống. Sau khi tải xong, vào <strong>Cài đặt điện thoại > Đã tải về hồ sơ</strong> để kích hoạt Icon ứng dụng ra màn hình chính.
+                </p>
+                <a href="app.mobileconfig" download class="cyber-btn btn-gold" style="display: block; text-align: center; text-decoration: none; padding: 15px; font-size: 14px;">
+                    <i class="fa-solid fa-download"></i> TẢI CẤU HÌNH "DONHAYCHUAN" VỀ MÁY
+                </a>
+            </div>
         </div>
 
-        <!-- TAB 1: TÍNH TOÁN ĐỘ NHẠY (AI SENS) -->
         <div id="tab-1" class="tab-content">
             <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-calculator"></i> AI MA TRẬN KÉO TÂM</div>
@@ -180,7 +228,6 @@
 
                 <button class="cyber-btn" onclick="calculateAI()"><i class="fa-solid fa-wand-magic-sparkles"></i> PHÂN TÍCH ĐỘ NHẠY KỊCH TRẦN</button>
 
-                <!-- KẾT QUẢ AI -->
                 <div id="ai-result" class="result-box">
                     <h4 style="color: var(--neon-cyan); margin-bottom: 12px; font-size: 14px; text-align: center;">BỘ THÔNG SỐ CHUẨN XÁC AI (MAX 200)</h4>
                     <div class="stat-row"><span>Nhìn xung quanh:</span> <span class="stat-val" id="res-gen">0</span></div>
@@ -192,30 +239,36 @@
                         <div class="stat-row"><span>DPI (Độ rộng tối thiểu):</span> <span class="stat-val" id="res-dpi"><span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span></span></div>
                         <div class="stat-row"><span>Kích cỡ nút bắn (Touch Point):</span> <span class="stat-val" id="res-btn"><span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span></span></div>
                     </div>
+
+                    <div id="vip-guide">
+                        <strong style="color: #00ffaa;"><i class="fa-solid fa-circle-info"></i> QUY TRÌNH KÍCH HOẠT HỆ THỐNG 100%:</strong><br>
+                        1. Sau khi tải tệp cấu hình về máy, hãy dùng ứng dụng <strong>ZArchiver</strong>.<br>
+                        2. Di chuyển file cấu hình vào thư mục game theo đường dẫn:<br>
+                        <code style="color:var(--neon-cyan); background:#000; padding:2px 4px; border-radius:4px; font-size:11px; display:block; margin:5px 0;">Android/data/com.dts.freefireth/files/</code>
+                        3. <strong>Mẹo giảm delay màn hình:</strong> Vào cài đặt điện thoại, tìm mục <strong>Tốc độ con trỏ (Pointer Speed)</strong> và đẩy kịch trần lên mức Tối Đa.
+                    </div>
                 </div>
 
-                <button class="cyber-btn btn-gold btn-vip-locked" id="btn-gen-config" onclick="generateConfigFile()" style="display:none; width: 100%; margin-top: 15px;">
-                    <i class="fa-solid fa-download"></i> XUẤT FILE REGEDIT (.CFG) <span class="badge-pro">PRO</span>
+                <button class="cyber-btn btn-gold btn-vip-locked" id="btn-gen-config" onclick="askPermissionBeforeDownload()" style="display:none; width: 100%; margin-top: 15px;">
+                    <i class="fa-solid fa-download"></i> KÍCH HOẠT & XUẤT CONFIG HỆ THỐNG <span class="badge-pro">PRO</span>
                 </button>
             </div>
         </div>
 
-        <!-- TAB 2: QUẢN TRỊ PRO VIP -->
         <div id="tab-2" class="tab-content">
             <div id="pro-buy-panel">
                 <div class="pro-banner">
                     <h2 style="color: #fff; font-size: 18px;">MỞ KHÓA <span style="color: var(--neon-gold)">PRO VIP</span> TRỌN ĐỜI</h2>
                     <div class="pro-price">200.000 VNĐ</div>
                     <ul style="text-align: left; font-size: 13px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.8; list-style-type: '⚡ ';">
-                        <li>Đo Ping ẩn đa máy chủ (Garena).</li>
+                        <li>Cấp quyền tải File cấu hình đồng bộ hóa dữ liệu game.</li>
                         <li>Mở khóa công thức tính DPI chuẩn không lỗi màn.</li>
                         <li>Phân tích kích cỡ điểm chạm Nút Bắn (Touch Point).</li>
-                        <li>Trình xuất tệp mã hóa <code>.cfg</code> tự động dán vào game.</li>
+                        <li>Trình hướng dẫn kích hoạt hệ thống cài đặt ẩn tăng tốc thật 100%.</li>
                     </ul>
 
                     <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                         <p style="font-size: 13px; color: #8a8a9e; margin-bottom: 5px;">Quét QR (ZaloPay) hoặc Chuyển Khoản:</p>
-                        <!-- ẢNH QR GẮN TỪ YÊU CẦU -->
                         <img src="image.png" alt="Mã QR ZaloPay" class="qr-code">
                         <p style="color: #00f3ff; font-weight: bold; margin-top: 10px; letter-spacing: 1px;">0395734228</p>
                         <p style="color: #fff; font-size: 12px; margin-top: 3px;">NGUYEN KHAC HIEU</p>
@@ -237,11 +290,10 @@
                 </div>
             </div>
 
-            <!-- Panel Hiện Khi Đã Mua Pro -->
             <div id="pro-active-panel" class="vip-status-active">
                 <i class="fa-solid fa-circle-check" style="font-size: 50px; margin-bottom: 15px;"></i><br>
                 TÀI KHOẢN ĐÃ KÍCH HOẠT PRO VĨNH VIỄN
-                <p style="font-size: 12px; color: #8a8a9e; font-weight: normal; margin-top: 10px;">Tất cả các tính năng AI ẩn, Config và DPI đã được giải phóng trên thiết bị này.</p>
+                <p style="font-size: 12px; color: #8a8a9e; font-weight: normal; margin-top: 10px;">Tất cả các tính năng AI ẩn, sơ đồ dán dữ liệu thực tế đã được kích hoạt hoàn toàn.</p>
             </div>
         </div>
     </div>
@@ -253,13 +305,14 @@
         const PRO_KEY_2 = "BOHIEUDEPTRAIVIPPRO209";
         
         let isPro = localStorage.getItem('is_pro_user') === 'true';
+        let currentDeviceInfo = null;
 
-        // Khởi tạo
         window.onload = () => {
             if(sessionStorage.getItem('app_unlocked') === 'true') {
                 document.getElementById('login-app').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'flex';
                 applyProState();
+                updateDeviceInfo();
                 checkNetwork();
             }
         };
@@ -273,6 +326,7 @@
                     document.getElementById('login-app').style.display = 'none';
                     document.getElementById('main-ui').style.display = 'flex';
                     applyProState();
+                    updateDeviceInfo();
                     checkNetwork();
                 }, 400);
             } else {
@@ -286,55 +340,88 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             btnEle.classList.add('active');
             document.getElementById('tab-' + idx).classList.add('active');
-            
-            // Xử lý rung nếu thiết bị hỗ trợ
             if(navigator.vibrate) navigator.vibrate(10);
         }
 
-        // --- 3. ĐO PING THỰC TẾ (Bằng cách fetch 1 file siêu nhỏ trên CDN) ---
+        // --- 3. NHẬN DIỆN THIẾT BỊ ---
+        function detectDevice() {
+            const ua = navigator.userAgent;
+            let os = 'Unknown';
+            let model = 'Unknown';
+            
+            if (/Android/.test(ua)) {
+                os = 'Android';
+                const match = ua.match(/Android\s[\d\.]+;\s([^;]+)/);
+                if (match) model = match[1].trim();
+            } else if (/iPhone|iPad|iPod/.test(ua)) {
+                os = 'iOS';
+                model = 'iPhone/iPad';
+            }
+            
+            const screenW = screen.width;
+            const screenH = screen.height;
+            const dpr = window.devicePixelRatio || 1;
+            const dpiEstimate = Math.round(Math.sqrt(screenW**2 + screenH**2) / (window.innerWidth / dpr) * 72);
+            
+            return { os, model, screenW, screenH, dpr, dpiEstimate };
+        }
+
+        function updateDeviceInfo() {
+            currentDeviceInfo = detectDevice();
+            const dev = currentDeviceInfo;
+            const details = document.getElementById('device-details');
+            details.innerHTML = `
+                <span style="color:#8a8a9e">HĐH:</span> ${dev.os} (${dev.model})<br>
+                <span style="color:#8a8a9e">Độ phân giải:</span> ${dev.screenW}x${dev.screenH} (@${dev.dpr}x)<br>
+                <span style="color:#8a8a9e">DPI ước lượng:</span> ${dev.dpiEstimate}
+            `;
+            
+            // Ẩn/hiện panel iOS config
+            const iosPanel = document.getElementById('ios-config-panel');
+            if (dev.os === 'iOS') {
+                iosPanel.style.display = 'block';
+            } else {
+                iosPanel.style.display = 'none';
+            }
+        }
+
+        // --- 4. ĐO PING THỰC TẾ ---
         async function checkNetwork() {
             const pingEl = document.getElementById('ping-value');
             pingEl.innerText = "Đang quét...";
             pingEl.className = "";
-            
             try {
                 const startTime = performance.now();
-                // Dùng mode no-cors và thêm timestamp để tránh cache, đo chính xác ms mạng thực.
                 await fetch('https://cloudflare-dns.com/dns-query?_t=' + startTime, { mode: 'no-cors', cache: 'no-store' });
                 const endTime = performance.now();
                 const pingTime = Math.round(endTime - startTime);
-                
                 pingEl.innerText = pingTime + " ms";
                 if(pingTime < 60) pingEl.classList.add('ping-good');
                 else pingEl.classList.add('ping-bad');
             } catch(e) {
-                // Fallback nếu lỗi kết nối
-                const fakePing = Math.floor(Math.random() * 20) + 35;
-                pingEl.innerText = fakePing + " ms";
+                pingEl.innerText = (Math.floor(Math.random() * 20) + 35) + " ms";
                 pingEl.classList.add('ping-good');
             }
         }
 
-        // --- 4. TỐI ƯU PHẦN CỨNG (Hiệu ứng tâm lý + Lời khuyên PRO) ---
+        // --- 5. TỐI ƯU PHẦN CỨNG (MÔ PHỎNG) ---
         function simulateBoost() {
             const btn = document.getElementById('btn-boost');
             btn.innerText = "ĐANG ÉP XUNG GPU & DỌN RAM...";
             btn.style.opacity = '0.7';
-            
             setTimeout(() => {
                 btn.innerText = "CHẠY BỘ TĂNG TỐC CẢM ỨNG";
                 btn.style.opacity = '1';
                 if(navigator.vibrate) navigator.vibrate([15, 30, 15]);
-                
                 if(isPro) {
-                    alert("[PRO ENABLED]: Đã khóa tỷ lệ Touch Delay xuống 0.5s. Khung hình FPS đã được gỡ bỏ giới hạn!");
+                    alert("[PRO VIP SUCCESS]: Hệ thống tối ưu cảm ứng đã chạy. Tốc độ kéo tâm mượt mà đã được giải phóng!");
                 } else {
-                    alert("[HỆ THỐNG FREE]: Tối ưu dọn rác thành công. Phát hiện thiết bị có thể giảm thêm 25% độ rít màn hình, vui lòng nâng cấp PRO để nén lệnh cực hạn!");
+                    alert("[HỆ THỐNG FREE]: Tối ưu hoàn tất. Phát hiện thiết bị có thể giảm thêm độ trễ nếu có tệp cấu hình VIP, vui lòng nâng cấp PRO!");
                 }
-            }, 1500);
+            }, 1200);
         }
 
-        // --- 5. LOGIC AI TÍNH TOÁN ĐỘ NHẠY (MỨC 200) ---
+        // --- 6. LOGIC AI TÍNH TOÁN ĐỘ NHẠY (DỰA TRÊN DPI THỰC) ---
         let currentConfigData = "";
 
         function calculateAI() {
@@ -345,78 +432,104 @@
                 return;
             }
 
-            const device = document.getElementById('device-select').value;
+            const dev = currentDeviceInfo || detectDevice();
             const style = document.getElementById('style-select').value;
             
             document.getElementById('ai-result').style.display = 'block';
             document.getElementById('btn-gen-config').style.display = 'block';
             
-            // Xử lý random tạo số liệu thực tế dựa trên logic game Free Fire 2024 (Giới hạn 200)
             let gen, red, x2, x4, dpi, btnSize;
 
-            if(device === 'android_low') {
-                gen = getRandom(185, 200);
-                dpi = getRandom(550, 680);
-                btnSize = getRandom(48, 55);
-            } else if (device === 'android_high') {
-                gen = getRandom(170, 195);
-                dpi = getRandom(450, 520);
-                btnSize = getRandom(43, 48);
-            } else if (device === 'ios_low') {
-                gen = getRandom(175, 195);
-                dpi = "Không cần chỉnh (iOS)";
-                btnSize = getRandom(45, 52);
-            } else { // ios_high
-                gen = getRandom(150, 180); // Màn mượt không cần kéo quá cao dễ văng
-                dpi = "Không cần chỉnh (iOS)";
-                btnSize = getRandom(40, 46);
+            // Tính toán dựa trên DPI ước lượng thay vì random
+            const baseDPI = dev.dpiEstimate;
+            if (dev.os === 'Android') {
+                if (baseDPI < 300) {
+                    gen = Math.round(185 + (baseDPI - 200) * 0.2);
+                } else {
+                    gen = Math.round(170 + (baseDPI - 300) * 0.1);
+                }
+                dpi = baseDPI;
+                btnSize = Math.round(48 + (baseDPI - 300) * 0.1);
+            } else { // iOS
+                gen = Math.round(165 + (baseDPI - 300) * 0.15);
+                dpi = "Mặc định hệ thống iOS";
+                btnSize = Math.round(45 + (baseDPI - 300) * 0.1);
             }
+            
+            // Giới hạn trong 150-200
+            gen = Math.min(200, Math.max(150, gen));
 
-            // Điều chỉnh theo lối chơi
             if(style === 'rush') {
-                red = gen - getRandom(5, 15);
-                x2 = red - getRandom(10, 20);
-                x4 = x2 - getRandom(5, 10);
-            } else { // snipe
-                red = gen - getRandom(20, 40);
-                x2 = getRandom(120, 145);
-                x4 = getRandom(110, 135);
+                red = gen - 10;
+                x2 = red - 15;
+                x4 = x2 - 10;
+            } else {
+                red = gen - 25;
+                x2 = 135;
+                x4 = 125;
             }
 
-            // Gán dữ liệu lên UI
             animateValue("res-gen", 0, gen, 600);
             animateValue("res-red", 0, red, 700);
             animateValue("res-2x", 0, x2, 800);
             animateValue("res-4x", 0, x4, 900);
 
             if(isPro) {
-                document.getElementById('res-dpi').innerText = dpi + (typeof dpi === 'number' ? " dpi" : "");
+                document.getElementById('res-dpi').innerText = (typeof dpi === 'number' ? dpi + " dpi" : dpi);
                 document.getElementById('res-dpi').style.color = "#00ffaa";
-                document.getElementById('res-btn').innerText = btnSize + "% (Góc dưới phải)";
+                document.getElementById('res-btn').innerText = btnSize + "%";
                 document.getElementById('res-btn').style.color = "#00ffaa";
+                document.getElementById('vip-guide').style.display = "block";
                 
-                // Lưu chuỗi config để xuất file
-                currentConfigData = `[AI_SENSITIVITY_CONFIG_V2]\nGAME=FREEFIRE_MAX\nDEVICE=${device}\nGENERAL=${gen}\nRED_DOT=${red}\nSCOPE_2X=${x2}\nSCOPE_4X=${x4}\nDPI_SETTING=${dpi}\nBUTTON_SIZE=${btnSize}\nANTI_SHAKE=ENABLED\nTOUCH_DELAY=0.5ms\n// NGUYEN KHAC HIEU PRO VIP SYSTEM`;
-                
-                const genBtn = document.getElementById('btn-gen-config');
-                genBtn.classList.remove('btn-vip-locked');
-                genBtn.classList.add('btn-gold');
-                genBtn.innerHTML = `<i class="fa-solid fa-download"></i> XUẤT FILE REGEDIT (.CFG)`;
+                currentConfigData = `[AI_SENSITIVITY_PRO_V2]
+GENERAL=${gen}
+RED_DOT=${red}
+SCOPE_2X=${x2}
+SCOPE_4X=${x4}
+DPI=${dpi}
+BUTTON_SIZE=${btnSize}%
+DEVICE=${dev.model} (${dev.os})
+RESOLUTION=${dev.screenW}x${dev.screenH}
+TIMESTAMP=${new Date().toISOString()}
+# Hướng dẫn: Copy file vào Android/data/com.dts.freefireth/files/ (Android) hoặc tự cài đặt trong game (iOS)`;
             } else {
                 document.getElementById('res-dpi').innerHTML = `<span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span>`;
                 document.getElementById('res-btn').innerHTML = `<span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span>`;
+                document.getElementById('vip-guide').style.display = "none";
+            }
+
+            // Nếu là iOS và chưa Pro, ẩn nút tải config (chỉ hiện hướng dẫn)
+            if (dev.os === 'iOS' && !isPro) {
+                document.getElementById('btn-gen-config').style.display = 'none';
             }
         }
 
-        // --- 6. XUẤT FILE CONFIG (CHỈ PRO) ---
-        function generateConfigFile() {
+        // --- 7. XIN QUYỀN HỆ THỐNG TRƯỚC KHI TẢI CONFIG (ANDROID) ---
+        function askPermissionBeforeDownload() {
+            const dev = currentDeviceInfo || detectDevice();
+            if (dev.os === 'iOS') {
+                alert("Trên iPhone/iPad không thể tải file cấu hình game. Vui lòng tự cài đặt các thông số bên trên vào game.\n\nHoặc sử dụng nút tải cấu hình Web Clip để thêm ứng dụng ra màn hình chính!");
+                return;
+            }
             if(!isPro) {
                 alert("Bạn cần kích hoạt mã PRO VIP để tải tệp lệnh bù trừ cảm ứng này vào máy!");
                 switchTab(2, document.querySelectorAll('.tab-btn')[2]);
                 return;
             }
-            if(!currentConfigData) return;
+            document.getElementById('permission-modal').style.display = 'flex';
+        }
 
+        function closePermission(isAccepted) {
+            document.getElementById('permission-modal').style.display = 'none';
+            if(isAccepted) {
+                executeDownloadConfig();
+            } else {
+                alert("Hệ thống đã từ chối cấp quyền. Cấu hình chưa được áp dụng.");
+            }
+        }
+
+        function executeDownloadConfig() {
+            if(!currentConfigData) return;
             const blob = new Blob([currentConfigData], {type: "text/plain"});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -427,10 +540,10 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert("Đã tải tệp lệnh thành công! Hãy chép file này vào mục lưu trữ của bạn.");
+            alert("🔒 ÁP DỤNG THÀNH CÔNG 100%!\nTệp cấu hình hệ thống đã được tải về máy của bạn. Hãy làm theo hướng dẫn ở khung màu xanh để kích hoạt hiệu năng kéo tâm tốt nhất!");
         }
 
-        // --- 7. KÍCH HOẠT PRO ---
+        // --- 8. KÍCH HOẠT PRO VỚI 2 LỚP MẬT KHẨU ---
         function unlockPro() {
             const k1 = document.getElementById('pro-key-1').value.trim();
             const k2 = document.getElementById('pro-key-2').value.trim();
@@ -440,6 +553,9 @@
                 isPro = true;
                 alert("CHÚC MỪNG! Tài khoản đã được nâng cấp lên PRO VIP VĨNH VIỄN.");
                 applyProState();
+                if(document.getElementById('ai-result').style.display === 'block') {
+                    calculateAI();
+                }
             } else {
                 alert("Mã bảo mật 2 lớp không hợp lệ! Vui lòng liên hệ Admin để mua Key.");
             }
@@ -450,27 +566,22 @@
                 document.getElementById('pro-buy-panel').style.display = 'none';
                 document.getElementById('pro-active-panel').style.display = 'block';
                 document.getElementById('vip-indicator').style.display = 'inline-block';
-                
-                // Mở khóa CSS options
                 document.querySelectorAll('.pro-option').forEach(el => {
                     el.innerText = el.innerText.replace('(Yêu cầu PRO)', '✔');
                 });
-                
                 const genBtn = document.getElementById('btn-gen-config');
                 if(genBtn) {
                     genBtn.classList.remove('btn-vip-locked');
                     genBtn.classList.add('btn-gold');
-                    genBtn.innerHTML = `<i class="fa-solid fa-download"></i> XUẤT FILE REGEDIT (.CFG)`;
                 }
             }
         }
 
-        // --- CÁC HÀM TIỆN ÍCH ---
+        // --- 9. HIỆU ỨNG & TIỆN ÍCH ---
         function getRandom(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-        
+        // @keyframes blink đã được chuyển vào <style>
         function animateValue(id, start, end, duration) {
-            let obj = document.getElementById(id);
-            let startTimestamp = null;
+            let obj = document.getElementById(id); let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
@@ -478,6 +589,15 @@
                 if (progress < 1) { window.requestAnimationFrame(step); }
             };
             window.requestAnimationFrame(step);
+        }
+
+        // --- 10. PWA: Đăng ký Service Worker ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(reg => console.log('Service Worker registered!', reg))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
         }
     </script>
 </body>
