@@ -158,7 +158,6 @@
 
         <!-- TAB HỆ THỐNG -->
         <div id="tab-0" class="tab-content active">
-            <!-- Thông tin thiết bị (thêm mới) -->
             <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-mobile-screen"></i> THIẾT BỊ HIỆN TẠI</div>
                 <div id="device-details" style="font-size:13px; line-height:1.8;">Đang kiểm tra...</div>
@@ -255,6 +254,9 @@
                 <button class="cyber-btn btn-gold btn-vip-locked" id="btn-gen-config" onclick="askPermissionBeforeDownload()" style="display:none; width: 100%; margin-top: 15px;">
                     <i class="fa-solid fa-download"></i> KÍCH HOẠT & XUẤT CONFIG HỆ THỐNG <span class="badge-pro">PRO</span>
                 </button>
+                <button class="cyber-btn btn-gold" id="btn-launch-game" onclick="launchGame()" style="display:none; width: 100%; margin-top: 10px;">
+                    <i class="fa-solid fa-play"></i> BẮT ĐẦU KHỞI CHẠY
+                </button>
             </div>
         </div>
 
@@ -317,7 +319,7 @@
                 document.getElementById('login-app').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'flex';
                 applyProState();
-                detectDeviceInfo();
+                updateDeviceInfo();
                 checkNetwork();
                 gameChanged();
             }
@@ -325,13 +327,15 @@
             if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
                 document.getElementById('ios-config-panel').classList.remove('hidden');
             }
-            // Xử lý ảnh QR
+            // Xử lý ảnh QR fallback
             const qrImg = document.getElementById('qr-image');
-            qrImg.onerror = function() {
-                this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300f3ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 14.17l5.59-5.59L18 10l-7 7z"/></svg>';
-                this.style.objectFit = 'contain';
-                this.style.padding = '20px';
-            };
+            if (qrImg) {
+                qrImg.onerror = function() {
+                    this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300f3ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 14.17l5.59-5.59L18 10l-7 7z"/></svg>';
+                    this.style.objectFit = 'contain';
+                    this.style.padding = '20px';
+                };
+            }
         };
 
         function loginApp() {
@@ -342,7 +346,7 @@
                     document.getElementById('login-app').style.display = 'none';
                     document.getElementById('main-ui').style.display = 'flex';
                     applyProState();
-                    detectDeviceInfo();
+                    updateDeviceInfo();
                     checkNetwork();
                     gameChanged();
                 }, 400);
@@ -362,7 +366,7 @@
         }
 
         // ==================== PHÂN TÍCH THIẾT BỊ ====================
-        function detectDeviceInfo() {
+        function detectDevice() {
             const ua = navigator.userAgent;
             let os = 'Unknown', model = 'Unknown';
             if (/Android/.test(ua)) {
@@ -382,22 +386,24 @@
             else dpiEstimate = 150;
             if (os === 'iOS' && dpr === 2) dpiEstimate = 326;
             if (os === 'iOS' && dpr === 3) dpiEstimate = 460;
-            currentDeviceInfo = { os, model, screenW: sw, screenH: sh, dpr, dpiEstimate };
+            return { os, model, screenW: sw, screenH: sh, dpr, dpiEstimate };
+        }
 
+        function updateDeviceInfo() {
+            currentDeviceInfo = detectDevice();
+            const dev = currentDeviceInfo;
             document.getElementById('device-details').innerHTML = `
-                <span style="color:#8a8a9e">HĐH:</span> ${os} (${model})<br>
-                <span style="color:#8a8a9e">Độ phân giải:</span> ${sw}x${sh} (@${dpr}x)<br>
-                <span style="color:#8a8a9e">DPI ước lượng:</span> ${dpiEstimate} ppi
+                <span style="color:#8a8a9e">HĐH:</span> ${dev.os} (${dev.model})<br>
+                <span style="color:#8a8a9e">Độ phân giải:</span> ${dev.screenW}x${dev.screenH} (@${dev.dpr}x)<br>
+                <span style="color:#8a8a9e">DPI ước lượng:</span> ${dev.dpiEstimate} ppi
                 <span class="security-badge"><i class="fa-solid fa-shield"></i> ĐÃ XÁC THỰC</span>
             `;
-
-            // Tự động chọn chế độ thiết bị
             const deviceSelect = document.getElementById('device-select');
             if (deviceSelect.value === 'auto') {
-                if (os === 'Android') {
-                    deviceSelect.value = dpiEstimate >= 320 ? 'android_high' : 'android_low';
+                if (dev.os === 'Android') {
+                    deviceSelect.value = dev.dpiEstimate >= 320 ? 'android_high' : 'android_low';
                 } else {
-                    deviceSelect.value = dpiEstimate >= 400 ? 'ios_high' : 'ios_low';
+                    deviceSelect.value = dev.dpiEstimate >= 400 ? 'ios_high' : 'ios_low';
                 }
             }
         }
@@ -450,11 +456,12 @@
             }
             document.getElementById('ai-result').style.display = 'none';
             document.getElementById('btn-gen-config').style.display = 'none';
+            document.getElementById('btn-launch-game').style.display = 'none';
         }
 
         // ==================== AI TÍNH TOÁN ====================
         function calculateAI() {
-            if (!currentDeviceInfo) detectDeviceInfo();
+            if (!currentDeviceInfo) updateDeviceInfo();
             const dev = currentDeviceInfo;
             const game = document.getElementById('game-select').value;
             if (!isPro && game !== 'ff') {
@@ -472,8 +479,8 @@
             const guidePath = document.getElementById('guide-path');
             
             resultBox.style.display = 'block';
-            resultBox.style.animation = 'fadeUp 0.5s';
             document.getElementById('btn-gen-config').style.display = 'block';
+            document.getElementById('btn-launch-game').style.display = 'block';
 
             let gen, red, x2, x4, dpi, btnSize;
             const baseDPI = dev.dpiEstimate;
@@ -518,18 +525,7 @@
                 `;
                 guidePath.innerText = "Android/data/com.dts.freefireth/files/";
                 document.getElementById('touch-point-row').style.display = 'flex';
-                currentConfigData = `[AI_SENSITIVITY_PRO_V2]
-GAME=FREE_FIRE
-GENERAL=${gen}
-RED_DOT=${red}
-SCOPE_2X=${x2}
-SCOPE_4X=${x4}
-DPI=${dpi}
-BUTTON_SIZE=${btnSize}%
-DEVICE=${dev.model} (${dev.os})
-RESOLUTION=${dev.screenW}x${dev.screenH}
-TIMESTAMP=${new Date().toISOString()}
-# Hướng dẫn: copy file vào Android/data/com.dts.freefireth/files/`;
+                currentConfigData = `[AI_SENSITIVITY_PRO_V2]\nGAME=FREE_FIRE\nGENERAL=${gen}\nRED_DOT=${red}\nSCOPE_2X=${x2}\nSCOPE_4X=${x4}\nDPI=${dpi}\nBUTTON_SIZE=${btnSize}%\nDEVICE=${dev.model} (${dev.os})\nRESOLUTION=${dev.screenW}x${dev.screenH}\nTIMESTAMP=${new Date().toISOString()}`;
             } else if (game === 'pubg') {
                 resultTitle.innerText = "BỘ THÔNG SỐ CHUẨN XÁC AI - PUBG MOBILE";
                 const camera = Math.round(80 + (baseDPI - 300) * 0.2);
@@ -550,21 +546,7 @@ TIMESTAMP=${new Date().toISOString()}
                 `;
                 guidePath.innerText = "Android/data/com.tencent.ig/files/";
                 document.getElementById('touch-point-row').style.display = 'flex';
-                currentConfigData = `[AI_SENSITIVITY_PRO_V2]
-GAME=PUBG_MOBILE
-CAMERA=${camera}%
-ADS=${ads}%
-SCOPE_2X=${scope2x}%
-SCOPE_3X=${scope3x}%
-SCOPE_4X=${scope4x}%
-SCOPE_6X=${scope6x}%
-SCOPE_8X=${scope8x}%
-DPI=${dpi}
-BUTTON_SIZE=${btnSize}%
-DEVICE=${dev.model} (${dev.os})
-RESOLUTION=${dev.screenW}x${dev.screenH}
-TIMESTAMP=${new Date().toISOString()}
-# Hướng dẫn: copy file vào Android/data/com.tencent.ig/files/`;
+                currentConfigData = `[AI_SENSITIVITY_PRO_V2]\nGAME=PUBG_MOBILE\nCAMERA=${camera}%\nADS=${ads}%\nSCOPE_2X=${scope2x}%\nSCOPE_3X=${scope3x}%\nSCOPE_4X=${scope4x}%\nSCOPE_6X=${scope6x}%\nSCOPE_8X=${scope8x}%\nDPI=${dpi}\nBUTTON_SIZE=${btnSize}%\nDEVICE=${dev.model} (${dev.os})\nRESOLUTION=${dev.screenW}x${dev.screenH}\nTIMESTAMP=${new Date().toISOString()}`;
             } else if (game === 'lq') {
                 resultTitle.innerText = "BỘ THÔNG SỐ TỐI ƯU - LIÊN QUÂN MOBILE";
                 const cameraSpeed = Math.round(60 + (baseDPI - 300) * 0.3);
@@ -577,16 +559,7 @@ TIMESTAMP=${new Date().toISOString()}
                 `;
                 guidePath.innerText = "Android/data/com.garena.game.kgvn/files/";
                 document.getElementById('touch-point-row').style.display = 'none';
-                currentConfigData = `[AI_SENSITIVITY_PRO_V2]
-GAME=LIEN_QUAN_MOBILE
-CAMERA_SPEED=${cameraSpeed}%
-MOVE_SPEED=${moveSpeed}%
-SKILL_BTN_SIZE=${skillBtnSize}%
-DPI=${dpi}
-DEVICE=${dev.model} (${dev.os})
-RESOLUTION=${dev.screenW}x${dev.screenH}
-TIMESTAMP=${new Date().toISOString()}
-# Hướng dẫn: copy file vào Android/data/com.garena.game.kgvn/files/`;
+                currentConfigData = `[AI_SENSITIVITY_PRO_V2]\nGAME=LIEN_QUAN_MOBILE\nCAMERA_SPEED=${cameraSpeed}%\nMOVE_SPEED=${moveSpeed}%\nSKILL_BTN_SIZE=${skillBtnSize}%\nDPI=${dpi}\nDEVICE=${dev.model} (${dev.os})\nRESOLUTION=${dev.screenW}x${dev.screenH}\nTIMESTAMP=${new Date().toISOString()}`;
             }
 
             // Hiển thị DPI và nút bắn theo Pro
@@ -618,7 +591,7 @@ TIMESTAMP=${new Date().toISOString()}
                 alert("⚠️ Vui lòng nhấn PHÂN TÍCH ĐỘ NHẠY trước khi tải!");
                 return;
             }
-            const dev = currentDeviceInfo;
+            const dev = currentDeviceInfo || detectDevice();
             if (dev.os === 'iOS') {
                 alert("Trên iPhone/iPad, bạn chỉ có thể tải cấu hình Web Clip (nút vàng trong tab HỆ THỐNG).\nCòn thông số game, hãy tự cài đặt theo các giá trị hiển thị bên trên.");
                 return;
@@ -655,6 +628,38 @@ TIMESTAMP=${new Date().toISOString()}
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             alert("🔒 ÁP DỤNG THÀNH CÔNG 100%!\nTệp cấu hình đã được tải về. Hãy làm theo hướng dẫn ở khung màu xanh để kích hoạt hiệu năng tốt nhất!");
+        }
+
+        // ==================== NÚT "BẮT ĐẦU KHỞI CHẠY" MỞ GAME ====================
+        function launchGame() {
+            const game = document.getElementById('game-select').value;
+            const dev = currentDeviceInfo || detectDevice();
+            let url = '';
+            switch (game) {
+                case 'ff':
+                    url = dev.os === 'Android' ? 'intent://play?store=true#Intent;scheme=freefire;package=com.dts.freefireth;end;' : 'freefire://';
+                    break;
+                case 'pubg':
+                    url = dev.os === 'Android' ? 'intent://play?store=true#Intent;scheme=pubgmobile;package=com.tencent.ig;end;' : 'pubgmobile://';
+                    break;
+                case 'lq':
+                    url = dev.os === 'Android' ? 'intent://play?store=true#Intent;scheme=lienquan;package=com.garena.game.kgvn;end;' : 'lienquan://';
+                    break;
+            }
+            if (url) {
+                const startTime = Date.now();
+                window.location.href = url;
+                setTimeout(() => {
+                    if (Date.now() - startTime < 2500) {
+                        const storeUrl = game === 'ff' ? (dev.os === 'Android' ? 'https://play.google.com/store/apps/details?id=com.dts.freefireth' : 'https://apps.apple.com/app/id1300146617')
+                                      : game === 'pubg' ? (dev.os === 'Android' ? 'https://play.google.com/store/apps/details?id=com.tencent.ig' : 'https://apps.apple.com/app/id1330123889')
+                                      : (dev.os === 'Android' ? 'https://play.google.com/store/apps/details?id=com.garena.game.kgvn' : 'https://apps.apple.com/app/id1158114988');
+                        window.location.href = storeUrl;
+                    }
+                }, 2000);
+            } else {
+                alert("Không thể mở game. Vui lòng mở thủ công.");
+            }
         }
 
         // ==================== KÍCH HOẠT PRO ====================
