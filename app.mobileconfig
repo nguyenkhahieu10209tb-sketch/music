@@ -1,52 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0/EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>PayloadContent</key>
     <array>
         <dict>
-            <key>FullScreen</key>
-            <true/>
+            <key>Icon</key>
+            <data>
+            iVBORw0KGgoAAAANSUhEUgAAAGQAAABkBAMAAACCzI93AAAAG1BMVEUAAAD/09P/
+            Fxf/ERH/KSkAAAD/Vlb/g4P/zMz///89v6XhAAAAAXRSTlMAQObYZgAAAAFiS0dE
+            mU6Ym0IAAAAnSURBVFjD7cExAQAAAMKg9U9tDB8gAAAAAAAAAAAAAAAAAAAAAD4M
+            hQAAsb473QAAAABJRU5ErkJggg==
+            </data>
             <key>IsRemovable</key>
             <true/>
             <key>Label</key>
-            <string>DoNhayChuan Pro</string>
+            <string>DoNhayChuan</string>
             <key>PayloadDescription</key>
-            <string>Lối tắt cài đặt Web Clip DoNhayChuan Pro</string>
+            <string>Cấu hình tối ưu độ nhạy hệ thống cảm ứng</string>
             <key>PayloadDisplayName</key>
-            <string>Web Clip DoNhayChuan Pro</string>
+            <string>DoNhayChuan App</string>
             <key>PayloadIdentifier</key>
-            <string>com.donhaychuan.pro.webclip</string>
+            <string>com.nguyenkhahieu.donhaychuan</string>
             <key>PayloadType</key>
-            <string>com.apple.webClip.managed</string>
+            <string>com.apple.webclip.managed</string>
             <key>PayloadUUID</key>
-            <string>E39C4B78-5E24-4B2E-8E5C-8D4C0E0A6F45</string>
+            <string>a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d</string>
             <key>PayloadVersion</key>
             <integer>1</integer>
-            <key>Precomposed</key>
-            <true/>
             <key>URL</key>
-            <string>https://nguyenkhahieu10209tb-sketch.github.io/music/?mode=app</string>
-            <key>Icon</key>
-            <data>
-            iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==
-            </data>
+            <string>https://nguyenkhahieu10209tb-sketch.github.io/music/</string>
+            <key>FullScreen</key>
+            <true/>
         </dict>
     </array>
-    <key>PayloadDescription</key>
-    <string>Cấu hình này sẽ cài đặt giao diện điều khiển DoNhayChuan Pro ra màn hình chính của bạn.</string>
     <key>PayloadDisplayName</key>
-    <string>Cấu hình DoNhayChuan Pro</string>
+    <string>Cấu hình Độ Nhạy Chuẩn</string>
     <key>PayloadIdentifier</key>
-    <string>com.donhaychuan.pro.profile</string>
-    <key>PayloadOrganization</key>
-    <string>Nguyen Khac Hieu</string>
+    <string>com.nguyenkhahieu.profile</string>
     <key>PayloadRemovalDisallowed</key>
     <false/>
     <key>PayloadType</key>
     <string>Configuration</string>
     <key>PayloadUUID</key>
-    <string>7A1B3C5D-9E2F-4B6A-8D0C-2E4F6A8B0C2D</string>
+    <string>f4e3d2c1-b0a9-8e7d-6c5b-4a3f2e1d0c9b</string>
     <key>PayloadVersion</key>
     <integer>1</integer>
 </dict>
