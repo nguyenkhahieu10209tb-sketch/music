@@ -5,17 +5,8 @@
   "display": "standalone",
   "background_color": "#070712",
   "theme_color": "#00f3ff",
-  "description": "Công cụ tối ưu cảm ứng game",
   "icons": [
-    {
-      "src": "image.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "image.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "image.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "image.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
