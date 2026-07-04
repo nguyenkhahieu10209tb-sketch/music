@@ -35,7 +35,7 @@
             position: relative;
         }
         
-        /* Hiệu ứng hạt nền ma mị (Bg-Orbs) */
+        /* Hiệu ứng hạt nền ma mị */
         .bg-orbs { 
             position: absolute; 
             top: 0; 
@@ -48,7 +48,7 @@
                         radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.15), transparent 35%); 
         }
         
-        /* Biểu tượng loa nổi góc trên bên phải giống ảnh */
+        /* Biểu tượng loa */
         #mute-btn { 
             position: absolute; 
             top: 25px; 
@@ -67,9 +67,12 @@
             align-items: center;
             justify-content: center;
             box-shadow: inset 0 0 8px rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: 0.2s;
         }
+        #mute-btn:active { transform: scale(0.9); }
 
-        /* MÀN HÌNH ĐĂNG NHẬP (Chuẩn ảnh 2) */
+        /* MÀN HÌNH ĐĂNG NHẬP */
         #login-screen { 
             position: fixed; 
             top: 0; 
@@ -116,7 +119,9 @@
             text-align: center; 
             outline: none; 
             letter-spacing: 2px;
+            user-select: auto; /* Cho phép focus nhập liệu chuẩn xác */
         }
+        input.vip-input:focus { box-shadow: 0 0 10px rgba(83, 178, 254, 0.3); border: 1px solid rgba(83, 178, 254, 0.5); }
         
         .btn-blue-glow { 
             background: linear-gradient(90deg, #53b2fe, #5077f7); 
@@ -129,18 +134,21 @@
             width: 100%; 
             letter-spacing: 0.5px; 
             box-shadow: 0 4px 20px rgba(80, 119, 247, 0.4); 
+            cursor: pointer;
+            transition: 0.15s;
         }
+        .btn-blue-glow:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* MÀN HÌNH CHÍNH (Đồng bộ chuẩn ảnh 1) */
+        /* MÀN HÌNH CHÍNH */
         #main-app { display: none; width: 100%; height: 100%; flex-direction: column; padding: 20px; overflow-y: auto; }
         .header-title { text-align: center; font-size: 24px; font-weight: 800; color: #ff3864; letter-spacing: 1px; margin: 15px 0; text-shadow: 0 0 12px rgba(255, 56, 100, 0.3); }
         
-        /* Cụm Tabs đầu trang */
+        /* Cụm Tabs */
         .tabs { display: flex; justify-content: space-between; margin-bottom: 22px; gap: 8px; }
         .tab { flex: 1; text-align: center; padding: 12px 5px; background: #111122; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 13px; font-weight: 600; color: #696984; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .tab.active-cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); text-shadow: var(--text-glow); background: rgba(0, 243, 255, 0.02); }
 
-        /* Khung Ma Trận Điều Chỉnh */
+        /* Khung Ma Trận */
         .matrix-box { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 25px 20px; margin-bottom: 22px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .matrix-title { color: var(--neon-cyan); font-weight: 700; font-size: 15px; text-align: center; margin-bottom: 25px; letter-spacing: 0.5px; text-shadow: var(--text-glow); }
         
@@ -150,7 +158,7 @@
         .toggle-info h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
         .toggle-info p { font-size: 11px; color: #62627a; font-weight: 400; }
         
-        /* Cấu trúc Switch độc quyền chống đơ */
+        /* Switch Gạt */
         .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #252538; transition: .3s; border-radius: 34px; }
@@ -158,24 +166,26 @@
         input:checked + .slider { background-color: #fff; }
         input:checked + .slider:before { transform: translateX(22px); background-color: #121224; }
 
-        /* Khung lựa chọn phiên bản game */
+        /* Chọn Game */
         .game-select-title { font-size: 12px; color: var(--neon-cyan); margin-bottom: 10px; font-weight: 700; }
-        select.game-select { width: 100%; padding: 14px; background: #0b0b14; color: #fff; border: 1px solid var(--glass-border); border-radius: 12px; outline: none; margin-bottom: 22px; font-size: 14px; font-weight: 500; appearance: none; -webkit-appearance: none; }
+        select.game-select { width: 100%; padding: 14px; background: #0b0b14; color: #fff; border: 1px solid var(--glass-border); border-radius: 12px; outline: none; margin-bottom: 22px; font-size: 14px; font-weight: 500; appearance: none; -webkit-appearance: none; cursor: pointer; }
         
-        /* Nút Khởi Chạy Sáng Rực */
-        .btn-launch { background: linear-gradient(90deg, #46b6fe, #23ecec); border: none; padding: 16px; border-radius: 16px; color: #fff; font-size: 15px; font-weight: 700; width: 100%; letter-spacing: 0.5px; box-shadow: 0 4px 25px rgba(35, 236, 236, 0.35); text-transform: uppercase; }
+        /* Nút Khởi Chạy */
+        .btn-launch { background: linear-gradient(90deg, #46b6fe, #23ecec); border: none; padding: 16px; border-radius: 16px; color: #fff; font-size: 15px; font-weight: 700; width: 100%; letter-spacing: 0.5px; box-shadow: 0 4px 25px rgba(35, 236, 236, 0.35); text-transform: uppercase; cursor: pointer; transition: 0.15s; }
+        .btn-launch:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* Khung luyện tập cơ tay cấp dưới */
+        /* Khung luyện tập */
         .rhythm-box { background: rgba(13, 13, 28, 0.4); border: 1px dashed rgba(255,255,255,0.05); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 30px; }
-        .btn-rhythm { width: 100%; background: #16162a; border: 1px solid rgba(255,255,255,0.06); padding: 15px; border-radius: 14px; color: #e1e1e6; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-rhythm { width: 100%; background: #16162a; border: 1px solid rgba(255,255,255,0.06); padding: 15px; border-radius: 14px; color: #e1e1e6; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.15s; }
+        .btn-rhythm:active { transform: scale(0.96); }
 
-        /* Modal Cấp Quyền Hệ Thống */
+        /* Modal Cấp Quyền */
         #permission-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,10,0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .modal-content { background: #0f0f1e; border: 1px solid var(--glass-border); padding: 30px 22px; border-radius: 24px; width: 86%; max-width: 340px; text-align: center; }
         .modal-content h3 { color: var(--neon-cyan); margin-bottom: 12px; font-size: 17px; }
         .modal-content p { font-size: 13px; color: #8a8a9e; margin-bottom: 25px; line-height: 1.6; }
         
-        /* Lớp phủ dọn RAM & Ép xung */
+        /* Loading Overlay */
         #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #06060c; z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
         .progress-bar-bg { width: 75%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-top: 25px; }
         .progress-bar-fill { height: 100%; width: 0%; background: var(--neon-cyan); box-shadow: 0 0 12px var(--neon-cyan); }
@@ -186,14 +196,14 @@
 
     <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
     <div class="bg-orbs" id="bg-orbs"></div>
-    <div id="mute-btn"><i class="fa-solid fa-volume-high"></i></div>
+    <div id="mute-btn" onclick="toggleBackgroundMusic()"><i class="fa-solid fa-volume-high"></i></div>
 
     <div id="login-screen">
         <div class="login-panel">
             <h2>AI CONFIG INTERFACE</h2>
             <p>Mã Hóa Cấp Độ Cao</p>
-            <input type="password" id="vip-key" class="vip-input" placeholder="••••••••••••">
-            <button class="btn-blue-glow" id="btn-login">MỞ KHÓA HỆ THỐNG</button>
+            <input type="password" id="vip-key" class="vip-input" placeholder="••••••••••••" onkeypress="if(event.keyCode==13) verifyCredentials()">
+            <button class="btn-blue-glow" onclick="verifyCredentials()">MỞ KHÓA HỆ THỐNG</button>
         </div>
     </div>
 
@@ -215,7 +225,7 @@
                     <p>Khóa mục tiêu ổn định không lệch</p>
                 </div>
                 <label class="switch">
-                    <input type="checkbox" id="t-shake">
+                    <input type="checkbox" id="t-shake" onchange="handleHardwareToggles('shake')">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -226,7 +236,7 @@
                     <p>Ép luồng xử lý đồ họa mượt nhất</p>
                 </div>
                 <label class="switch">
-                    <input type="checkbox" id="t-fps">
+                    <input type="checkbox" id="t-fps" onchange="handleHardwareToggles('fps')">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -237,7 +247,7 @@
                     <p>Chống rít, duy trì Polling Rate cao nhất</p>
                 </div>
                 <label class="switch">
-                    <input type="checkbox" id="t-touch">
+                    <input type="checkbox" id="t-touch" onchange="handleHardwareToggles('touch')">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -248,7 +258,7 @@
                     <p>Định tuyến băng thông chống ping nhảy vọt</p>
                 </div>
                 <label class="switch">
-                    <input type="checkbox" id="t-dns">
+                    <input type="checkbox" id="t-dns" onchange="handleHardwareToggles('dns')">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -264,13 +274,13 @@
                 <option value="playtogether">Play Together (Tăng tốc câu cá)</option>
             </select>
 
-            <button class="btn-launch" id="btn-main-launch">🔥 KHỞI CHẠY & VÀO GAME NGAY</button>
+            <button class="btn-launch" onclick="executeGamingBoost()">🔥 KHỞI CHẠY & VÀO GAME NGAY</button>
         </div>
 
         <div class="rhythm-box">
             <h4 style="font-size: 14px; font-weight: 600; color: var(--neon-cyan); margin-bottom: 6px;">⚡ KHỞI ĐỘNG CƠ TAY TRƯỚC TRẬN ĐẤU</h4>
             <p style="font-size: 11px; color: #5c5c70; margin-bottom: 16px;">Luyện tập phản xạ ngón tay với nhịp điệu Click cơ học Gaming êm tai (Mặc định: TẮT).</p>
-            <button class="btn-rhythm" id="btn-rhythm-toggle"><i class="fa-solid fa-play"></i> BẬT LUYỆN TẬP NHỊP ĐIỆU</button>
+            <button class="btn-rhythm" id="btn-rhythm-toggle" onclick="toggleRhythmTraining()"><i class="fa-solid fa-play"></i> BẬT LUYỆN TẬP NHỊP ĐIỆU</button>
         </div>
     </div>
 
@@ -278,7 +288,7 @@
         <div class="modal-content">
             <h3><i class="fa-solid fa-shield-halved"></i> UỶ QUYỀN HỆ THỐNG</h3>
             <p>Để tối ưu hóa cảm biến chạm và dải băng thông, vui lòng cấp quyền truy cập phần cứng để bộ nén hoạt động ổn định.</p>
-            <button class="btn-blue-glow" id="btn-grant-permission">XÁC NHẬN CẤP QUYỀN</button>
+            <button class="btn-blue-glow" onclick="activateHardwareBoosters()">XÁC NHẬN CẤP QUYỀN</button>
         </div>
     </div>
 
@@ -290,13 +300,13 @@
     </div>
 
     <script>
-        // Bảo vệ độc quyền chống trộm code và F12
+        // 1. Bảo vệ độc quyền
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.onkeydown = e => { if(e.keyCode == 123) return false; };
 
-        // Mật khẩu mã hóa Base64 bảo mật
-        const ADMIN_HASH = "SElFVV9BRE1JTl8yMDI2"; // HIEU_ADMIN_2026
-        const USER_HASH = "Ym9oaWV1ZGF5Y29uMDk="; // bohieudaycon09
+        // 2. Mật mã lưu trữ ẩn (Base64) - Đã sửa lỗi sập web khi gõ tiếng Việt
+        const ADMIN_HASH = "SElFVV9BRE1JTl8yMDI2"; // Bản gốc là: HIEU_ADMIN_2026
+        const USER_HASH = "Ym9oaWV1ZGF5Y29uMDk="; // Bản gốc là: bohieudaycon09
 
         let isAppReady = false;
         let wakeLock = null;
@@ -308,88 +318,87 @@
         let worker = null;
         let animationFrameId = null;
 
-        // Tự động khôi phục trạng thái mở khóa khi vào lại trang
-        window.addEventListener('DOMContentLoaded', () => {
-            if(localStorage.getItem('vip_unlocked') === 'true') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-                showModal();
+        // 3. Khởi tạo trạng thái tự động (Chạy ngay lập tức, không chờ đợi DOM ảo)
+        function initApp() {
+            try {
+                if(localStorage.getItem('vip_unlocked') === 'true') {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'flex';
+                    document.getElementById('permission-modal').style.display = 'flex';
+                }
+            } catch (error) {
+                // Đề phòng lỗi trình duyệt ẩn danh
+                console.log("LocalStorage bị chặn");
             }
-            bindEvents();
-        });
-
-        // Đóng khóa sửa lỗi FastClick - Liên kết trực tiếp tương tác chạm an toàn
-        function bindEvents() {
-            // Sự kiện nút đăng nhập
-            document.getElementById('btn-login').addEventListener('click', verifyCredentials);
-            
-            // Sự kiện loa tắt/bật nhạc nền
-            document.getElementById('mute-btn').addEventListener('click', toggleBackgroundMusic);
-            
-            // Sự kiện nút cấp quyền hệ thống ban đầu
-            document.getElementById('btn-grant-permission').addEventListener('click', activateHardwareBoosters);
-            
-            // Sự kiện nút kích hoạt nhịp điệu luyện cơ tay
-            document.getElementById('btn-rhythm-toggle').addEventListener('click', toggleRhythmTraining);
-            
-            // Sự kiện nút chính KHỞI CHẠY & VÀO GAME
-            document.getElementById('btn-main-launch').addEventListener('click', executeGamingBoost);
-
-            // Gắn lắng nghe cho các hộp gạt (Checkbox) để xử lý phần cứng mượt mà
-            document.getElementById('t-shake').addEventListener('change', () => handleHardwareToggles('shake'));
-            document.getElementById('t-fps').addEventListener('change', () => handleHardwareToggles('fps'));
-            document.getElementById('t-touch').addEventListener('change', () => handleHardwareToggles('touch'));
-            document.getElementById('t-dns').addEventListener('change', () => handleHardwareToggles('dns'));
         }
+        initApp();
 
+        // 4. Hàm Kiểm tra Mật Khẩu Siêu Tốc (Chống sập 100%)
         function verifyCredentials() {
-            const inputVal = document.getElementById('vip-key').value;
-            const hashedInput = btoa(inputVal);
+            const inputVal = document.getElementById('vip-key').value.trim(); // Cắt dấu cách thừa
+            if(inputVal === "") {
+                alert("Vui lòng nhập mã kích hoạt!");
+                return;
+            }
 
-            if (hashedInput === ADMIN_HASH) {
+            // Giải mã Hash ngược lại thành text để so sánh (Cách này không bao giờ sập)
+            const trueAdminKey = atob(ADMIN_HASH);
+            const trueUserKey = atob(USER_HASH);
+
+            if (inputVal === trueAdminKey) {
                 alert("[ADMIN CODE]: Đăng nhập tối cao thành công. Đã mở khóa tính năng sinh mã Keygen!");
                 proceedToApp();
-            } else if (hashedInput === USER_HASH) {
+            } else if (inputVal === trueUserKey) {
                 proceedToApp();
             } else {
                 alert("Mã kích hoạt không hợp lệ hoặc đã hết hạn!");
             }
         }
 
+        // 5. Hiệu ứng mở khóa thành công
         function proceedToApp() {
-            localStorage.setItem('vip_unlocked', 'true');
+            try { localStorage.setItem('vip_unlocked', 'true'); } catch(e){}
             document.getElementById('login-screen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'flex';
-                showModal();
+                document.getElementById('permission-modal').style.display = 'flex';
             }, 400);
         }
 
-        function showModal() {
-            document.getElementById('permission-modal').style.display = 'flex';
-        }
-
+        // 6. Cấp Quyền & Kích hoạt Vũ khí
         async function activateHardwareBoosters() {
             document.getElementById('permission-modal').style.display = 'none';
             isAppReady = true;
 
-            // Mở khóa luồng nhạc nền có cơ chế tự tải lại khi lỗi mạng
+            // Bật nhạc (Cơ chế Auto-retry)
             attemptAudioPlay(3);
 
-            // Mở khóa Kênh âm thanh Web Audio API từ cử chỉ người dùng
+            // Cấp quyền âm thanh cơ học
             if(!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
-            // Kích hoạt Wake Lock chống tắt màn hình khi cắm treo máy
+            // Giữ sáng màn hình
             if ('wakeLock' in navigator) {
-                try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) { console.log('WakeLock API blocked'); }
+                try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) { console.log('WakeLock API chặn'); }
             }
 
-            // Đồng bộ hoá cảm biến Gyro chống loạn tâm (iOS 13+)
+            // Cảm biến Gyro
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 DeviceOrientationEvent.requestPermission().then(state => {
                     if (state === 'granted') { window.addEventListener('deviceorientation', () => {}); }
                 }).catch(console.error);
+            }
+        }
+
+        // Hàm hỗ trợ Tắt/Bật Nhạc
+        function toggleBackgroundMusic() {
+            const icon = document.querySelector('#mute-btn i');
+            if (audioEl.paused) {
+                audioEl.play();
+                icon.className = "fa-solid fa-volume-high";
+            } else {
+                audioEl.pause();
+                icon.className = "fa-solid fa-volume-xmark";
             }
         }
 
@@ -402,18 +411,7 @@
             }
         }
 
-        function toggleBackgroundMusic() {
-            const icon = document.querySelector('#mute-btn i');
-            if (audioEl.paused) {
-                audioEl.play();
-                icon.className = "fa-solid fa-volume-high";
-            } else {
-                audioEl.pause();
-                icon.className = "fa-solid fa-volume-xmark";
-            }
-        }
-
-        // Khắc phục triệt để lỗi đứng hình khi chạy ngầm ẩn ứng dụng
+        // Tự động tạm ngưng khi ẩn App chống treo
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 audioEl.pause();
@@ -426,26 +424,23 @@
             }
         });
 
-        /* XỬ LÝ PHẦN CỨNG THẬT SỰ TỪ NÚT GẠT SWITCH */
+        // 7. Xử lý Toggles Phần Cứng
         function handleHardwareToggles(type) {
             if(!isAppReady) return;
 
-            // Rung phản hồi haptic lập tức ngay khi ngón tay chạm gạt nút
+            // Rung khi gạt (Nếu máy hỗ trợ)
             if(navigator.vibrate) navigator.vibrate(12);
 
             if (type === 'fps') {
                 const checked = document.getElementById('t-fps').checked;
-                // Đóng băng toàn bộ hoạt cảnh nền để giải phóng 100% GPU
                 document.getElementById('bg-orbs').style.display = checked ? 'none' : 'block';
             } 
             else if (type === 'touch' || type === 'shake') {
                 const isActive = document.getElementById('t-touch').checked || document.getElementById('t-shake').checked;
                 if(isActive) {
-                    // Ép chu kỳ quét cảm ứng (60Hz - 120Hz) đồng bộ màn hình phần cứng
                     const scanBoost = () => { animationFrameId = requestAnimationFrame(scanBoost); };
                     scanBoost();
 
-                    // Khởi chạy Web Worker độc lập để tính toán dải LERP làm mịn tâm đường kéo
                     if (!worker) {
                         const blobCode = `self.onmessage = function() { self.postMessage('computed'); };`;
                         const blob = new Blob([blobCode], {type: 'application/javascript'});
@@ -459,7 +454,7 @@
             }
         }
 
-        /* KHỞI ĐỘNG CƠ TAY CLICK CƠ HỌC */
+        // 8. Chế độ Luyện cơ tay
         function toggleRhythmTraining() {
             if(!audioCtx) return;
             const btn = document.getElementById('btn-rhythm-toggle');
@@ -469,7 +464,6 @@
                 btn.innerHTML = `<i class="fa-solid fa-pause"></i> DỪNG LUYỆN TẬP`;
                 btn.style.borderColor = "var(--neon-cyan)";
                 rhythmInterval = setInterval(() => {
-                    // Sóng âm giả lập tiếng cơ khí click chuột trầm đầm tay
                     osc = audioCtx.createOscillator();
                     let gainNode = audioCtx.createGain();
                     osc.connect(gainNode);
@@ -498,7 +492,7 @@
             if(osc) { osc.disconnect(); osc = null; }
         }
 
-        /* TIẾN TRÌNH KHỞI CHẠY GAME & CPU SPIKE FORCING */
+        // 9. Khởi chạy Game (Deep Link + Ép Xung)
         function executeGamingBoost() {
             const gameType = document.getElementById('game-selector').value;
             const overlay = document.getElementById('loading-overlay');
@@ -513,7 +507,7 @@
                 title.innerText = "ĐANG ÉP XUNG CPU...";
             }
 
-            // Ép xung đột biến vô hại (CPU Spike) buộc nhân to của chip thức tỉnh hoàn toàn
+            // Ép xung CPU
             let heavyCalc = 0;
             for(let i=0; i<8000000; i++) { heavyCalc += Math.sqrt(i); }
 
@@ -531,7 +525,6 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         overlay.style.display = 'none';
-                        // Định tuyến Deep Link mở ứng dụng trực tiếp trên thiết bị
                         if (gameType === 'freefire') window.location.href = "freefire://";
                         else if (gameType === 'lienquan') window.location.href = "garena://";
                         else if (gameType === 'roblox') window.location.href = "roblox://";
