@@ -10,6 +10,7 @@
     <link rel="apple-touch-icon" href="image.png">
     <title>AI CONFIG - ULTIMATE SENSITIVITY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
     <style>
         :root {
             --neon-red: #ff3366;
@@ -95,7 +96,7 @@
         .pwa-instruction { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px; margin-bottom: 15px; font-size: 12px; text-align: center; color: var(--neon-cyan); }
         .hidden { display: none !important; }
 
-        /* Style cho danh sách thiết bị (thêm mới) */
+        /* Thêm style cho toggle, device list */
         .device-type-btn { padding: 8px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #8a8a9e; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 2px; }
         .device-type-btn.active { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,243,255,0.05); }
         .device-item { background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 12px; margin: 4px 0; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; }
@@ -179,8 +180,19 @@
             </div>
 
             <div class="glass-panel">
+                <div class="panel-title"><i class="fa-solid fa-music"></i> ÂM THANH NỀN</div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button id="btn-music" class="cyber-btn" style="width: auto; padding: 10px 20px; font-size: 14px;" onclick="toggleMusic()">
+                        <i class="fa-solid fa-play"></i> BẬT NHẠC
+                    </button>
+                    <span id="music-status" style="color: #8a8a9e; font-size: 13px;">Đang tắt</span>
+                </div>
+                <p style="font-size: 11px; color: #8a8a9e; margin-top: 10px;">File: music.mp3 • Tự động lặp</p>
+            </div>
+
+            <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-rocket"></i> TỐI ƯU PHẦN CỨNG (TOUCH BOOSTER)</div>
-                <p style="font-size: 12px; color:#8a8a9e; margin-bottom: 15px;">Kích hoạt luồng xử lý CPU ngầm giúp giảm độ trễ chạm và khóa tỷ lệ văng tâm qua đầu.</p>
+                <p style="font-size: 12px; color:#8a8a9e; margin-bottom: 15px;">Kích hoạt luồng xử lý CPU ngầm giúp giảm độ trễ chạm (Input Delay) và khóa tỷ lệ văng tâm qua đầu.</p>
                 <button id="btn-boost" class="cyber-btn" onclick="simulateBoost()">CHẠY BỘ TĂNG TỐC CẢM ỨNG</button>
             </div>
 
@@ -191,7 +203,7 @@
             </div>
         </div>
 
-        <!-- TAB CẤU HÌNH AI (giữ nguyên) -->
+        <!-- TAB CẤU HÌNH AI -->
         <div id="tab-1" class="tab-content">
             <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-calculator"></i> AI MA TRẬN KÉO TÂM</div>
@@ -237,7 +249,7 @@
             </div>
         </div>
 
-        <!-- TAB THIẾT BỊ (MỚI) -->
+        <!-- TAB THIẾT BỊ (TRA CỨU) -->
         <div id="tab-2" class="tab-content">
             <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-mobile"></i> TRA CỨU ĐỘ NHẠY THEO MÁY</div>
@@ -254,7 +266,7 @@
             </div>
         </div>
 
-        <!-- TAB PRO (giữ nguyên + thêm QR từ mẫu) -->
+        <!-- TAB PRO -->
         <div id="tab-3" class="tab-content">
             <div id="pro-buy-panel">
                 <div class="pro-banner">
@@ -293,8 +305,13 @@
         </div>
     </div>
 
+    <!-- Audio ẩn -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // ==================== BẢO MẬT ====================
+        // ==================== BẢO MẬT & TRẠNG THÁI ====================
         const APP_PASS = "bohieudaycon209";
         const PRO_KEY_1 = "HIEUDEPTRAIVIPPRO09";
         const PRO_KEY_2 = "BOHIEUDEPTRAIVIPPRO209";
@@ -302,7 +319,7 @@
         let currentDeviceInfo = null;
         let currentConfigData = "";
 
-        // ==================== DỮ LIỆU THIẾT BỊ (THÊM MỚI) ====================
+        // ==================== DỮ LIỆU THIẾT BỊ TRA CỨU ====================
         const iphoneDevices = [
             { name: 'iPhone 6', screen: 4.7, ram: 1, perf: 1200 },
             { name: 'iPhone 7', screen: 4.7, ram: 2, perf: 3300 },
@@ -382,7 +399,7 @@
             document.getElementById('deviceDetailView').classList.add('hidden');
         }
 
-        // Toggle tối ưu
+        // ==================== TOGGLES TỐI ƯU ====================
         const toggleData = [
             { id: 'fixrung', label: 'FIX RUNG', desc: 'Giảm rung khi bắn', pro: false },
             { id: 'giamlo', label: 'GIẢM LỐ', desc: 'Giảm độ giật', pro: false },
@@ -413,7 +430,36 @@
             alert(`${id.toUpperCase()} ${toggleStates[id] ? 'đã bật ✅' : 'đã tắt ❌'}`);
         }
 
-        // ==================== CÁC HÀM GỐC (GIỮ NGUYÊN) ====================
+        // ==================== NHẠC NỀN ====================
+        let musicPlaying = false;
+        const bgMusic = document.getElementById('bg-music');
+        function toggleMusic() {
+            const btn = document.getElementById('btn-music');
+            const status = document.getElementById('music-status');
+            if (musicPlaying) {
+                bgMusic.pause();
+                btn.innerHTML = '<i class="fa-solid fa-play"></i> BẬT NHẠC';
+                status.textContent = 'Đang tắt';
+                musicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-pause"></i> TẮT NHẠC';
+                    status.textContent = 'Đang phát ♫';
+                    musicPlaying = true;
+                }).catch(() => alert('⚠️ Trình duyệt chặn tự động phát. Hãy bấm lại sau khi tương tác với trang.'));
+            }
+        }
+        document.addEventListener('click', function firstPlay() {
+            if (!musicPlaying && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    document.getElementById('btn-music').innerHTML = '<i class="fa-solid fa-pause"></i> TẮT NHẠC';
+                    document.getElementById('music-status').textContent = 'Đang phát ♫';
+                    musicPlaying = true;
+                }).catch(() => {});
+            }
+        }, { once: true });
+
+        // ==================== HỆ THỐNG GỐC ====================
         function detectDevice() {
             const ua = navigator.userAgent;
             let os = 'Unknown', model = 'Unknown';
@@ -552,7 +598,6 @@
         window.onload = () => {
             if (sessionStorage.getItem('app_unlocked') === 'true') { document.getElementById('login-app').style.display = 'none'; document.getElementById('main-ui').style.display = 'flex'; updateDeviceInfo(); checkNetwork(); renderToggles(); renderDeviceList(); applyProState(); }
             if (/iPhone|iPad|iPod/.test(navigator.userAgent)) document.getElementById('ios-config-panel').classList.remove('hidden');
-            // Sự kiện cho nút chọn loại thiết bị
             document.querySelectorAll('.device-type-btn').forEach(b => b.addEventListener('click', function() {
                 document.querySelectorAll('.device-type-btn').forEach(x => x.classList.remove('active'));
                 this.classList.add('active');
