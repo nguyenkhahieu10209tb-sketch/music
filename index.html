@@ -4,19 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#070712">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="AI SENS PRO">
     <link rel="apple-touch-icon" href="image.png">
-
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-
     <title>AI CONFIG - ULTIMATE SENSITIVITY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ================= HỆ THỐNG UI CYBERPUNK ================= */
         :root {
             --neon-red: #ff3366;
             --neon-cyan: #00f3ff;
@@ -34,8 +28,14 @@
         .bg-matrix { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #070712 100%); overflow: hidden; }
         .bg-matrix::before { content: ""; position: absolute; width: 200%; height: 200%; background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0, 243, 255, 0.03) 4px, rgba(0, 243, 255, 0.03) 5px); animation: scan 10s linear infinite; }
         @keyframes scan { 0% { transform: translateY(-50%); } 100% { transform: translateY(0); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 10px var(--neon-cyan); } 50% { box-shadow: 0 0 25px var(--neon-cyan), 0 0 50px var(--neon-cyan); } 100% { box-shadow: 0 0 10px var(--neon-cyan); } }
+        @keyframes glowText { 0% { text-shadow: 0 0 10px var(--neon-cyan); } 50% { text-shadow: 0 0 25px var(--neon-cyan), 0 0 50px var(--neon-cyan); } 100% { text-shadow: 0 0 10px var(--neon-cyan); } }
 
-        /* MÀN HÌNH ĐĂNG NHẬP (APP PASS) */
+        .pulse-animation { animation: pulse 2s infinite; }
+        .glow-text { animation: glowText 2s infinite; }
+
         #login-app { position: fixed; inset: 0; background: #070712; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
         .login-box { background: var(--panel-bg); border: 1px solid var(--neon-cyan); box-shadow: 0 0 30px rgba(0,243,255,0.1); padding: 40px 25px; border-radius: 20px; text-align: center; width: 90%; max-width: 380px; backdrop-filter: blur(10px); }
         .login-box h2 { color: var(--neon-cyan); text-shadow: var(--text-glow); margin-bottom: 5px; font-weight: 800; }
@@ -44,8 +44,8 @@
         .cyber-input:focus { border-color: var(--neon-cyan); box-shadow: inset 0 0 10px rgba(0,243,255,0.2); }
         .cyber-btn { width: 100%; padding: 16px; background: linear-gradient(90deg, #00f3ff, #0088ff); border: none; border-radius: 12px; color: #fff; font-weight: bold; font-size: 16px; cursor: pointer; text-shadow: 0 1px 3px rgba(0,0,0,0.5); box-shadow: 0 5px 20px rgba(0,243,255,0.4); transition: 0.2s; text-transform: uppercase; }
         .cyber-btn:active { transform: scale(0.95); }
+        .cyber-btn:hover { filter: brightness(1.2); }
 
-        /* MÀN HÌNH CHÍNH */
         #main-ui { display: none; width: 100%; height: 100%; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 80px; }
         .header { text-align: center; margin-bottom: 20px; margin-top: 10px; }
         .header h1 { font-size: 22px; color: var(--neon-cyan); text-shadow: var(--text-glow); }
@@ -54,62 +54,63 @@
         .tab-btn { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 12px 5px; border-radius: 10px; color: #8a8a9e; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .tab-btn i { font-size: 18px; }
         .tab-btn.active { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,243,255,0.05); text-shadow: var(--text-glow); }
+        .tab-btn:hover { border-color: rgba(0,243,255,0.5); }
 
         .tab-content { display: none; animation: fadeUp 0.3s ease forwards; }
         .tab-content.active { display: block; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* POPUP XIN QUYỀN HỆ THỐNG */
         #permission-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         .modal-box { background: #0c0c1e; border: 2px solid var(--neon-red); border-radius: 16px; padding: 25px; width: 90%; max-width: 360px; text-align: center; box-shadow: 0 0 30px rgba(255,51,102,0.3); }
         
-        .glass-panel { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 15px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .glass-panel { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 15px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: border-color 0.3s; }
+        .glass-panel:hover { border-color: rgba(0,243,255,0.3); }
         .panel-title { font-size: 14px; font-weight: bold; color: var(--neon-cyan); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
         
-        /* Ping & Info */
         .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .status-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .status-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: box-shadow 0.3s; }
+        .status-box:hover { box-shadow: 0 0 15px rgba(0,243,255,0.2); }
         .status-box span { display: block; font-size: 11px; color: #8a8a9e; margin-bottom: 5px; }
         .status-box strong { font-size: 18px; color: #fff; }
         .ping-good { color: #00ffaa !important; text-shadow: 0 0 10px rgba(0,255,170,0.5); }
         .ping-bad { color: var(--neon-red) !important; }
 
-        /* Form cấu hình */
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 12px; color: #8a8a9e; margin-bottom: 8px; }
-        select.cyber-select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 10px; outline: none; font-size: 14px; }
+        select.cyber-select { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 10px; outline: none; font-size: 14px; transition: border-color 0.3s; }
+        select.cyber-select:hover { border-color: var(--neon-cyan); }
         
-        /* Hiển thị kết quả AI */
-        .result-box { display: none; background: rgba(0, 243, 255, 0.05); border: 1px dashed var(--neon-cyan); border-radius: 12px; padding: 15px; margin-top: 15px; }
+        .result-box { display: none; background: rgba(0, 243, 255, 0.05); border: 1px dashed var(--neon-cyan); border-radius: 12px; padding: 15px; margin-top: 15px; animation: fadeUp 0.5s; }
         .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
         .stat-row:last-child { border-bottom: none; }
         .stat-val { color: var(--neon-gold); font-weight: bold; text-shadow: var(--gold-glow); }
         .stat-pro { color: var(--neon-red); font-style: italic; font-size: 12px; cursor: pointer; }
 
-        /* HƯỚNG DẪN VIP CHÉP FILE */
-        #vip-guide { display: none; background: rgba(0, 255, 170, 0.05); border: 1px solid #00ffaa; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: left; font-size: 13px; line-height: 1.6; }
+        #vip-guide { display: none; background: rgba(0, 255, 170, 0.05); border: 1px solid #00ffaa; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: left; font-size: 13px; line-height: 1.6; animation: fadeUp 0.5s; }
 
         .btn-gold { background: linear-gradient(90deg, #ffcc00, #ff6600); box-shadow: 0 5px 20px rgba(255, 204, 0, 0.4); color: #000; margin-top: 15px; }
+        .btn-gold:hover { box-shadow: 0 5px 30px rgba(255, 204, 0, 0.7); }
         .btn-red { background: linear-gradient(90deg, #ff3366, #cc0033); box-shadow: 0 5px 20px rgba(255, 51, 102, 0.4); }
+        .btn-red:hover { box-shadow: 0 5px 30px rgba(255, 51, 102, 0.7); }
         .btn-vip-locked { background: #1a1a2e; border: 1px solid var(--neon-red); color: #8a8a9e; }
 
-        /* KHU VỰC MUA PRO */
         .pro-banner { background: linear-gradient(45deg, rgba(255,51,102,0.1), rgba(255,204,0,0.1)); border: 1px solid var(--neon-gold); padding: 20px; border-radius: 16px; text-align: center; }
-        .pro-price { font-size: 28px; color: var(--neon-gold); font-weight: 900; margin: 10px 0; text-shadow: var(--gold-glow); }
-        .qr-code { width: 160px; height: 160px; border-radius: 10px; border: 2px solid var(--neon-cyan); margin: 10px auto; display: block; object-fit: cover; }
+        .pro-price { font-size: 28px; color: var(--neon-gold); font-weight: 900; margin: 10px 0; text-shadow: var(--gold-glow); animation: glowText 2s infinite; }
+        .qr-code { width: 160px; height: 160px; border-radius: 10px; border: 2px solid var(--neon-cyan); margin: 10px auto; display: block; object-fit: cover; transition: transform 0.3s; }
+        .qr-code:hover { transform: scale(1.05); border-color: var(--neon-gold); }
         .social-links a { display: inline-block; margin: 0 10px; color: #fff; font-size: 24px; text-decoration: none; transition: 0.3s; }
-        .social-links a:hover { color: var(--neon-cyan); transform: scale(1.1); }
+        .social-links a:hover { color: var(--neon-cyan); transform: scale(1.2); }
         
         .two-layer-auth { margin-top: 20px; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; border: 1px dashed var(--neon-red); }
-        .vip-status-active { display: none; color: #00ffaa; font-weight: bold; font-size: 18px; text-align: center; text-shadow: 0 0 15px rgba(0,255,170,0.6); margin-top: 20px; border: 1px solid #00ffaa; padding: 20px; border-radius: 15px; background: rgba(0,255,170,0.1); }
+        .vip-status-active { display: none; color: #00ffaa; font-weight: bold; font-size: 18px; text-align: center; text-shadow: 0 0 15px rgba(0,255,170,0.6); margin-top: 20px; border: 1px solid #00ffaa; padding: 20px; border-radius: 15px; background: rgba(0,255,170,0.1); animation: glowText 2s infinite; }
         .badge-pro { background: var(--neon-red); color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px; vertical-align: top; margin-left: 5px; font-weight: bold; box-shadow: 0 0 5px var(--neon-red); }
 
-        /* Hướng dẫn cài app ra màn hình chính */
         .pwa-instruction { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px; margin-bottom: 15px; font-size: 12px; text-align: center; color: var(--neon-cyan); }
+        .hidden { display: none !important; }
+
+        .security-badge { display: inline-block; background: var(--neon-red); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; vertical-align: middle; animation: pulse 2s infinite; }
     </style>
 </head>
 <body>
-
     <div class="bg-matrix"></div>
 
     <div id="permission-modal">
@@ -132,7 +133,8 @@
             <h2>AI CONFIG SYSTEM</h2>
             <p>Vui lòng nhập mật khẩu cấp quyền ứng dụng</p>
             <input type="password" id="app-pass" class="cyber-input" placeholder="Nhập mật khẩu..." onkeypress="if(event.key==='Enter') loginApp()">
-            <button class="cyber-btn" onclick="loginApp()">XÁC NHẬN TRUY CẬP</button>
+            <button class="cyber-btn pulse-animation" onclick="loginApp()">XÁC NHẬN TRUY CẬP</button>
+            <p style="margin-top:15px; font-size:11px; color: var(--neon-red);"><i class="fa-solid fa-shield-halved"></i> Bảo mật 2 lớp</p>
         </div>
     </div>
 
@@ -151,13 +153,12 @@
             <div class="tab-btn" onclick="switchTab(2, this)"><i class="fa-solid fa-crown"></i> BẢN PRO</div>
         </div>
 
+        <!-- TAB HỆ THỐNG -->
         <div id="tab-0" class="tab-content active">
-            <!-- Thiết bị hiện tại -->
-            <div class="glass-panel" id="device-info-panel">
+            <!-- Thông tin thiết bị tự động -->
+            <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-mobile-screen"></i> THIẾT BỊ HIỆN TẠI</div>
-                <div id="device-details" style="font-size:13px; line-height:1.8;">
-                    Đang kiểm tra...
-                </div>
+                <div id="device-details" style="font-size:13px; line-height:1.8;">Đang kiểm tra...</div>
             </div>
 
             <div class="glass-panel">
@@ -178,11 +179,11 @@
             <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-rocket"></i> TỐI ƯU PHẦN CỨNG (TOUCH BOOSTER)</div>
                 <p style="font-size: 12px; color:#8a8a9e; margin-bottom: 15px; line-height: 1.5;">Kích hoạt luồng xử lý CPU ngầm giúp giảm độ trễ chạm (Input Delay) và khóa tỷ lệ văng tâm qua đầu.</p>
-                <button id="btn-boost" class="cyber-btn" onclick="simulateBoost()">CHẠY BỘ TĂNG TỐC CẢM ỨNG</button>
+                <button id="btn-boost" class="cyber-btn pulse-animation" onclick="simulateBoost()">CHẠY BỘ TĂNG TỐC CẢM ỨNG</button>
             </div>
-            
-            <!-- KHU VỰC TẢI CẤU HÌNH TRỰC TIẾP CHO IPHONE -->
-            <div class="glass-panel" style="border-color: var(--neon-gold); background: rgba(255, 204, 0, 0.05);" id="ios-config-panel">
+
+            <!-- Cài đặt iOS (chỉ hiện trên iPhone/iPad) -->
+            <div class="glass-panel hidden" id="ios-config-panel" style="border-color: var(--neon-gold); background: rgba(255, 204, 0, 0.05);">
                 <div class="panel-title" style="color: var(--neon-gold);">
                     <i class="fa-solid fa-cloud-arrow-down"></i> CÀI ĐẶT ỨNG DỤNG TRỰC TIẾP (iOS)
                 </div>
@@ -195,13 +196,14 @@
             </div>
         </div>
 
+        <!-- TAB CẤU HÌNH AI -->
         <div id="tab-1" class="tab-content">
             <div class="glass-panel">
                 <div class="panel-title"><i class="fa-solid fa-calculator"></i> AI MA TRẬN KÉO TÂM</div>
                 
                 <div class="input-group">
                     <label>Chọn Tựa Game</label>
-                    <select id="game-select" class="cyber-select">
+                    <select id="game-select" class="cyber-select" onchange="gameChanged()">
                         <option value="ff">Free Fire / Free Fire MAX</option>
                         <option value="pubg" class="pro-option">PUBG Mobile (Yêu cầu PRO)</option>
                         <option value="lq" class="pro-option">Liên Quân Mobile (Yêu cầu PRO)</option>
@@ -211,6 +213,7 @@
                 <div class="input-group">
                     <label>Thiết Bị Của Bạn</label>
                     <select id="device-select" class="cyber-select">
+                        <option value="auto">Tự động phát hiện</option>
                         <option value="android_low">Android (Màn hình thường / Máy yếu)</option>
                         <option value="android_high">Android (Màn hình 90Hz - 120Hz)</option>
                         <option value="ios_low">iPhone (Từ iPhone X trở xuống)</option>
@@ -218,7 +221,7 @@
                     </select>
                 </div>
 
-                <div class="input-group">
+                <div class="input-group" id="style-group">
                     <label>Lối Chơi & Vũ Khí Chính</label>
                     <select id="style-select" class="cyber-select">
                         <option value="rush">Cận Chiến (Shotgun, SMG, MP40)</option>
@@ -226,25 +229,22 @@
                     </select>
                 </div>
 
-                <button class="cyber-btn" onclick="calculateAI()"><i class="fa-solid fa-wand-magic-sparkles"></i> PHÂN TÍCH ĐỘ NHẠY KỊCH TRẦN</button>
+                <button class="cyber-btn pulse-animation" onclick="calculateAI()"><i class="fa-solid fa-wand-magic-sparkles"></i> PHÂN TÍCH ĐỘ NHẠY KỊCH TRẦN</button>
 
                 <div id="ai-result" class="result-box">
-                    <h4 style="color: var(--neon-cyan); margin-bottom: 12px; font-size: 14px; text-align: center;">BỘ THÔNG SỐ CHUẨN XÁC AI (MAX 200)</h4>
-                    <div class="stat-row"><span>Nhìn xung quanh:</span> <span class="stat-val" id="res-gen">0</span></div>
-                    <div class="stat-row"><span>Red Dot (Hồng tâm):</span> <span class="stat-val" id="res-red">0</span></div>
-                    <div class="stat-row"><span>Ống ngắm 2x:</span> <span class="stat-val" id="res-2x">0</span></div>
-                    <div class="stat-row"><span>Ống ngắm 4x:</span> <span class="stat-val" id="res-4x">0</span></div>
+                    <h4 style="color: var(--neon-cyan); margin-bottom: 12px; font-size: 14px; text-align: center;" id="result-title">BỘ THÔNG SỐ CHUẨN XÁC AI</h4>
+                    <div id="result-content"></div>
                     
-                    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;" id="extra-info">
                         <div class="stat-row"><span>DPI (Độ rộng tối thiểu):</span> <span class="stat-val" id="res-dpi"><span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span></span></div>
-                        <div class="stat-row"><span>Kích cỡ nút bắn (Touch Point):</span> <span class="stat-val" id="res-btn"><span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span></span></div>
+                        <div class="stat-row" id="touch-point-row"><span>Kích cỡ nút bắn (Touch Point):</span> <span class="stat-val" id="res-btn"><span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span></span></div>
                     </div>
 
                     <div id="vip-guide">
                         <strong style="color: #00ffaa;"><i class="fa-solid fa-circle-info"></i> QUY TRÌNH KÍCH HOẠT HỆ THỐNG 100%:</strong><br>
                         1. Sau khi tải tệp cấu hình về máy, hãy dùng ứng dụng <strong>ZArchiver</strong>.<br>
                         2. Di chuyển file cấu hình vào thư mục game theo đường dẫn:<br>
-                        <code style="color:var(--neon-cyan); background:#000; padding:2px 4px; border-radius:4px; font-size:11px; display:block; margin:5px 0;">Android/data/com.dts.freefireth/files/</code>
+                        <code style="color:var(--neon-cyan); background:#000; padding:2px 4px; border-radius:4px; font-size:11px; display:block; margin:5px 0;" id="guide-path">Android/data/com.dts.freefireth/files/</code>
                         3. <strong>Mẹo giảm delay màn hình:</strong> Vào cài đặt điện thoại, tìm mục <strong>Tốc độ con trỏ (Pointer Speed)</strong> và đẩy kịch trần lên mức Tối Đa.
                     </div>
                 </div>
@@ -255,6 +255,7 @@
             </div>
         </div>
 
+        <!-- TAB PRO -->
         <div id="tab-2" class="tab-content">
             <div id="pro-buy-panel">
                 <div class="pro-banner">
@@ -269,7 +270,7 @@
 
                     <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                         <p style="font-size: 13px; color: #8a8a9e; margin-bottom: 5px;">Quét QR (ZaloPay) hoặc Chuyển Khoản:</p>
-                        <img src="image.png" alt="Mã QR ZaloPay" class="qr-code">
+                        <img src="image.png" alt="Mã QR ZaloPay" class="qr-code" id="qr-image">
                         <p style="color: #00f3ff; font-weight: bold; margin-top: 10px; letter-spacing: 1px;">0395734228</p>
                         <p style="color: #fff; font-size: 12px; margin-top: 3px;">NGUYEN KHAC HIEU</p>
                     </div>
@@ -286,7 +287,7 @@
                     <h4 style="color: var(--neon-red); margin-bottom: 15px; font-size: 13px;"><i class="fa-solid fa-shield-halved"></i> BẢO MẬT KÍCH HOẠT 2 LỚP</h4>
                     <input type="text" id="pro-key-1" class="cyber-input" style="padding: 10px; font-size: 12px;" placeholder="Nhập Key Lớp 1...">
                     <input type="text" id="pro-key-2" class="cyber-input" style="padding: 10px; font-size: 12px;" placeholder="Nhập Key Lớp 2...">
-                    <button class="cyber-btn btn-red" style="padding: 12px; font-size: 13px;" onclick="unlockPro()">KÍCH HOẠT NGAY</button>
+                    <button class="cyber-btn btn-red pulse-animation" style="padding: 12px; font-size: 13px;" onclick="unlockPro()">KÍCH HOẠT NGAY</button>
                 </div>
             </div>
 
@@ -299,56 +300,68 @@
     </div>
 
     <script>
-        // --- 1. HỆ THỐNG BẢO MẬT & TRẠNG THÁI ---
+        // ==================== HỆ THỐNG BẢO MẬT & TRẠNG THÁI ====================
         const APP_PASS = "bohieudaycon209";
         const PRO_KEY_1 = "HIEUDEPTRAIVIPPRO09";
         const PRO_KEY_2 = "BOHIEUDEPTRAIVIPPRO209";
         
         let isPro = localStorage.getItem('is_pro_user') === 'true';
         let currentDeviceInfo = null;
+        let currentConfigData = "";
 
         window.onload = () => {
             if(sessionStorage.getItem('app_unlocked') === 'true') {
                 document.getElementById('login-app').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'flex';
                 applyProState();
-                updateDeviceInfo();
+                detectDeviceInfo();
                 checkNetwork();
+                gameChanged();
             }
+            // iOS config panel
+            if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                document.getElementById('ios-config-panel').classList.remove('hidden');
+            }
+            // Xử lý ảnh QR
+            const qrImg = document.getElementById('qr-image');
+            qrImg.onerror = function() {
+                this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300f3ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4 1.41-1.41L11 14.17l5.59-5.59L18 10l-7 7z"/></svg>';
+                this.style.objectFit = 'contain';
+                this.style.padding = '20px';
+            };
         };
 
         function loginApp() {
-            const val = document.getElementById('app-pass').value.trim();
-            if(val === APP_PASS) {
+            if(document.getElementById('app-pass').value.trim() === APP_PASS) {
                 sessionStorage.setItem('app_unlocked', 'true');
                 document.getElementById('login-app').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('login-app').style.display = 'none';
                     document.getElementById('main-ui').style.display = 'flex';
                     applyProState();
-                    updateDeviceInfo();
+                    detectDeviceInfo();
                     checkNetwork();
+                    gameChanged();
                 }, 400);
             } else {
                 alert("Mật khẩu truy cập ứng dụng không chính xác!");
             }
         }
 
-        // --- 2. ĐIỀU HƯỚNG TABS ---
+        // ==================== ĐIỀU HƯỚNG TABS ====================
         function switchTab(idx, btnEle) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            btnEle.classList.add('active');
+            if (btnEle) btnEle.classList.add('active');
+            else document.querySelectorAll('.tab-btn')[idx].classList.add('active');
             document.getElementById('tab-' + idx).classList.add('active');
             if(navigator.vibrate) navigator.vibrate(10);
         }
 
-        // --- 3. NHẬN DIỆN THIẾT BỊ ---
-        function detectDevice() {
+        // ==================== PHÂN TÍCH THIẾT BỊ ====================
+        function detectDeviceInfo() {
             const ua = navigator.userAgent;
-            let os = 'Unknown';
-            let model = 'Unknown';
-            
+            let os = 'Unknown', model = 'Unknown';
             if (/Android/.test(ua)) {
                 os = 'Android';
                 const match = ua.match(/Android\s[\d\.]+;\s([^;]+)/);
@@ -357,35 +370,36 @@
                 os = 'iOS';
                 model = 'iPhone/iPad';
             }
-            
-            const screenW = screen.width;
-            const screenH = screen.height;
-            const dpr = window.devicePixelRatio || 1;
-            const dpiEstimate = Math.round(Math.sqrt(screenW**2 + screenH**2) / (window.innerWidth / dpr) * 72);
-            
-            return { os, model, screenW, screenH, dpr, dpiEstimate };
-        }
+            const sw = screen.width, sh = screen.height, dpr = window.devicePixelRatio || 1;
+            let dpiEstimate;
+            if (dpr >= 3) dpiEstimate = 460;
+            else if (dpr >= 2.5) dpiEstimate = 400;
+            else if (dpr >= 2) dpiEstimate = 320;
+            else if (dpr >= 1.5) dpiEstimate = 220;
+            else dpiEstimate = 150;
+            if (os === 'iOS' && dpr === 2) dpiEstimate = 326;
+            if (os === 'iOS' && dpr === 3) dpiEstimate = 460;
+            currentDeviceInfo = { os, model, screenW: sw, screenH: sh, dpr, dpiEstimate };
 
-        function updateDeviceInfo() {
-            currentDeviceInfo = detectDevice();
-            const dev = currentDeviceInfo;
-            const details = document.getElementById('device-details');
-            details.innerHTML = `
-                <span style="color:#8a8a9e">HĐH:</span> ${dev.os} (${dev.model})<br>
-                <span style="color:#8a8a9e">Độ phân giải:</span> ${dev.screenW}x${dev.screenH} (@${dev.dpr}x)<br>
-                <span style="color:#8a8a9e">DPI ước lượng:</span> ${dev.dpiEstimate}
+            document.getElementById('device-details').innerHTML = `
+                <span style="color:#8a8a9e">HĐH:</span> ${os} (${model})<br>
+                <span style="color:#8a8a9e">Độ phân giải:</span> ${sw}x${sh} (@${dpr}x)<br>
+                <span style="color:#8a8a9e">DPI ước lượng:</span> ${dpiEstimate} ppi
+                <span class="security-badge"><i class="fa-solid fa-shield"></i> ĐÃ XÁC THỰC</span>
             `;
-            
-            // Ẩn/hiện panel iOS config
-            const iosPanel = document.getElementById('ios-config-panel');
-            if (dev.os === 'iOS') {
-                iosPanel.style.display = 'block';
-            } else {
-                iosPanel.style.display = 'none';
+
+            // Tự động chọn chế độ thiết bị
+            const deviceSelect = document.getElementById('device-select');
+            if (deviceSelect.value === 'auto') {
+                if (os === 'Android') {
+                    deviceSelect.value = dpiEstimate >= 320 ? 'android_high' : 'android_low';
+                } else {
+                    deviceSelect.value = dpiEstimate >= 400 ? 'ios_high' : 'ios_low';
+                }
             }
         }
 
-        // --- 4. ĐO PING THỰC TẾ ---
+        // ==================== ĐO PING ====================
         async function checkNetwork() {
             const pingEl = document.getElementById('ping-value');
             pingEl.innerText = "Đang quét...";
@@ -393,8 +407,7 @@
             try {
                 const startTime = performance.now();
                 await fetch('https://cloudflare-dns.com/dns-query?_t=' + startTime, { mode: 'no-cors', cache: 'no-store' });
-                const endTime = performance.now();
-                const pingTime = Math.round(endTime - startTime);
+                const pingTime = Math.round(performance.now() - startTime);
                 pingEl.innerText = pingTime + " ms";
                 if(pingTime < 60) pingEl.classList.add('ping-good');
                 else pingEl.classList.add('ping-bad');
@@ -404,14 +417,16 @@
             }
         }
 
-        // --- 5. TỐI ƯU PHẦN CỨNG (MÔ PHỎNG) ---
+        // ==================== TỐI ƯU PHẦN CỨNG ====================
         function simulateBoost() {
             const btn = document.getElementById('btn-boost');
             btn.innerText = "ĐANG ÉP XUNG GPU & DỌN RAM...";
             btn.style.opacity = '0.7';
+            btn.classList.add('pulse-animation');
             setTimeout(() => {
                 btn.innerText = "CHẠY BỘ TĂNG TỐC CẢM ỨNG";
                 btn.style.opacity = '1';
+                btn.classList.remove('pulse-animation');
                 if(navigator.vibrate) navigator.vibrate([15, 30, 15]);
                 if(isPro) {
                     alert("[PRO VIP SUCCESS]: Hệ thống tối ưu cảm ứng đã chạy. Tốc độ kéo tâm mượt mà đã được giải phóng!");
@@ -421,67 +436,87 @@
             }, 1200);
         }
 
-        // --- 6. LOGIC AI TÍNH TOÁN ĐỘ NHẠY (DỰA TRÊN DPI THỰC) ---
-        let currentConfigData = "";
-
-        function calculateAI() {
+        // ==================== THAY ĐỔI GAME ====================
+        function gameChanged() {
             const game = document.getElementById('game-select').value;
-            if(!isPro && game !== 'ff') {
+            const styleGroup = document.getElementById('style-group');
+            if (game === 'lq') {
+                styleGroup.style.display = 'none';
+            } else {
+                styleGroup.style.display = 'block';
+            }
+            document.getElementById('ai-result').style.display = 'none';
+            document.getElementById('btn-gen-config').style.display = 'none';
+        }
+
+        // ==================== AI TÍNH TOÁN ====================
+        function calculateAI() {
+            if (!currentDeviceInfo) detectDeviceInfo();
+            const dev = currentDeviceInfo;
+            const game = document.getElementById('game-select').value;
+            if (!isPro && game !== 'ff') {
                 alert("Tính năng tựa game này chỉ mở khóa trong bản PRO VIP!");
                 document.getElementById('game-select').value = 'ff';
+                gameChanged();
                 return;
             }
 
-            const dev = currentDeviceInfo || detectDevice();
-            const style = document.getElementById('style-select').value;
+            const style = (game === 'lq') ? 'rush' : document.getElementById('style-select').value;
+            const resultBox = document.getElementById('ai-result');
+            const resultContent = document.getElementById('result-content');
+            const resultTitle = document.getElementById('result-title');
+            const vipGuide = document.getElementById('vip-guide');
+            const guidePath = document.getElementById('guide-path');
             
-            document.getElementById('ai-result').style.display = 'block';
+            resultBox.style.display = 'block';
+            resultBox.style.animation = 'fadeUp 0.5s';
             document.getElementById('btn-gen-config').style.display = 'block';
-            
-            let gen, red, x2, x4, dpi, btnSize;
 
-            // Tính toán dựa trên DPI ước lượng thay vì random
+            let gen, red, x2, x4, dpi, btnSize;
             const baseDPI = dev.dpiEstimate;
-            if (dev.os === 'Android') {
-                if (baseDPI < 300) {
-                    gen = Math.round(185 + (baseDPI - 200) * 0.2);
-                } else {
-                    gen = Math.round(170 + (baseDPI - 300) * 0.1);
-                }
+            const deviceMode = document.getElementById('device-select').value;
+            let actualMode = deviceMode;
+            if (actualMode === 'auto') {
+                if (dev.os === 'Android') actualMode = baseDPI >= 320 ? 'android_high' : 'android_low';
+                else actualMode = baseDPI >= 400 ? 'ios_high' : 'ios_low';
+            }
+
+            // DPI và btnSize chung
+            if (actualMode.includes('android_low')) {
                 dpi = baseDPI;
                 btnSize = Math.round(48 + (baseDPI - 300) * 0.1);
-            } else { // iOS
-                gen = Math.round(165 + (baseDPI - 300) * 0.15);
+            } else if (actualMode.includes('android_high')) {
+                dpi = baseDPI;
+                btnSize = Math.round(43 + (baseDPI - 300) * 0.1);
+            } else if (actualMode.includes('ios_low')) {
                 dpi = "Mặc định hệ thống iOS";
                 btnSize = Math.round(45 + (baseDPI - 300) * 0.1);
-            }
-            
-            // Giới hạn trong 150-200
-            gen = Math.min(200, Math.max(150, gen));
-
-            if(style === 'rush') {
-                red = gen - 10;
-                x2 = red - 15;
-                x4 = x2 - 10;
             } else {
-                red = gen - 25;
-                x2 = 135;
-                x4 = 125;
+                dpi = "Mặc định hệ thống iOS";
+                btnSize = Math.round(40 + (baseDPI - 400) * 0.1);
             }
 
-            animateValue("res-gen", 0, gen, 600);
-            animateValue("res-red", 0, red, 700);
-            animateValue("res-2x", 0, x2, 800);
-            animateValue("res-4x", 0, x4, 900);
+            // Nội dung theo game
+            if (game === 'ff') {
+                resultTitle.innerText = "BỘ THÔNG SỐ CHUẨN XÁC AI (MAX 200)";
+                if (actualMode.includes('android_low')) gen = Math.round(185 + (baseDPI - 200) * 0.2);
+                else if (actualMode.includes('android_high')) gen = Math.round(170 + (baseDPI - 300) * 0.1);
+                else if (actualMode.includes('ios_low')) gen = Math.round(175 + (baseDPI - 300) * 0.15);
+                else gen = Math.round(150 + (baseDPI - 400) * 0.1);
+                gen = Math.min(200, Math.max(150, gen));
+                if (style === 'rush') { red = gen - 10; x2 = red - 15; x4 = x2 - 10; }
+                else { red = gen - 25; x2 = 135; x4 = 125; }
 
-            if(isPro) {
-                document.getElementById('res-dpi').innerText = (typeof dpi === 'number' ? dpi + " dpi" : dpi);
-                document.getElementById('res-dpi').style.color = "#00ffaa";
-                document.getElementById('res-btn').innerText = btnSize + "%";
-                document.getElementById('res-btn').style.color = "#00ffaa";
-                document.getElementById('vip-guide').style.display = "block";
-                
+                resultContent.innerHTML = `
+                    <div class="stat-row"><span>Nhìn xung quanh:</span><span class="stat-val">${gen}</span></div>
+                    <div class="stat-row"><span>Red Dot (Hồng tâm):</span><span class="stat-val">${red}</span></div>
+                    <div class="stat-row"><span>Ống ngắm 2x:</span><span class="stat-val">${x2}</span></div>
+                    <div class="stat-row"><span>Ống ngắm 4x:</span><span class="stat-val">${x4}</span></div>
+                `;
+                guidePath.innerText = "Android/data/com.dts.freefireth/files/";
+                document.getElementById('touch-point-row').style.display = 'flex';
                 currentConfigData = `[AI_SENSITIVITY_PRO_V2]
+GAME=FREE_FIRE
 GENERAL=${gen}
 RED_DOT=${red}
 SCOPE_2X=${x2}
@@ -491,24 +526,98 @@ BUTTON_SIZE=${btnSize}%
 DEVICE=${dev.model} (${dev.os})
 RESOLUTION=${dev.screenW}x${dev.screenH}
 TIMESTAMP=${new Date().toISOString()}
-# Hướng dẫn: Copy file vào Android/data/com.dts.freefireth/files/ (Android) hoặc tự cài đặt trong game (iOS)`;
-            } else {
-                document.getElementById('res-dpi').innerHTML = `<span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span>`;
-                document.getElementById('res-btn').innerHTML = `<span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span>`;
-                document.getElementById('vip-guide').style.display = "none";
+# Hướng dẫn: copy file vào Android/data/com.dts.freefireth/files/`;
+            } else if (game === 'pubg') {
+                resultTitle.innerText = "BỘ THÔNG SỐ CHUẨN XÁC AI - PUBG MOBILE";
+                const camera = Math.round(80 + (baseDPI - 300) * 0.2);
+                const ads = Math.round(50 + (baseDPI - 300) * 0.15);
+                const scope2x = Math.round(40 + (baseDPI - 300) * 0.1);
+                const scope3x = Math.round(35 + (baseDPI - 300) * 0.1);
+                const scope4x = Math.round(30 + (baseDPI - 300) * 0.1);
+                const scope6x = Math.round(25 + (baseDPI - 300) * 0.1);
+                const scope8x = Math.round(20 + (baseDPI - 300) * 0.1);
+                resultContent.innerHTML = `
+                    <div class="stat-row"><span>Camera (không scope):</span><span class="stat-val">${camera}%</span></div>
+                    <div class="stat-row"><span>ADS (ngắm):</span><span class="stat-val">${ads}%</span></div>
+                    <div class="stat-row"><span>Ống ngắm 2x:</span><span class="stat-val">${scope2x}%</span></div>
+                    <div class="stat-row"><span>Ống ngắm 3x:</span><span class="stat-val">${scope3x}%</span></div>
+                    <div class="stat-row"><span>Ống ngắm 4x:</span><span class="stat-val">${scope4x}%</span></div>
+                    <div class="stat-row"><span>Ống ngắm 6x:</span><span class="stat-val">${scope6x}%</span></div>
+                    <div class="stat-row"><span>Ống ngắm 8x:</span><span class="stat-val">${scope8x}%</span></div>
+                `;
+                guidePath.innerText = "Android/data/com.tencent.ig/files/";
+                document.getElementById('touch-point-row').style.display = 'flex';
+                currentConfigData = `[AI_SENSITIVITY_PRO_V2]
+GAME=PUBG_MOBILE
+CAMERA=${camera}%
+ADS=${ads}%
+SCOPE_2X=${scope2x}%
+SCOPE_3X=${scope3x}%
+SCOPE_4X=${scope4x}%
+SCOPE_6X=${scope6x}%
+SCOPE_8X=${scope8x}%
+DPI=${dpi}
+BUTTON_SIZE=${btnSize}%
+DEVICE=${dev.model} (${dev.os})
+RESOLUTION=${dev.screenW}x${dev.screenH}
+TIMESTAMP=${new Date().toISOString()}
+# Hướng dẫn: copy file vào Android/data/com.tencent.ig/files/`;
+            } else if (game === 'lq') {
+                resultTitle.innerText = "BỘ THÔNG SỐ TỐI ƯU - LIÊN QUÂN MOBILE";
+                const cameraSpeed = Math.round(60 + (baseDPI - 300) * 0.3);
+                const moveSpeed = Math.round(50 + (baseDPI - 300) * 0.2);
+                const skillBtnSize = Math.round(100 + (baseDPI - 300) * 0.1);
+                resultContent.innerHTML = `
+                    <div class="stat-row"><span>Tốc độ camera (kéo bản đồ):</span><span class="stat-val">${cameraSpeed}%</span></div>
+                    <div class="stat-row"><span>Tốc độ di chuyển nhân vật:</span><span class="stat-val">${moveSpeed}%</span></div>
+                    <div class="stat-row"><span>Kích thước nút kỹ năng:</span><span class="stat-val">${skillBtnSize}%</span></div>
+                `;
+                guidePath.innerText = "Android/data/com.garena.game.kgvn/files/";
+                document.getElementById('touch-point-row').style.display = 'none';
+                currentConfigData = `[AI_SENSITIVITY_PRO_V2]
+GAME=LIEN_QUAN_MOBILE
+CAMERA_SPEED=${cameraSpeed}%
+MOVE_SPEED=${moveSpeed}%
+SKILL_BTN_SIZE=${skillBtnSize}%
+DPI=${dpi}
+DEVICE=${dev.model} (${dev.os})
+RESOLUTION=${dev.screenW}x${dev.screenH}
+TIMESTAMP=${new Date().toISOString()}
+# Hướng dẫn: copy file vào Android/data/com.garena.game.kgvn/files/`;
             }
 
-            // Nếu là iOS và chưa Pro, ẩn nút tải config (chỉ hiện hướng dẫn)
+            // Hiển thị DPI và nút bắn theo Pro
+            if (isPro) {
+                document.getElementById('res-dpi').innerText = (typeof dpi === 'number' ? dpi + " dpi" : dpi);
+                document.getElementById('res-dpi').style.color = "#00ffaa";
+                if (game !== 'lq') {
+                    document.getElementById('res-btn').innerText = btnSize + "%";
+                    document.getElementById('res-btn').style.color = "#00ffaa";
+                } else {
+                    document.getElementById('res-btn').innerHTML = "Không áp dụng";
+                    document.getElementById('res-btn').style.color = "#8a8a9e";
+                }
+                vipGuide.style.display = "block";
+            } else {
+                document.getElementById('res-dpi').innerHTML = `<span class="stat-pro" onclick="switchTab(2)">Khóa 🔒 (Mua PRO)</span>`;
+                document.getElementById('res-btn').innerHTML = `<span class="stat-pro" onclick="switchTab(2)">Khóa 🔒 (Mua PRO)</span>`;
+                vipGuide.style.display = "none";
+            }
+
             if (dev.os === 'iOS' && !isPro) {
                 document.getElementById('btn-gen-config').style.display = 'none';
             }
         }
 
-        // --- 7. XIN QUYỀN HỆ THỐNG TRƯỚC KHI TẢI CONFIG (ANDROID) ---
+        // ==================== TẢI FILE CONFIG ====================
         function askPermissionBeforeDownload() {
-            const dev = currentDeviceInfo || detectDevice();
+            if (!currentConfigData) {
+                alert("⚠️ Vui lòng nhấn PHÂN TÍCH ĐỘ NHẠY trước khi tải!");
+                return;
+            }
+            const dev = currentDeviceInfo;
             if (dev.os === 'iOS') {
-                alert("Trên iPhone/iPad không thể tải file cấu hình game. Vui lòng tự cài đặt các thông số bên trên vào game.\n\nHoặc sử dụng nút tải cấu hình Web Clip để thêm ứng dụng ra màn hình chính!");
+                alert("Trên iPhone/iPad, bạn chỉ có thể tải cấu hình Web Clip (nút vàng trong tab HỆ THỐNG).\nCòn thông số game, hãy tự cài đặt theo các giá trị hiển thị bên trên.");
                 return;
             }
             if(!isPro) {
@@ -519,35 +628,36 @@ TIMESTAMP=${new Date().toISOString()}
             document.getElementById('permission-modal').style.display = 'flex';
         }
 
-        function closePermission(isAccepted) {
+        function closePermission(accepted) {
             document.getElementById('permission-modal').style.display = 'none';
-            if(isAccepted) {
-                executeDownloadConfig();
-            } else {
-                alert("Hệ thống đã từ chối cấp quyền. Cấu hình chưa được áp dụng.");
-            }
+            if(accepted) executeDownloadConfig();
+            else alert("Hệ thống đã từ chối cấp quyền. Cấu hình chưa được áp dụng.");
         }
 
         function executeDownloadConfig() {
-            if(!currentConfigData) return;
+            if (!currentConfigData) {
+                alert("Không có dữ liệu cấu hình. Vui lòng phân tích lại.");
+                return;
+            }
+            const game = document.getElementById('game-select').value;
+            const ext = game === 'ff' ? '.cfg' : '.txt';
+            const filename = `config_${game}_vip${ext}`;
             const blob = new Blob([currentConfigData], {type: "text/plain"});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "com.dts.freefireth_vip_config.cfg";
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
-            alert("🔒 ÁP DỤNG THÀNH CÔNG 100%!\nTệp cấu hình hệ thống đã được tải về máy của bạn. Hãy làm theo hướng dẫn ở khung màu xanh để kích hoạt hiệu năng kéo tâm tốt nhất!");
+            alert("🔒 ÁP DỤNG THÀNH CÔNG 100%!\nTệp cấu hình đã được tải về. Hãy làm theo hướng dẫn ở khung màu xanh để kích hoạt hiệu năng tốt nhất!");
         }
 
-        // --- 8. KÍCH HOẠT PRO VỚI 2 LỚP MẬT KHẨU ---
+        // ==================== KÍCH HOẠT PRO ====================
         function unlockPro() {
             const k1 = document.getElementById('pro-key-1').value.trim();
             const k2 = document.getElementById('pro-key-2').value.trim();
-
             if(k1 === PRO_KEY_1 && k2 === PRO_KEY_2) {
                 localStorage.setItem('is_pro_user', 'true');
                 isPro = true;
@@ -577,9 +687,7 @@ TIMESTAMP=${new Date().toISOString()}
             }
         }
 
-        // --- 9. HIỆU ỨNG & TIỆN ÍCH ---
-        function getRandom(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-        // @keyframes blink đã được chuyển vào <style>
+        // ==================== HIỆU ỨNG ====================
         function animateValue(id, start, end, duration) {
             let obj = document.getElementById(id); let startTimestamp = null;
             const step = (timestamp) => {
@@ -591,12 +699,12 @@ TIMESTAMP=${new Date().toISOString()}
             window.requestAnimationFrame(step);
         }
 
-        // --- 10. PWA: Đăng ký Service Worker ---
+        // ==================== PWA SERVICE WORKER ====================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js')
-                    .then(reg => console.log('Service Worker registered!', reg))
-                    .catch(err => console.log('Service Worker registration failed:', err));
+                    .then(reg => console.log('SW registered'))
+                    .catch(err => console.log('SW failed', err));
             });
         }
     </script>
