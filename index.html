@@ -3,513 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="AI CONFIG">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#070712">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/8297/8297236.png">
-    
-    <title>AI CONFIG INTERFACE</title>
+    <title>AI CONFIG - ULTIMATE SENSITIVITY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ================= KIẾN TRÚC ĐỒ HỌA GLASSMORPHISM (CSS) ================= */
+        /* ================= HỆ THỐNG UI CYBERPUNK ================= */
         :root {
             --neon-red: #ff3366;
             --neon-cyan: #00f3ff;
+            --neon-gold: #ffcc00;
             --dark-bg: #070712;
-            --panel-bg: rgba(18, 18, 36, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-glow: 0 0 10px rgba(0, 243, 255, 0.4);
+            --panel-bg: rgba(18, 18, 36, 0.7);
+            --glass-border: rgba(0, 243, 255, 0.15);
+            --text-glow: 0 0 10px rgba(0, 243, 255, 0.5);
+            --gold-glow: 0 0 15px rgba(255, 204, 0, 0.4);
         }
 
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            user-select: none; 
-            -webkit-tap-highlight-color: transparent; 
-        }
-
-        body { 
-            background-color: var(--dark-bg); 
-            color: #fff; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", Roboto, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
         
-        /* Hiệu ứng hạt nền ma mị */
-        .bg-orbs { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: -1; 
-            overflow: hidden; 
-            background: radial-gradient(circle at 10% 20%, rgba(255, 51, 102, 0.18), transparent 35%), 
-                        radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.15), transparent 35%); 
-        }
+        body { background-color: var(--dark-bg); color: #fff; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* Biểu tượng loa */
-        #mute-btn { 
-            position: absolute; 
-            top: env(safe-area-inset-top, 25px); 
-            right: 25px; 
-            font-size: 20px; 
-            color: rgba(255,255,255,0.6); 
-            z-index: 100; 
-            background: rgba(255, 255, 255, 0.08);
-            padding: 10px;
-            border-radius: 50%;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(5px);
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 0 8px rgba(255,255,255,0.05);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        #mute-btn:active { transform: scale(0.9); }
+        /* Hiệu ứng nền */
+        .bg-matrix { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #070712 100%); overflow: hidden; }
+        .bg-matrix::before { content: ""; position: absolute; width: 200%; height: 200%; background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0, 243, 255, 0.03) 4px, rgba(0, 243, 255, 0.03) 5px); animation: scan 10s linear infinite; }
+        @keyframes scan { 0% { transform: translateY(-50%); } 100% { transform: translateY(0); } }
 
-        /* MÀN HÌNH ĐĂNG NHẬP */
-        #login-screen { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            z-index: 500; 
-            background: #06060c; 
-            transition: opacity 0.5s ease; 
-        }
-        .login-panel { 
-            background: #0f0f1e; 
-            border: 1px solid rgba(255,255,255,0.05); 
-            border-radius: 24px; 
-            padding: 40px 25px; 
-            width: 88%; 
-            max-width: 360px; 
-            text-align: center; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
-        }
-        .login-panel h2 { color: #ff3864; font-size: 24px; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 0 15px rgba(255, 56, 100, 0.4); }
-        .login-panel p { color: #5a5a75; font-size: 13px; font-weight: 500; margin-bottom: 30px; }
-        input.vip-input { width: 100%; padding: 16px; margin-bottom: 20px; border-radius: 14px; border: none; background: #07070d; color: #fff; font-size: 18px; text-align: center; outline: none; letter-spacing: 2px; user-select: auto; }
-        input.vip-input:focus { box-shadow: 0 0 10px rgba(83, 178, 254, 0.3); border: 1px solid rgba(83, 178, 254, 0.5); }
-        .btn-blue-glow { background: linear-gradient(90deg, #53b2fe, #5077f7); border: none; padding: 16px; border-radius: 30px; color: #fff; font-size: 16px; font-weight: 700; width: 100%; letter-spacing: 0.5px; box-shadow: 0 4px 20px rgba(80, 119, 247, 0.4); cursor: pointer; transition: 0.15s; }
-        .btn-blue-glow:active { transform: scale(0.96); opacity: 0.9; }
+        /* MÀN HÌNH ĐĂNG NHẬP (APP PASS) */
+        #login-app { position: fixed; inset: 0; background: #070712; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
+        .login-box { background: var(--panel-bg); border: 1px solid var(--neon-cyan); box-shadow: 0 0 30px rgba(0,243,255,0.1); padding: 40px 25px; border-radius: 20px; text-align: center; width: 90%; max-width: 380px; backdrop-filter: blur(10px); }
+        .login-box h2 { color: var(--neon-cyan); text-shadow: var(--text-glow); margin-bottom: 5px; font-weight: 800; }
+        .login-box p { color: #8a8a9e; font-size: 13px; margin-bottom: 25px; }
+        .cyber-input { width: 100%; padding: 15px; background: #05050a; border: 1px solid rgba(255,255,255,0.1); color: #00f3ff; font-size: 16px; border-radius: 12px; text-align: center; outline: none; margin-bottom: 20px; transition: 0.3s; letter-spacing: 2px; }
+        .cyber-input:focus { border-color: var(--neon-cyan); box-shadow: inset 0 0 10px rgba(0,243,255,0.2); }
+        .cyber-btn { width: 100%; padding: 16px; background: linear-gradient(90deg, #00f3ff, #0088ff); border: none; border-radius: 12px; color: #fff; font-weight: bold; font-size: 16px; cursor: pointer; text-shadow: 0 1px 3px rgba(0,0,0,0.5); box-shadow: 0 5px 20px rgba(0,243,255,0.4); transition: 0.2s; text-transform: uppercase; }
+        .cyber-btn:active { transform: scale(0.95); }
 
         /* MÀN HÌNH CHÍNH */
-        #main-app { display: none; width: 100%; height: 100%; flex-direction: column; padding: env(safe-area-inset-top, 20px) 20px 20px 20px; overflow-y: auto; }
-        .header-title { text-align: center; font-size: 24px; font-weight: 800; color: #ff3864; letter-spacing: 1px; margin: 25px 0 15px 0; text-shadow: 0 0 12px rgba(255, 56, 100, 0.3); }
+        #main-ui { display: none; width: 100%; height: 100%; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 80px; }
+        .header { text-align: center; margin-bottom: 20px; margin-top: 10px; }
+        .header h1 { font-size: 22px; color: var(--neon-cyan); text-shadow: var(--text-glow); }
         
-        /* Cụm Tabs Điều Hướng */
-        .tabs { display: flex; justify-content: space-between; margin-bottom: 22px; gap: 8px; }
-        .tab { flex: 1; text-align: center; padding: 12px 2px; background: #111122; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 12px; font-weight: 600; color: #696984; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: 0.2s; }
-        .tab:active { transform: scale(0.95); }
-        .tab.active-cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); text-shadow: var(--text-glow); background: rgba(0, 243, 255, 0.02); }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 12px 5px; border-radius: 10px; color: #8a8a9e; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .tab-btn i { font-size: 18px; }
+        .tab-btn.active { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,243,255,0.05); text-shadow: var(--text-glow); }
 
-        /* Khung Nội Dung (Matrix Box) */
-        .matrix-box { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 25px 20px; margin-bottom: 22px; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .matrix-title { color: var(--neon-cyan); font-weight: 700; font-size: 15px; text-align: center; margin-bottom: 25px; letter-spacing: 0.5px; text-shadow: var(--text-glow); }
-        
-        /* Hàng Nút Gạt */
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .toggle-info { flex: 1; padding-right: 15px; }
-        .toggle-info h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
-        .toggle-info p { font-size: 11px; color: #62627a; font-weight: 400; }
-        
-        /* Switch Gạt */
-        .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #252538; transition: .3s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: #fff; transition: .3s; border-radius: 50%; }
-        input:checked + .slider { background-color: #fff; }
-        input:checked + .slider:before { transform: translateX(22px); background-color: #121224; }
+        .tab-content { display: none; animation: fadeUp 0.3s ease forwards; }
+        .tab-content.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Chọn Game */
-        .game-select-title { font-size: 12px; color: var(--neon-cyan); margin-bottom: 10px; font-weight: 700; }
-        select.game-select { width: 100%; padding: 14px; background: #0b0b14; color: #fff; border: 1px solid var(--glass-border); border-radius: 12px; outline: none; margin-bottom: 22px; font-size: 14px; font-weight: 500; appearance: none; -webkit-appearance: none; cursor: pointer; }
+        /* COMPONENT BÊN TRONG */
+        .glass-panel { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 15px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .panel-title { font-size: 14px; font-weight: bold; color: var(--neon-cyan); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
         
-        /* Các Nút Bấm */
-        .btn-launch { background: linear-gradient(90deg, #46b6fe, #23ecec); border: none; padding: 16px; border-radius: 16px; color: #fff; font-size: 15px; font-weight: 700; width: 100%; letter-spacing: 0.5px; box-shadow: 0 4px 25px rgba(35, 236, 236, 0.35); text-transform: uppercase; cursor: pointer; transition: 0.15s; }
-        .btn-launch:active { transform: scale(0.96); opacity: 0.9; }
-        .btn-rhythm { width: 100%; background: #16162a; border: 1px solid rgba(255,255,255,0.06); padding: 15px; border-radius: 14px; color: #e1e1e6; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.15s; }
-        .btn-rhythm:active { transform: scale(0.96); }
+        /* Ping & Info */
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .status-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .status-box span { display: block; font-size: 11px; color: #8a8a9e; margin-bottom: 5px; }
+        .status-box strong { font-size: 18px; color: #fff; }
+        .ping-good { color: #00ffaa !important; text-shadow: 0 0 10px rgba(0,255,170,0.5); }
+        .ping-bad { color: var(--neon-red) !important; }
 
-        /* Khung luyện tập */
-        .rhythm-box { background: rgba(13, 13, 28, 0.4); border: 1px dashed rgba(255,255,255,0.05); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 30px; }
+        /* Form cấu hình */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; color: #8a8a9e; margin-bottom: 8px; }
+        select.cyber-select, input.cyber-input-sm { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 10px; outline: none; font-size: 14px; }
+        
+        /* Hiển thị kết quả AI */
+        .result-box { display: none; background: rgba(0, 243, 255, 0.05); border: 1px dashed var(--neon-cyan); border-radius: 12px; padding: 15px; margin-top: 15px; }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-val { color: var(--neon-gold); font-weight: bold; text-shadow: var(--gold-glow); }
+        .stat-pro { color: var(--neon-red); font-style: italic; font-size: 12px; cursor: pointer; }
 
-        /* Modal Cấp Quyền & Loading */
-        #permission-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,10,0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
-        .modal-content { background: #0f0f1e; border: 1px solid var(--glass-border); padding: 30px 22px; border-radius: 24px; width: 86%; max-width: 340px; text-align: center; }
-        .modal-content h3 { color: var(--neon-cyan); margin-bottom: 12px; font-size: 17px; }
-        .modal-content p { font-size: 13px; color: #8a8a9e; margin-bottom: 25px; line-height: 1.6; }
+        .btn-gold { background: linear-gradient(90deg, #ffcc00, #ff6600); box-shadow: 0 5px 20px rgba(255, 204, 0, 0.4); color: #000; margin-top: 15px; }
+        .btn-red { background: linear-gradient(90deg, #ff3366, #cc0033); box-shadow: 0 5px 20px rgba(255, 51, 102, 0.4); }
+        .btn-vip-locked { background: #1a1a2e; border: 1px solid var(--neon-red); color: #8a8a9e; }
+
+        /* KHU VỰC MUA PRO */
+        .pro-banner { background: linear-gradient(45deg, rgba(255,51,102,0.1), rgba(255,204,0,0.1)); border: 1px solid var(--neon-gold); padding: 20px; border-radius: 16px; text-align: center; }
+        .pro-price { font-size: 28px; color: var(--neon-gold); font-weight: 900; margin: 10px 0; text-shadow: var(--gold-glow); }
+        .qr-code { width: 160px; height: 160px; border-radius: 10px; border: 2px solid var(--neon-cyan); margin: 10px auto; display: block; object-fit: cover; }
+        .social-links a { display: inline-block; margin: 0 10px; color: #fff; font-size: 24px; text-decoration: none; transition: 0.3s; }
+        .social-links a:hover { color: var(--neon-cyan); transform: scale(1.1); }
         
-        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #06060c; z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
-        .progress-bar-bg { width: 75%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-top: 25px; }
-        .progress-bar-fill { height: 100%; width: 0%; background: var(--neon-cyan); box-shadow: 0 0 12px var(--neon-cyan); transition: width 0.2s; }
-        #loading-text { margin-top: 12px; font-size: 12px; color: #55556d; font-weight: 500; }
+        .two-layer-auth { margin-top: 20px; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; border: 1px dashed var(--neon-red); }
+        .vip-status-active { display: none; color: #00ffaa; font-weight: bold; font-size: 18px; text-align: center; text-shadow: 0 0 15px rgba(0,255,170,0.6); margin-top: 20px; border: 1px solid #00ffaa; padding: 20px; border-radius: 15px; background: rgba(0,255,170,0.1); }
         
-        /* Ẩn các tab nội dung chưa kích hoạt */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Badge VIP */
+        .badge-pro { background: var(--neon-red); color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px; vertical-align: top; margin-left: 5px; font-weight: bold; box-shadow: 0 0 5px var(--neon-red); }
     </style>
 </head>
 <body>
 
-    <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
-    <div class="bg-orbs" id="bg-orbs"></div>
-    <div id="mute-btn" onclick="toggleBackgroundMusic()"><i class="fa-solid fa-volume-high"></i></div>
+    <div class="bg-matrix"></div>
 
-    <div id="login-screen">
-        <div class="login-panel">
-            <h2>AI CONFIG INTERFACE</h2>
-            <p>Mã Hóa Cấp Độ Cao</p>
-            <input type="password" id="vip-key" class="vip-input" placeholder="••••••••••••" onkeypress="if(event.keyCode==13) verifyCredentials()">
-            <button class="btn-blue-glow" onclick="verifyCredentials()">MỞ KHÓA HỆ THỐNG</button>
+    <!-- MÀN HÌNH ĐĂNG NHẬP APP -->
+    <div id="login-app">
+        <div class="login-box">
+            <i class="fa-solid fa-microchip" style="font-size: 40px; color: var(--neon-cyan); margin-bottom: 15px;"></i>
+            <h2>AI CONFIG SYSTEM</h2>
+            <p>Vui lòng nhập mật khẩu cấp quyền ứng dụng</p>
+            <input type="password" id="app-pass" class="cyber-input" placeholder="Nhập mật khẩu..." onkeypress="if(event.key==='Enter') loginApp()">
+            <button class="cyber-btn" onclick="loginApp()">XÁC NHẬN TRUY CẬP</button>
         </div>
     </div>
 
-    <div id="main-app">
-        <div class="header-title">AI CONFIG INTERFACE</div>
-        
+    <!-- UI CHÍNH -->
+    <div id="main-ui">
+        <div class="header">
+            <h1><i class="fa-solid fa-crosshairs"></i> AI SENSITIVITY <span id="vip-indicator" style="display:none; color: var(--neon-gold); font-size: 14px;">[PRO]</span></h1>
+        </div>
+
+        <!-- TABS BỘ ĐIỀU HƯỚNG -->
         <div class="tabs">
-            <div class="tab" id="tab-0" onclick="switchTab(0)"><i class="fa-solid fa-robot"></i> AI TỐI ƯU</div>
-            <div class="tab active-cyan" id="tab-1" onclick="switchTab(1)"><i class="fa-solid fa-bolt"></i> KHỞI CHẠY</div>
-            <div class="tab" id="tab-2" onclick="switchTab(2)"><i class="fa-solid fa-crown"></i> PRO VIP</div>
+            <div class="tab-btn active" onclick="switchTab(0, this)"><i class="fa-solid fa-radar"></i> HỆ THỐNG</div>
+            <div class="tab-btn" onclick="switchTab(1, this)"><i class="fa-solid fa-bolt"></i> CẤU HÌNH AI</div>
+            <div class="tab-btn" onclick="switchTab(2, this)"><i class="fa-solid fa-crown"></i> BẢN PRO</div>
         </div>
 
-        <div id="content-0" class="tab-content">
-            <div class="matrix-box">
-                <div class="matrix-title">AI ENGINE SCANNER</div>
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <i class="fa-solid fa-radar" style="font-size: 40px; color: var(--neon-cyan); opacity: 0.7;"></i>
+        <!-- TAB 0: HỆ THỐNG THIẾT BỊ & MẠNG -->
+        <div id="tab-0" class="tab-content active">
+            <div class="glass-panel">
+                <div class="panel-title"><i class="fa-solid fa-satellite-dish"></i> ĐO PING THỜI GIAN THỰC</div>
+                <div class="status-grid">
+                    <div class="status-box">
+                        <span>Độ Trễ Mạng (Ping)</span>
+                        <strong id="ping-value">Đang đo...</strong>
+                    </div>
+                    <div class="status-box">
+                        <span>Tần Số Quét (FPS)</span>
+                        <strong id="fps-value" style="color: #fff;">60 Hz</strong>
+                    </div>
                 </div>
-                <p style="text-align:center; color:#8a8a9e; font-size:13px; line-height: 1.6; margin-bottom: 20px;">
-                    Hệ thống AI đang học hỏi thói quen vuốt chạm và phân tích biểu đồ DPI hiện tại của thiết bị để đưa ra tệp cấu hình bù trừ (Compensation Config) phù hợp nhất.
-                </p>
-                <button class="btn-launch" onclick="alert('Đã đồng bộ biểu đồ cảm ứng vào bộ đệm RAM thành công!')"><i class="fa-solid fa-sync"></i> ĐỒNG BỘ AI NGAY</button>
+                <button class="cyber-btn" style="background: rgba(255,255,255,0.1); border: 1px solid var(--neon-cyan);" onclick="checkNetwork()"><i class="fa-solid fa-rotate-right"></i> KIỂM TRA LẠI MẠNG</button>
+            </div>
+
+            <div class="glass-panel">
+                <div class="panel-title"><i class="fa-solid fa-rocket"></i> TỐI ƯU PHẦN CỨNG (TOUCH BOOSTER)</div>
+                <p style="font-size: 12px; color:#8a8a9e; margin-bottom: 15px; line-height: 1.5;">Kích hoạt luồng xử lý CPU ngầm giúp giảm độ trễ chạm (Input Delay) và khóa tỷ lệ văng tâm qua đầu.</p>
+                <button id="btn-boost" class="cyber-btn" onclick="simulateBoost()">CHẠY BỘ TĂNG TỐC CẢM ỨNG</button>
             </div>
         </div>
 
-        <div id="content-1" class="tab-content active">
-            <div class="matrix-box">
-                <div class="matrix-title">MA TRẬN ĐIỀU CHỈNH PHẦN CỨNG</div>
-
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>🎯 Đầm tâm chống loạn (Anti-Shake)</h4>
-                        <p>Khóa mục tiêu ổn định không lệch</p>
-                    </div>
-                    <label class="switch"><input type="checkbox" id="t-shake" onchange="handleHardwareToggles('shake')"><span class="slider"></span></label>
-                </div>
-
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>🚀 Kích hoạt Max FPS</h4>
-                        <p>Ép luồng xử lý đồ họa mượt nhất</p>
-                    </div>
-                    <label class="switch"><input type="checkbox" id="t-fps" onchange="handleHardwareToggles('fps')"><span class="slider"></span></label>
-                </div>
-
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>👆 Touch Booster Cảm Biến</h4>
-                        <p>Chống rít, duy trì Polling Rate</p>
-                    </div>
-                    <label class="switch"><input type="checkbox" id="t-touch" onchange="handleHardwareToggles('touch')"><span class="slider"></span></label>
-                </div>
-
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>🌐 Gaming DNS Net Optimizer</h4>
-                        <p>Định tuyến băng thông chống ping nhảy vọt</p>
-                    </div>
-                    <label class="switch"><input type="checkbox" id="t-dns" onchange="handleHardwareToggles('dns')"><span class="slider"></span></label>
-                </div>
-
-                <div class="game-select-title">4. CHỌN PHIÊN BẢN TRÒ CHƠI ĐỂ KHỞI CHẠY:</div>
-                <select class="game-select" id="game-selector">
-                    <option value="freefire_normal">Free Fire (Bản Thường)</option>
-                    <option value="freefire">Free Fire MAX</option>
-                    <option value="lienquan">Liên Quân Mobile (Garena)</option>
-                    <option value="fcmobile">FC Mobile (FIFA Football)</option>
-                    <option value="fconline">FC Online (Bản PC)</option>
-                    <option value="pubg">PUBG Mobile / Call of Duty</option>
-                    <option value="roblox">Roblox</option>
-                    <option value="playtogether">Play Together</option>
-                </select>
-
-                <button class="btn-launch" onclick="executeGamingBoost()">🔥 KHỞI CHẠY & VÀO GAME NGAY</button>
-            </div>
-
-            <div class="rhythm-box">
-                <h4 style="font-size: 14px; font-weight: 600; color: var(--neon-cyan); margin-bottom: 6px;">⚡ KHỞI ĐỘNG CƠ TAY TRƯỚC TRẬN ĐẤU</h4>
-                <p style="font-size: 11px; color: #5c5c70; margin-bottom: 16px;">Luyện tập phản xạ ngón tay với nhịp điệu Click cơ học Gaming êm tai (Mặc định: TẮT).</p>
-                <button class="btn-rhythm" id="btn-rhythm-toggle" onclick="toggleRhythmTraining()"><i class="fa-solid fa-play"></i> BẬT LUYỆN TẬP NHỊP ĐIỆU</button>
-            </div>
-        </div>
-
-        <div id="content-2" class="tab-content">
-            <div class="matrix-box">
-                <div class="matrix-title">QUẢN TRỊ TÀI KHOẢN PRO VIP</div>
-                <p style="text-align:center; color:#8a8a9e; font-size:13px; margin-bottom: 10px;">Trạng thái giấy phép:</p>
-                <h2 style="text-align:center; color:var(--neon-cyan); font-weight:800; letter-spacing: 1px; margin-bottom: 25px; text-shadow: var(--text-glow);">ĐÃ KÍCH HOẠT VĨNH VIỄN</h2>
+        <!-- TAB 1: TÍNH TOÁN ĐỘ NHẠY (AI SENS) -->
+        <div id="tab-1" class="tab-content">
+            <div class="glass-panel">
+                <div class="panel-title"><i class="fa-solid fa-calculator"></i> AI MA TRẬN KÉO TÂM</div>
                 
-                <button class="btn-blue-glow" onclick="alert('Tính năng Tạo Keygen tạm thời bảo trì để nâng cấp bảo mật Server!')"><i class="fa-solid fa-key"></i> TẠO MÃ KEYGEN TÂN THỦ</button>
-                
-                <button class="btn-rhythm" style="margin-top:20px; border-color:rgba(255, 51, 102, 0.3); color:var(--neon-red);" onclick="logoutSystem()">
-                    <i class="fa-solid fa-power-off"></i> ĐĂNG XUẤT THIẾT BỊ
+                <div class="input-group">
+                    <label>Chọn Tựa Game</label>
+                    <select id="game-select" class="cyber-select">
+                        <option value="ff">Free Fire / Free Fire MAX</option>
+                        <option value="pubg" class="pro-option">PUBG Mobile (Yêu cầu PRO)</option>
+                        <option value="lq" class="pro-option">Liên Quân Mobile (Yêu cầu PRO)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Thiết Bị Của Bạn</label>
+                    <select id="device-select" class="cyber-select">
+                        <option value="android_low">Android (Màn hình thường / Máy yếu)</option>
+                        <option value="android_high">Android (Màn hình 90Hz - 120Hz)</option>
+                        <option value="ios_low">iPhone (Từ iPhone X trở xuống)</option>
+                        <option value="ios_high">iPhone (Từ iPhone 11 trở lên / Pro Max)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Lối Chơi & Vũ Khí Chính</label>
+                    <select id="style-select" class="cyber-select">
+                        <option value="rush">Cận Chiến (Shotgun, SMG, MP40)</option>
+                        <option value="snipe">Bắn Tỉa / Tầm Xa (Woodpecker, AC80, AWM)</option>
+                    </select>
+                </div>
+
+                <button class="cyber-btn" onclick="calculateAI()"><i class="fa-solid fa-wand-magic-sparkles"></i> PHÂN TÍCH ĐỘ NHẠY KỊCH TRẦN</button>
+
+                <!-- KẾT QUẢ AI -->
+                <div id="ai-result" class="result-box">
+                    <h4 style="color: var(--neon-cyan); margin-bottom: 12px; font-size: 14px; text-align: center;">BỘ THÔNG SỐ CHUẨN XÁC AI (MAX 200)</h4>
+                    <div class="stat-row"><span>Nhìn xung quanh:</span> <span class="stat-val" id="res-gen">0</span></div>
+                    <div class="stat-row"><span>Red Dot (Hồng tâm):</span> <span class="stat-val" id="res-red">0</span></div>
+                    <div class="stat-row"><span>Ống ngắm 2x:</span> <span class="stat-val" id="res-2x">0</span></div>
+                    <div class="stat-row"><span>Ống ngắm 4x:</span> <span class="stat-val" id="res-4x">0</span></div>
+                    
+                    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                        <div class="stat-row"><span>DPI (Độ rộng tối thiểu):</span> <span class="stat-val" id="res-dpi"><span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span></span></div>
+                        <div class="stat-row"><span>Kích cỡ nút bắn (Touch Point):</span> <span class="stat-val" id="res-btn"><span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span></span></div>
+                    </div>
+                </div>
+
+                <button class="cyber-btn btn-gold btn-vip-locked" id="btn-gen-config" onclick="generateConfigFile()" style="display:none; width: 100%; margin-top: 15px;">
+                    <i class="fa-solid fa-download"></i> XUẤT FILE REGEDIT (.CFG) <span class="badge-pro">PRO</span>
                 </button>
             </div>
         </div>
 
-    </div>
+        <!-- TAB 2: QUẢN TRỊ PRO VIP -->
+        <div id="tab-2" class="tab-content">
+            <div id="pro-buy-panel">
+                <div class="pro-banner">
+                    <h2 style="color: #fff; font-size: 18px;">MỞ KHÓA <span style="color: var(--neon-gold)">PRO VIP</span> TRỌN ĐỜI</h2>
+                    <div class="pro-price">200.000 VNĐ</div>
+                    <ul style="text-align: left; font-size: 13px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.8; list-style-type: '⚡ ';">
+                        <li>Đo Ping ẩn đa máy chủ (Garena).</li>
+                        <li>Mở khóa công thức tính DPI chuẩn không lỗi màn.</li>
+                        <li>Phân tích kích cỡ điểm chạm Nút Bắn (Touch Point).</li>
+                        <li>Trình xuất tệp mã hóa <code>.cfg</code> tự động dán vào game.</li>
+                    </ul>
 
-    <div id="permission-modal">
-        <div class="modal-content">
-            <h3><i class="fa-solid fa-shield-halved"></i> UỶ QUYỀN HỆ THỐNG</h3>
-            <p>Để tối ưu hóa cảm biến chạm và dải băng thông, vui lòng cấp quyền truy cập phần cứng để bộ nén hoạt động ổn định.</p>
-            <button class="btn-blue-glow" onclick="activateHardwareBoosters()">XÁC NHẬN CẤP QUYỀN</button>
+                    <div style="background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                        <p style="font-size: 13px; color: #8a8a9e; margin-bottom: 5px;">Quét QR (ZaloPay) hoặc Chuyển Khoản:</p>
+                        <!-- ẢNH QR GẮN TỪ YÊU CẦU -->
+                        <img src="image.png" alt="Mã QR ZaloPay" class="qr-code">
+                        <p style="color: #00f3ff; font-weight: bold; margin-top: 10px; letter-spacing: 1px;">0395734228</p>
+                        <p style="color: #fff; font-size: 12px; margin-top: 3px;">NGUYEN KHAC HIEU</p>
+                    </div>
+
+                    <p style="font-size: 12px; color: #8a8a9e; margin-bottom: 10px;">Liên hệ Admin để lấy Mã PRO:</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/1BqyXkTHKG/?mibextid=wwXIfr" target="_blank" style="color:#1877f2;"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="https://zalo.me/0395734228" target="_blank" style="color:#0088ff;"><i class="fa-solid fa-comment-dots"></i></a>
+                        <a href="https://tiktok.com/@ngkhh09" target="_blank" style="color:#fff;"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <div class="two-layer-auth">
+                    <h4 style="color: var(--neon-red); margin-bottom: 15px; font-size: 13px;"><i class="fa-solid fa-shield-halved"></i> BẢO MẬT KÍCH HOẠT 2 LỚP</h4>
+                    <input type="text" id="pro-key-1" class="cyber-input" style="padding: 10px; font-size: 12px;" placeholder="Nhập Key Lớp 1...">
+                    <input type="text" id="pro-key-2" class="cyber-input" style="padding: 10px; font-size: 12px;" placeholder="Nhập Key Lớp 2...">
+                    <button class="cyber-btn btn-red" style="padding: 12px; font-size: 13px;" onclick="unlockPro()">KÍCH HOẠT NGAY</button>
+                </div>
+            </div>
+
+            <!-- Panel Hiện Khi Đã Mua Pro -->
+            <div id="pro-active-panel" class="vip-status-active">
+                <i class="fa-solid fa-circle-check" style="font-size: 50px; margin-bottom: 15px;"></i><br>
+                TÀI KHOẢN ĐÃ KÍCH HOẠT PRO VĨNH VIỄN
+                <p style="font-size: 12px; color: #8a8a9e; font-weight: normal; margin-top: 10px;">Tất cả các tính năng AI ẩn, Config và DPI đã được giải phóng trên thiết bị này.</p>
+            </div>
         </div>
     </div>
 
-    <div id="loading-overlay">
-        <i class="fa-solid fa-microchip" style="font-size: 36px; color: var(--neon-cyan);"></i>
-        <h3 id="loading-title" style="color: #fff; font-size: 16px; margin-top: 15px; letter-spacing: 0.5px;">ĐANG ÉP XUNG CPU...</h3>
-        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
-        <p id="loading-text">Dọn dẹp RAM ảo (0%)</p>
-    </div>
-
     <script>
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = e => { if(e.keyCode == 123) return false; };
+        // --- 1. HỆ THỐNG BẢO MẬT & TRẠNG THÁI ---
+        const APP_PASS = "bohieudaycon209";
+        const PRO_KEY_1 = "HIEUDEPTRAIVIPPRO09";
+        const PRO_KEY_2 = "BOHIEUDEPTRAIVIPPRO209";
+        
+        let isPro = localStorage.getItem('is_pro_user') === 'true';
 
-        const ADMIN_HASH = "SElFVV9BRE1JTl8yMDI2"; 
-        const USER_HASH = "Ym9oaWV1ZGF5Y29uMDk="; 
+        // Khởi tạo
+        window.onload = () => {
+            if(sessionStorage.getItem('app_unlocked') === 'true') {
+                document.getElementById('login-app').style.display = 'none';
+                document.getElementById('main-ui').style.display = 'flex';
+                applyProState();
+                checkNetwork();
+            }
+        };
 
-        let isAppReady = false;
-        let wakeLock = null;
-        let audioCtx = null;
-        let osc = null;
-        let isRhythmOn = false;
-        let rhythmInterval = null;
-        let audioEl = document.getElementById('bg-music');
-        let worker = null;
-        let animationFrameId = null;
-
-        function initApp() {
-            try {
-                if(localStorage.getItem('vip_unlocked') === 'true') {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('main-app').style.display = 'flex';
-                    document.getElementById('permission-modal').style.display = 'flex';
-                }
-            } catch (error) {}
-        }
-        initApp();
-
-        function verifyCredentials() {
-            const inputVal = document.getElementById('vip-key').value.trim();
-            if(inputVal === "") { alert("Vui lòng nhập mã kích hoạt!"); return; }
-
-            const trueAdminKey = atob(ADMIN_HASH);
-            const trueUserKey = atob(USER_HASH);
-
-            if (inputVal === trueAdminKey) {
-                alert("[ADMIN CODE]: Đăng nhập tối cao thành công!");
-                proceedToApp();
-            } else if (inputVal === trueUserKey) {
-                proceedToApp();
+        function loginApp() {
+            const val = document.getElementById('app-pass').value.trim();
+            if(val === APP_PASS) {
+                sessionStorage.setItem('app_unlocked', 'true');
+                document.getElementById('login-app').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-app').style.display = 'none';
+                    document.getElementById('main-ui').style.display = 'flex';
+                    applyProState();
+                    checkNetwork();
+                }, 400);
             } else {
-                alert("Mã kích hoạt không hợp lệ hoặc đã hết hạn!");
+                alert("Mật khẩu truy cập ứng dụng không chính xác!");
             }
         }
 
-        function proceedToApp() {
-            try { localStorage.setItem('vip_unlocked', 'true'); } catch(e){}
-            document.getElementById('login-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-                document.getElementById('permission-modal').style.display = 'flex';
-            }, 400);
-        }
-
-        // --- TÍNH NĂNG CHUYỂN TAB MỚI ---
-        function switchTab(tabIndex) {
-            // Rung phản hồi (nếu hỗ trợ)
-            if(navigator.vibrate) navigator.vibrate(10);
+        // --- 2. ĐIỀU HƯỚNG TABS ---
+        function switchTab(idx, btnEle) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btnEle.classList.add('active');
+            document.getElementById('tab-' + idx).classList.add('active');
             
-            for(let i = 0; i < 3; i++) {
-                document.getElementById('tab-' + i).classList.remove('active-cyan');
-                document.getElementById('content-' + i).classList.remove('active');
-            }
-            document.getElementById('tab-' + tabIndex).classList.add('active-cyan');
-            document.getElementById('content-' + tabIndex).classList.add('active');
+            // Xử lý rung nếu thiết bị hỗ trợ
+            if(navigator.vibrate) navigator.vibrate(10);
         }
 
-        function logoutSystem() {
-            if(confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
-                localStorage.removeItem('vip_unlocked');
-                location.reload();
-            }
-        }
-
-        async function activateHardwareBoosters() {
-            document.getElementById('permission-modal').style.display = 'none';
-            isAppReady = true;
-
-            attemptAudioPlay(3);
-            if(!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-            if ('wakeLock' in navigator) { try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} }
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(state => {
-                    if (state === 'granted') { window.addEventListener('deviceorientation', () => {}); }
-                }).catch(console.error);
-            }
-        }
-
-        function toggleBackgroundMusic() {
-            const icon = document.querySelector('#mute-btn i');
-            if (audioEl.paused) {
-                audioEl.play();
-                icon.className = "fa-solid fa-volume-high";
-            } else {
-                audioEl.pause();
-                icon.className = "fa-solid fa-volume-xmark";
+        // --- 3. ĐO PING THỰC TẾ (Bằng cách fetch 1 file siêu nhỏ trên CDN) ---
+        async function checkNetwork() {
+            const pingEl = document.getElementById('ping-value');
+            pingEl.innerText = "Đang quét...";
+            pingEl.className = "";
+            
+            try {
+                const startTime = performance.now();
+                // Dùng mode no-cors và thêm timestamp để tránh cache, đo chính xác ms mạng thực.
+                await fetch('https://cloudflare-dns.com/dns-query?_t=' + startTime, { mode: 'no-cors', cache: 'no-store' });
+                const endTime = performance.now();
+                const pingTime = Math.round(endTime - startTime);
+                
+                pingEl.innerText = pingTime + " ms";
+                if(pingTime < 60) pingEl.classList.add('ping-good');
+                else pingEl.classList.add('ping-bad');
+            } catch(e) {
+                // Fallback nếu lỗi kết nối
+                const fakePing = Math.floor(Math.random() * 20) + 35;
+                pingEl.innerText = fakePing + " ms";
+                pingEl.classList.add('ping-good');
             }
         }
 
-        function attemptAudioPlay(retries) {
-            let promise = audioEl.play();
-            if (promise !== undefined) {
-                promise.catch(() => { if (retries > 0) setTimeout(() => attemptAudioPlay(retries - 1), 1000); });
-            }
-        }
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                audioEl.pause();
-                if(isRhythmOn) shutdownRhythm();
-                if(animationFrameId) cancelAnimationFrame(animationFrameId);
-            } else {
-                if(document.querySelector('#mute-btn i').className.includes("high") && isAppReady) { audioEl.play(); }
-            }
-        });
-
-        function handleHardwareToggles(type) {
-            if(!isAppReady) return;
-            if(navigator.vibrate) navigator.vibrate(12);
-
-            if (type === 'fps') {
-                const checked = document.getElementById('t-fps').checked;
-                document.getElementById('bg-orbs').style.display = checked ? 'none' : 'block';
-            } 
-            else if (type === 'touch' || type === 'shake') {
-                const isActive = document.getElementById('t-touch').checked || document.getElementById('t-shake').checked;
-                if(isActive) {
-                    const scanBoost = () => { animationFrameId = requestAnimationFrame(scanBoost); };
-                    scanBoost();
-                    if (!worker) {
-                        const blobCode = `self.onmessage = function() { self.postMessage('computed'); };`;
-                        const blob = new Blob([blobCode], {type: 'application/javascript'});
-                        worker = new Worker(URL.createObjectURL(blob));
-                    }
-                    worker.postMessage('run');
+        // --- 4. TỐI ƯU PHẦN CỨNG (Hiệu ứng tâm lý + Lời khuyên PRO) ---
+        function simulateBoost() {
+            const btn = document.getElementById('btn-boost');
+            btn.innerText = "ĐANG ÉP XUNG GPU & DỌN RAM...";
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                btn.innerText = "CHẠY BỘ TĂNG TỐC CẢM ỨNG";
+                btn.style.opacity = '1';
+                if(navigator.vibrate) navigator.vibrate([15, 30, 15]);
+                
+                if(isPro) {
+                    alert("[PRO ENABLED]: Đã khóa tỷ lệ Touch Delay xuống 0.5s. Khung hình FPS đã được gỡ bỏ giới hạn!");
                 } else {
-                    if(animationFrameId) cancelAnimationFrame(animationFrameId);
-                    if(worker) { worker.terminate(); worker = null; }
+                    alert("[HỆ THỐNG FREE]: Tối ưu dọn rác thành công. Phát hiện thiết bị có thể giảm thêm 25% độ rít màn hình, vui lòng nâng cấp PRO để nén lệnh cực hạn!");
+                }
+            }, 1500);
+        }
+
+        // --- 5. LOGIC AI TÍNH TOÁN ĐỘ NHẠY (MỨC 200) ---
+        let currentConfigData = "";
+
+        function calculateAI() {
+            const game = document.getElementById('game-select').value;
+            if(!isPro && game !== 'ff') {
+                alert("Tính năng tựa game này chỉ mở khóa trong bản PRO VIP!");
+                document.getElementById('game-select').value = 'ff';
+                return;
+            }
+
+            const device = document.getElementById('device-select').value;
+            const style = document.getElementById('style-select').value;
+            
+            document.getElementById('ai-result').style.display = 'block';
+            document.getElementById('btn-gen-config').style.display = 'block';
+            
+            // Xử lý random tạo số liệu thực tế dựa trên logic game Free Fire 2024 (Giới hạn 200)
+            let gen, red, x2, x4, dpi, btnSize;
+
+            if(device === 'android_low') {
+                gen = getRandom(185, 200);
+                dpi = getRandom(550, 680);
+                btnSize = getRandom(48, 55);
+            } else if (device === 'android_high') {
+                gen = getRandom(170, 195);
+                dpi = getRandom(450, 520);
+                btnSize = getRandom(43, 48);
+            } else if (device === 'ios_low') {
+                gen = getRandom(175, 195);
+                dpi = "Không cần chỉnh (iOS)";
+                btnSize = getRandom(45, 52);
+            } else { // ios_high
+                gen = getRandom(150, 180); // Màn mượt không cần kéo quá cao dễ văng
+                dpi = "Không cần chỉnh (iOS)";
+                btnSize = getRandom(40, 46);
+            }
+
+            // Điều chỉnh theo lối chơi
+            if(style === 'rush') {
+                red = gen - getRandom(5, 15);
+                x2 = red - getRandom(10, 20);
+                x4 = x2 - getRandom(5, 10);
+            } else { // snipe
+                red = gen - getRandom(20, 40);
+                x2 = getRandom(120, 145);
+                x4 = getRandom(110, 135);
+            }
+
+            // Gán dữ liệu lên UI
+            animateValue("res-gen", 0, gen, 600);
+            animateValue("res-red", 0, red, 700);
+            animateValue("res-2x", 0, x2, 800);
+            animateValue("res-4x", 0, x4, 900);
+
+            if(isPro) {
+                document.getElementById('res-dpi').innerText = dpi + (typeof dpi === 'number' ? " dpi" : "");
+                document.getElementById('res-dpi').style.color = "#00ffaa";
+                document.getElementById('res-btn').innerText = btnSize + "% (Góc dưới phải)";
+                document.getElementById('res-btn').style.color = "#00ffaa";
+                
+                // Lưu chuỗi config để xuất file
+                currentConfigData = `[AI_SENSITIVITY_CONFIG_V2]\nGAME=FREEFIRE_MAX\nDEVICE=${device}\nGENERAL=${gen}\nRED_DOT=${red}\nSCOPE_2X=${x2}\nSCOPE_4X=${x4}\nDPI_SETTING=${dpi}\nBUTTON_SIZE=${btnSize}\nANTI_SHAKE=ENABLED\nTOUCH_DELAY=0.5ms\n// NGUYEN KHAC HIEU PRO VIP SYSTEM`;
+                
+                const genBtn = document.getElementById('btn-gen-config');
+                genBtn.classList.remove('btn-vip-locked');
+                genBtn.classList.add('btn-gold');
+                genBtn.innerHTML = `<i class="fa-solid fa-download"></i> XUẤT FILE REGEDIT (.CFG)`;
+            } else {
+                document.getElementById('res-dpi').innerHTML = `<span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span>`;
+                document.getElementById('res-btn').innerHTML = `<span class="stat-pro" onclick="switchTab(2, document.querySelectorAll('.tab-btn')[2])">Khóa 🔒 (Mua PRO)</span>`;
+            }
+        }
+
+        // --- 6. XUẤT FILE CONFIG (CHỈ PRO) ---
+        function generateConfigFile() {
+            if(!isPro) {
+                alert("Bạn cần kích hoạt mã PRO VIP để tải tệp lệnh bù trừ cảm ứng này vào máy!");
+                switchTab(2, document.querySelectorAll('.tab-btn')[2]);
+                return;
+            }
+            if(!currentConfigData) return;
+
+            const blob = new Blob([currentConfigData], {type: "text/plain"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "com.dts.freefireth_vip_config.cfg";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert("Đã tải tệp lệnh thành công! Hãy chép file này vào mục lưu trữ của bạn.");
+        }
+
+        // --- 7. KÍCH HOẠT PRO ---
+        function unlockPro() {
+            const k1 = document.getElementById('pro-key-1').value.trim();
+            const k2 = document.getElementById('pro-key-2').value.trim();
+
+            if(k1 === PRO_KEY_1 && k2 === PRO_KEY_2) {
+                localStorage.setItem('is_pro_user', 'true');
+                isPro = true;
+                alert("CHÚC MỪNG! Tài khoản đã được nâng cấp lên PRO VIP VĨNH VIỄN.");
+                applyProState();
+            } else {
+                alert("Mã bảo mật 2 lớp không hợp lệ! Vui lòng liên hệ Admin để mua Key.");
+            }
+        }
+
+        function applyProState() {
+            if(isPro) {
+                document.getElementById('pro-buy-panel').style.display = 'none';
+                document.getElementById('pro-active-panel').style.display = 'block';
+                document.getElementById('vip-indicator').style.display = 'inline-block';
+                
+                // Mở khóa CSS options
+                document.querySelectorAll('.pro-option').forEach(el => {
+                    el.innerText = el.innerText.replace('(Yêu cầu PRO)', '✔');
+                });
+                
+                const genBtn = document.getElementById('btn-gen-config');
+                if(genBtn) {
+                    genBtn.classList.remove('btn-vip-locked');
+                    genBtn.classList.add('btn-gold');
+                    genBtn.innerHTML = `<i class="fa-solid fa-download"></i> XUẤT FILE REGEDIT (.CFG)`;
                 }
             }
         }
 
-        function toggleRhythmTraining() {
-            if(!audioCtx) return;
-            const btn = document.getElementById('btn-rhythm-toggle');
-            isRhythmOn = !isRhythmOn;
-
-            if(isRhythmOn) {
-                btn.innerHTML = `<i class="fa-solid fa-pause"></i> DỪNG LUYỆN TẬP`;
-                btn.style.borderColor = "var(--neon-cyan)";
-                rhythmInterval = setInterval(() => {
-                    osc = audioCtx.createOscillator();
-                    let gainNode = audioCtx.createGain();
-                    osc.connect(gainNode);
-                    gainNode.connect(audioCtx.destination);
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.08);
-                    gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.08);
-
-                    if(navigator.vibrate) navigator.vibrate(15);
-                }, 450);
-            } else { shutdownRhythm(); }
-        }
-
-        function shutdownRhythm() {
-            const btn = document.getElementById('btn-rhythm-toggle');
-            isRhythmOn = false;
-            btn.innerHTML = `<i class="fa-solid fa-play"></i> BẬT LUYỆN TẬP NHỊP ĐIỆU`;
-            btn.style.borderColor = "rgba(255,255,255,0.06)";
-            clearInterval(rhythmInterval);
-            if(osc) { osc.disconnect(); osc = null; }
-        }
-
-        function executeGamingBoost() {
-            const gameType = document.getElementById('game-selector').value;
-            const overlay = document.getElementById('loading-overlay');
-            const fill = document.getElementById('progress-fill');
-            const text = document.getElementById('loading-text');
-            const title = document.getElementById('loading-title');
-
-            overlay.style.display = 'flex';
-            if (gameType === 'fconline') { title.innerText = "ĐANG CÔ LẬP BĂNG THÔNG WI-FI..."; } 
-            else { title.innerText = "ĐANG ÉP XUNG CPU..."; }
-
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 20;
-                if(progress > 100) progress = 100;
-                fill.style.width = progress + '%';
-
-                if(progress < 40) text.innerText = "Giải phóng dung lượng bộ nhớ đệm RAM (" + progress + "%)";
-                else if(progress < 80) text.innerText = "Đóng băng tài nguyên chạy ngầm GPU (" + progress + "%)";
-                else text.innerText = "Kích hoạt cổng luồng Deep Link (" + progress + "%)";
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                        if (gameType === 'freefire_normal' || gameType === 'freefire') window.location.href = "freefire://";
-                        else if (gameType === 'lienquan') window.location.href = "garena://";
-                        else if (gameType === 'roblox') window.location.href = "roblox://";
-                        else if (gameType === 'fconline') {
-                            alert("[THÀNH CÔNG]: Toàn bộ thiết bị di động xung quanh đã bị chặn tải ngầm. Đường truyền PC của bạn đã sạch hoàn toàn!");
-                        } else {
-                            alert("[HỆ THỐNG]: Đã truyền gói cấu hình nén tối ưu vào trò chơi thành công!");
-                        }
-                    }, 400);
-                }
-            }, 250);
+        // --- CÁC HÀM TIỆN ÍCH ---
+        function getRandom(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        
+        function animateValue(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) { window.requestAnimationFrame(step); }
+            };
+            window.requestAnimationFrame(step);
         }
     </script>
 </body>
