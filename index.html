@@ -39,7 +39,6 @@
         .btn-primary:active { transform: scale(0.98); }
         .btn-primary:disabled { background: #4a5568; box-shadow: none; cursor: not-allowed; }
 
-        /* Toggles */
         .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #2d3748; }
         .toggle-row:last-child { border-bottom: none; }
         .toggle-info h4 { font-size: 14px; margin-bottom: 2px; }
@@ -51,13 +50,11 @@
         input:checked + .slider { background-color: var(--accent-color); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* Lưới kết quả */
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .stat-box { background-color: #1a1d26; padding: 12px; border-radius: 8px; border: 1px solid #2d3748; text-align: center; }
         .stat-label { font-size: 12px; color: var(--text-muted); }
         .stat-val { font-size: 19px; font-weight: bold; color: #fff; margin-top: 4px; }
 
-        /* Danh sách máy */
         .search-box { margin-bottom: 12px; position: relative; }
         .search-box i { position: absolute; left: 12px; top: 13px; color: var(--text-muted); }
         .search-box input { padding-left: 35px; }
@@ -67,7 +64,6 @@
         .device-info .model { font-weight: bold; font-size: 14px; color: #fff; }
         .device-info .specs { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-        /* Tabs & Bottom Nav (Chia 3 đều nhau) */
         .tab-content { display: none; animation: fadeIn 0.3s; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -77,7 +73,6 @@
         .nav-item i { font-size: 18px; margin-bottom: 4px; }
         .nav-item.active { color: var(--accent-color); }
 
-        /* UI Overlays: Toast, Loading, Modal */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-40px); background: #1a202c; border-left: 4px solid var(--success-color); color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); pointer-events: none; opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         .toast.active { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -109,7 +104,6 @@
     </div>
 
     <div class="container">
-
         <div id="tab-0" class="tab-content active">
             <div class="card">
                 <h3><i class="fas fa-bolt"></i> CƠ CHẾ TỐI ƯU CẢM ỨNG (MÔ PHỎNG)</h3>
@@ -193,7 +187,6 @@
                     <div class="stat-box"><div class="stat-label">DPI Hệ Thống</div><div class="stat-val" id="res-dpi" style="color: var(--community-color);">-</div></div>
                     <div class="stat-box"><div class="stat-label">Kích Thước Nút</div><div class="stat-val" id="res-btn" style="color: var(--community-color);">-</div></div>
                 </div>
-                
                 <div style="margin-top:15px; display:flex; gap:10px;">
                     <button class="btn-primary" style="flex:1; background: linear-gradient(90deg, #38a169, #2f855a);" onclick="exportConfig()">
                         <i class="fas fa-file-export"></i> LƯU THẺ CONFIG
@@ -216,7 +209,6 @@
                 <div class="device-list" id="device-list-dom"></div>
             </div>
         </div>
-
     </div>
 
     <div class="modal" id="app-modal">
@@ -252,12 +244,10 @@
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                showPWAInstallBanner();
             });
         });
 
         function initApp() {
-            // Đọc localStorage an toàn
             const aimSaved = localStorage.getItem('sens_toggle_aim') === 'true';
             const fpsSaved = localStorage.getItem('sens_toggle_fps') === 'true';
             document.getElementById('toggle-aim').checked = aimSaved;
@@ -343,6 +333,7 @@
             setTimeout(() => { if (Date.now() - start < 3000) window.location.href = store; }, 2500);
         }
 
+        // HÀM TẠO WEB CLIP ĐÃ ĐƯỢC SỬA LỖI CHỮ HOA CHỮ THƯỜNG CỦA APPLE
         function downloadMobileConfig() {
             const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -352,22 +343,30 @@
     <array>
         <dict>
             <key>FullScreen</key><true/>
+            <key>IsRemovable</key><true/>
+            <key>Icon</key>
+            <data>
+            iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+            jwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABCSURBVGhD7cExAQAAAMKg9U9tCF8gAAAAAAAA
+            AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuGoJwAAB0zYf3QAAAABJRU5E
+            rkJggg==
+            </data>
             <key>Label</key><string>ĐỘ NHẠY CHUẨN</string>
-            <key>PayloadDescription</key><string>Hồ sơ tối ưu cảm ứng (Cộng Đồng Miễn Phí)</string>
-            <key>PayloadDisplayName</key><string>ĐỘ NHẠY CHUẨN</string>
-            <key>PayloadIdentifier</key><string>com.dnc.webclip</string>
+            <key>PayloadDescription</key><string>Thêm ứng dụng ra màn hình chính (Free)</string>
+            <key>PayloadDisplayName</key><string>Web Clip Icon</string>
+            <key>PayloadIdentifier</key><string>com.apple.webClip.managed.dnc</string>
             <key>PayloadOrganization</key><string>Bo Hieu Day</string>
-            <key>PayloadType</key><string>com.apple.webclip.managed</string>
-            <key>PayloadUUID</key><string>A1B2C3D4-E5F6-7890-ABCD-EF1234567890</string>
+            <key>PayloadType</key><string>com.apple.webClip.managed</string>
+            <key>PayloadUUID</key><string>c1b2c3d4-e5f6-7890-abcd-ef1234567890</string>
             <key>PayloadVersion</key><integer>1</integer>
             <key>URL</key><string>${window.location.href}</string>
         </dict>
     </array>
-    <key>PayloadDisplayName</key><string>Hồ Sơ Cảm Ứng Web Clip</string>
+    <key>PayloadDisplayName</key><string>ĐỘ NHẠY CHUẨN - Bo Hieu Day</string>
     <key>PayloadIdentifier</key><string>com.dnc.profile</string>
     <key>PayloadOrganization</key><string>Bo Hieu Day</string>
     <key>PayloadType</key><string>Configuration</string>
-    <key>PayloadUUID</key><string>12345678-ABCD-EF01-2345-67890ABCDEF1</string>
+    <key>PayloadUUID</key><string>12345678-abcd-ef01-2345-67890abcdef1</string>
     <key>PayloadVersion</key><integer>1</integer>
 </dict>
 </plist>`;
@@ -380,7 +379,7 @@
             document.body.removeChild(anchor);
 
             setTimeout(() => {
-                alert("📥 HỒ SƠ ĐÃ TẢI XUỐNG!\n\nTiếp tục cài đặt:\n1. Mở 'Cài đặt' trên iPhone.\n2. Chọn 'Đã tải về hồ sơ' (ngay dưới tên iCloud).\n3. Nhấn 'Cài đặt' ở góc phải để thêm App ra màn hình chính.");
+                alert("📥 HỒ SƠ ĐÃ TẢI XUỐNG!\n\nBạn hãy vào:\n1. Mở 'Cài đặt' máy > 'Đã tải về hồ sơ'\n2. Bấm 'Cài đặt' góc phải trên cùng.\n3. Bỏ qua cảnh báo đỏ (Do Apple mặc định web ngoài là Chưa xác thực) và xác nhận cài.\n👉 Ứng dụng đã nằm ngoài màn hình chính của bạn!");
             }, 1000);
         }
 
@@ -482,37 +481,6 @@
                 </div>
             `;
             document.getElementById('app-modal').classList.add('active');
-        }
-
-        function showPWAInstallBanner() {
-            document.getElementById('modal-body-container').innerHTML = `
-                <div style="text-align:center;">
-                    <div style="display:flex; justify-content:center;">
-                        <svg class="fallback-icon" viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
-                    </div>
-                    <h3 style="font-size:16px; margin-bottom:10px;">THÊM VÀO MÀN HÌNH CHÍNH</h3>
-                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Cài đặt Web App chạy toàn màn hình, độc lập với trình duyệt để tăng độ phản hồi cảm ứng tốt nhất.</p>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn-primary" style="background:#4a5568;" onclick="closeModal()">ĐỂ SAU</button>
-                        <button class="btn-primary" style="background:var(--community-color);" onclick="handleInstall()">CÀI ĐẶT NGAY</button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('app-modal').classList.add('active');
-        }
-
-        function handleInstall() {
-            closeModal();
-            if(/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                downloadMobileConfig();
-            } else {
-                if(deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt = null;
-                } else {
-                    alert("🤖 HƯỚNG DẪN ANDROID:\n1. Bấm nút 3 chấm góc phải Chrome.\n2. Chọn 'Thêm vào màn hình chính'.");
-                }
-            }
         }
 
         function closeModal() { document.getElementById('app-modal').classList.remove('active'); }
