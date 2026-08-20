@@ -5,368 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DoNhayChuan PRO - SensiLegend Galaxy</title>
     <style>
-        /* ================= TÔNG MÀU XANH & TÍM GALAXY ================= */
-        :root {
-            --bg-color: #05050d;
-            --purple-main: #7209b7;
-            --purple-bright: #f72585;
-            --blue-main: #4361ee;
-            --blue-cyan: #4cc9f0;
-            --panel-bg: rgba(15, 12, 35, 0.75);
-            --text-light: #f8f9fa;
-            --text-muted: #a0aab8;
-            --success: #00f5d4;
-            --btn-depth: #2b0854;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-color); color: var(--text-light); overflow-x: hidden; position: relative; min-height: 100vh; }
-
-        /* ================= HIỆU ỨNG GALAXY & SAO BẰNG ================= */
-        .galaxy-bg {
-            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(114, 9, 183, 0.25), rgba(67, 97, 238, 0.2), rgba(5, 5, 13, 0.95));
-            animation: galaxyRotate 25s infinite linear; z-index: -2; pointer-events: none;
-        }
-        @keyframes galaxyRotate { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
-
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle linear infinite; z-index: -1; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; box-shadow: 0 0 8px var(--blue-cyan); transform: scale(1.2); } }
-
-        /* Sao băng lóe qua */
-        .shooting-star {
-            position: fixed; width: 120px; height: 2px;
-            background: linear-gradient(90deg, var(--blue-cyan), rgba(247, 37, 133, 0));
-            animation: shoot 4s infinite ease-in-out; opacity: 0; pointer-events: none; z-index: -1;
-        }
-        .shooting-star:nth-child(1) { top: 15%; left: -20%; animation-delay: 0s; }
-        .shooting-star:nth-child(2) { top: 35%; left: -20%; animation-delay: 2.5s; }
-        .shooting-star:nth-child(3) { top: 60%; left: -20%; animation-delay: 1.2s; }
-        @keyframes shoot {
-            0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; }
-            30% { transform: translateX(120vw) translateY(80vh) rotate(-35deg); opacity: 0; }
-            100% { transform: translateX(120vw) translateY(80vh) rotate(-35deg); opacity: 0; }
-        }
-
-        /* ================= BỐ CỤC & BO GÓC BO TRÒN ================= */
-        .container { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 90px; }
-        .hidden { display: none !important; }
-        
-        .panel { 
-            background: var(--panel-bg); 
-            border: 1px solid rgba(76, 201, 240, 0.25); 
-            border-radius: 20px; 
-            padding: 18px; 
-            margin-bottom: 18px; 
-            backdrop-filter: blur(16px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(114, 9, 183, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .panel-title { 
-            font-size: 13px; color: var(--blue-cyan); text-transform: uppercase; margin-bottom: 12px; font-weight: 800; 
-            letter-spacing: 1.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 6px; display: flex; align-items: center; gap: 6px;
-        }
-        
-        h1.logo { 
-            text-align: center; font-size: 26px; font-weight: 900; letter-spacing: 1px;
-            background: linear-gradient(135deg, var(--blue-cyan), var(--purple-bright)); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            margin-bottom: 22px; text-shadow: 0 0 20px rgba(114, 9, 183, 0.6);
-            animation: logoGlow 3s infinite alternate;
-        }
-        @keyframes logoGlow { 0% { filter: drop-shadow(0 0 2px var(--blue-main)); } 100% { filter: drop-shadow(0 0 10px var(--purple-bright)); } }
-
-        input, select { 
-            width: 100%; padding: 13px 16px; border-radius: 12px; border: 1px solid rgba(114, 9, 183, 0.4); 
-            background: rgba(5, 5, 13, 0.7); color: white; margin-bottom: 10px; font-size: 14px; outline: none; transition: 0.3s; 
-        }
-        input:focus, select:focus { border-color: var(--blue-cyan); box-shadow: 0 0 12px rgba(76, 201, 240, 0.4); }
-
-        /* ================= NÚT BẤM HIỆU ỨNG BÀN PHÍM CO SÃN ================= */
-        .btn { 
-            width: 100%; padding: 15px; border: none; border-radius: 14px; font-weight: 800; font-size: 15px; 
-            cursor: pointer; text-transform: uppercase; margin-top: 8px; letter-spacing: 1px;
-            position: relative; transition: all 0.08s ease; outline: none;
-        }
-        .btn-primary { 
-            background: linear-gradient(135deg, var(--purple-main), var(--blue-main)); 
-            color: white; 
-            box-shadow: 0 5px 0 var(--btn-depth), 0 8px 20px rgba(114, 9, 183, 0.5); 
-        }
-        .btn-primary:active { 
-            transform: translateY(4px); 
-            box-shadow: 0 1px 0 var(--btn-depth), 0 3px 10px rgba(114, 9, 183, 0.5); 
-        }
-
-        .btn-launch {
-            background: linear-gradient(135deg, #00f5d4, var(--blue-main));
-            color: #05050d;
-            box-shadow: 0 5px 0 #009688, 0 8px 20px rgba(0, 245, 212, 0.4);
-        }
-        .btn-launch:active {
-            transform: translateY(4px);
-            box-shadow: 0 1px 0 #009688, 0 3px 10px rgba(0, 245, 212, 0.4);
-        }
-
-        .btn-outline { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--blue-cyan); color: var(--blue-cyan); 
-            box-shadow: 0 4px 0 rgba(76, 201, 240, 0.3);
-        }
-        .btn-outline:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(76, 201, 240, 0.3); }
-
-        /* TAB & FILTER BUTTONS */
-        .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-        .tab-btn { 
-            flex: 1; padding: 12px; background: rgba(15, 12, 35, 0.6); border: 1px solid rgba(255,255,255,0.08); 
-            color: var(--text-muted); border-radius: 12px; cursor: pointer; transition: 0.2s; text-align: center; font-weight: bold; font-size: 13px;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.3);
-        }
-        .tab-btn.active { 
-            background: linear-gradient(135deg, var(--purple-main), var(--blue-main)); 
-            color: white; border-color: var(--blue-cyan); box-shadow: 0 4px 12px rgba(114, 9, 183, 0.4); 
-        }
-        .tab-btn:active { transform: translateY(2px); }
-
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .filter-btn { 
-            padding: 11px; background: rgba(5, 5, 13, 0.6); border: 1px solid rgba(255,255,255,0.08); 
-            color: white; border-radius: 10px; text-align: center; cursor: pointer; font-size: 13px; transition: 0.1s; font-weight: 600;
-            box-shadow: 0 3px 0 rgba(0,0,0,0.4);
-        }
-        .filter-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.4); }
-        .filter-btn.active-issue { background: rgba(247, 37, 133, 0.2); border-color: var(--purple-bright); color: var(--purple-bright); }
-        .filter-btn.active-mode { background: rgba(76, 201, 240, 0.2); border-color: var(--blue-cyan); color: var(--blue-cyan); }
-
-        /* TOGGLE SWITCHES */
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px dashed rgba(255,255,255,0.08); }
-        .toggle-row:last-child { border-bottom: none; }
-        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.15); transition: .3s; border-radius: 22px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .slider { background: linear-gradient(90deg, var(--purple-main), var(--blue-cyan)); }
-        input:checked + .slider:before { transform: translateX(22px); }
-        .pro-label { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; }
-        .badge-pro { background: linear-gradient(45deg, var(--purple-bright), var(--purple-main)); color: white; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: bold; }
-
-        /* OVERLAYS & MODALS */
-        #progressModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(5,5,13,0.92); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); }
-        .progress-circle { width: 110px; height: 110px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--blue-cyan); border-right-color: var(--purple-bright); animation: spin 0.8s linear infinite; margin-bottom: 20px; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        #progressText { color: var(--blue-cyan); font-weight: bold; font-size: 22px; margin-bottom: 8px; text-shadow: 0 0 10px var(--blue-cyan); }
-        #progressDesc { color: var(--text-muted); font-size: 13px; text-align: center; }
-
-        .result-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; }
-        .result-val { color: var(--blue-cyan); font-weight: bold; font-size: 16px; text-shadow: 0 0 8px rgba(76, 201, 240, 0.5); }
-        .scale-info { font-size: 11px; color: var(--success); text-align: center; margin-bottom: 12px; font-style: italic; }
-
-        .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .touch-text { font-size: 22px; font-weight: 900; color: var(--blue-cyan); animation: pulse 1.5s infinite; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
-        @keyframes pulse { 0% { opacity: 0.6; transform: scale(0.96); } 50% { opacity: 1; transform: scale(1.04); text-shadow: 0 0 15px var(--purple-bright); } 100% { opacity: 0.6; transform: scale(0.96); } }
-
-        .zalopay-box { text-align: center; background: rgba(67, 97, 238, 0.12); border: 1px solid var(--blue-main); padding: 16px; border-radius: 16px; margin-top: 15px; box-shadow: inset 0 0 15px rgba(67, 97, 238, 0.2); }
-        .zalopay-box h3 { color: var(--blue-cyan); margin-bottom: 6px; font-size: 15px; text-transform: uppercase; }
-
-        /* MODAL CHỌN FREE FIRE */
-        .ff-modal-box { background: var(--panel-bg); border: 1px solid var(--purple-bright); border-radius: 20px; padding: 20px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 0 30px rgba(247, 37, 133, 0.4); }
-    </style>
-</head>
-<body>
-
-    <audio id="bgMusic" loop src="music.mp3"></audio>
-    <div class="galaxy-bg"></div>
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-    <div id="starsContainer"></div>
-
-    <div id="touchScreen" class="fullscreen-overlay">
-        <div class="touch-text" onclick="initApp()">Chạm Để Vào App</div>
-        <p style="color: var(--text-muted); margin-top: 15px; font-size: 12px;">Đang khởi tạo không gian Galaxy Sensi...</p>
-    </div>
-
-    <div id="lockScreen" class="fullscreen-overlay hidden">
-        <div class="container" style="width: 100%;">
-            <h1 class="logo">SENSILegend</h1>
-            <div class="panel">
-                <p style="text-align: center; margin-bottom: 15px; font-size: 13px; color: var(--text-muted);">Hệ thống yêu cầu Key kích hoạt để truy cập</p>
-                <input type="password" id="keyInput" placeholder="Nhập Key kích hoạt...">
-                <button class="btn btn-primary" onclick="checkKey()">KÍCH HOẠT KEY</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="mainApp" class="container hidden">
-        <h1 class="logo">DoNhayChuan PRO</h1>
-        
-        <div class="tabs">
-            <div class="tab-btn active" onclick="switchTab('ios')">iOS</div>
-            <div class="tab-btn" onclick="switchTab('ipad')">iPad</div>
-            <div class="tab-btn" onclick="switchTab('android')">Android</div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">⚡ 1. Chọn Dòng Máy Của Bạn</div>
-            <input type="text" id="searchInput" placeholder="Tìm nhanh (VD: iPhone 13, iPad Air, S23...)" onkeyup="filterDevices()">
-            <select id="deviceSelect"></select>
-            <p id="keyLockStatus" style="font-size: 12px; color: var(--success); margin-top: 4px; text-align: center;"></p>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">🎯 2. Phân Tích Thực Chiến</div>
-            <p style="font-size: 12px; margin-bottom: 6px; color: var(--text-muted);">Chế độ chơi (Chọn 1):</p>
-            <div class="grid-2">
-                <div class="filter-btn active-mode" onclick="selectFilter(this, 'mode')">Sinh tồn rank</div>
-                <div class="filter-btn" onclick="selectFilter(this, 'mode')">Tử chiến rank</div>
-            </div>
-            <p style="font-size: 12px; margin-bottom: 6px; color: var(--text-muted);">Tình trạng gặp phải (Chọn nhiều):</p>
-            <div class="grid-2">
-                <div class="filter-btn" onclick="toggleIssue(this)" data-val="nangtam">Nặng tâm</div>
-                <div class="filter-btn" onclick="toggleIssue(this)" data-val="lodau">Lố đầu</div>
-                <div class="filter-btn" onclick="toggleIssue(this)" data-val="rungtam">Rung tâm</div>
-                <div class="filter-btn" onclick="toggleIssue(this)" data-val="lacdan">Lạc đạn</div>
-            </div>
-        </div>
-
-        <button class="btn btn-primary" onclick="startGeneration()">KHỞI CHẠY</button>
-
-        <div class="panel" style="margin-top: 18px;">
-            <div class="panel-title">⚙️ BẢNG ĐIỀU KHIỂN TỐI ƯU HỆ THỐNG</div>
-            <div class="toggle-row">
-                <span class="pro-label">Fix rung</span>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span class="pro-label">Giảm lố</span>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span class="pro-label">Nhẹ tâm</span>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span class="pro-label">Đầm tâm <span class="badge-pro">PRO</span></span>
-                <label class="switch"><input type="checkbox" id="pro1"><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span class="pro-label">Tăng FPS Max <span class="badge-pro">PRO</span></span>
-                <label class="switch"><input type="checkbox" id="pro2"><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span class="pro-label">Tối ưu Cảm ứng <span class="badge-pro">PRO</span></span>
-                <label class="switch"><input type="checkbox" id="pro3"><span class="slider"></span></label>
-            </div>
-            <div class="toggle-row">
-                <span class="pro-label">Tối ưu Mạng (Ping) <span class="badge-pro">PRO</span></span>
-                <label class="switch"><input type="checkbox" id="pro4"><span class="slider"></span></label>
-            </div>
-        </div>
-
-        <div id="upgradeBox" class="zalopay-box">
-            <h3>KÍCH HOẠT ĐẶC QUYỀN PRO</h3>
-            <p style="font-size: 13px; margin-bottom: 8px; color: var(--text-light);">Mở khóa toàn bộ chức năng ẩn và xóa giới hạn thiết bị.</p>
-            <p style="font-weight: bold; color: white;">ZaloPay: <span style="color: var(--blue-cyan);">0395734228</span></p>
-            <p style="font-size: 12px;">Chủ TK: NGUYEN KHAC HIEU</p>
-            <p style="font-weight: bold; margin-top: 4px;">Mức phí: 150.000 VND</p>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">*Vui lòng inbox Admin sau khi chuyển khoản kèm Key hiện tại.</p>
-        </div>
-    </div>
-
-    <!-- MODAL TIẾN TRÌNH -->
-    <div id="progressModal" class="hidden">
-        <div class="progress-circle"></div>
-        <div id="progressText">0%</div>
-        <div id="progressDesc">AI đang nhận diện thiết bị...</div>
-    </div>
-
-    <!-- MODAL KẾT QUẢ SENSI -->
-    <div id="resultModal" class="fullscreen-overlay hidden" style="background: rgba(5, 5, 13, 0.95); padding: 20px;">
-        <div class="container" style="width: 100%;">
-            <div class="panel">
-                <h2 style="text-align: center; color: var(--blue-cyan); margin-bottom: 4px; font-weight: 900;">KẾT QUẢ ĐỘ NHẠY AI</h2>
-                <div class="scale-info">* Hệ số phân tích AI chuẩn xác 100% (Scale 0 - 200)</div>
-                <div class="result-row"><span>Nhìn xung quanh</span><span class="result-val" id="resGeneral">0</span></div>
-                <div class="result-row"><span>Ống ngắm Red Dot</span><span class="result-val" id="resReddot">0</span></div>
-                <div class="result-row"><span>Ống ngắm 2x</span><span class="result-val" id="res2x">0</span></div>
-                <div class="result-row"><span>Ống ngắm 4x</span><span class="result-val" id="res4x">0</span></div>
-                <div class="result-row"><span>Ống ngắm Sniper</span><span class="result-val" id="resSniper">0</span></div>
-                <div class="result-row"><span>Nút Camera Tự do</span><span class="result-val" id="resCamera">0</span></div>
-                <div class="result-row"><span>Kích thước Nút bắn</span><span class="result-val" id="resButton">0%</span></div>
-                <div class="result-row hidden" id="androidDPI"><span>DPI Khuyên dùng</span><span class="result-val" id="resDPI">0</span></div>
-                
-                <button class="btn btn-launch" style="margin-top: 18px;" onclick="openFFChoice()">🚀 KHỞI CHẠY TỐI ƯU</button>
-                <button class="btn btn-outline" style="margin-top: 10px;" onclick="closeResult()">ĐÓNG BẢNG</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL CHỌN CỔNG GAME FREE FIRE -->
-    <div id="ffChoiceModal" class="fullscreen-overlay hidden" style="background: rgba(0, 0, 0, 0.85); z-index: 1000;">
-        <div class="ff-modal-box">
-            <h3 style="color: var(--blue-cyan); margin-bottom: 10px;">CHỌN CỔNG GAME</h3>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Hệ thống sẽ nạp thông số độ nhạy AI và tự động khởi chạy game!</p>
-            <button class="btn btn-primary" style="margin-bottom: 12px; background: linear-gradient(135deg, #ffb703, #fb8500);" onclick="launchGame('ff_normal')">FREE FIRE THƯỜNG</button>
-            <button class="btn btn-primary" style="background: linear-gradient(135deg, var(--purple-bright), var(--purple-main));" onclick="launchGame('ff_max')">FREE FIRE MAX</button>
-            <button class="btn btn-outline" style="margin-top: 15px; border-color: rgba(255,255,255,0.2); color: white;" onclick="closeFFChoice()">HỦY BỎ</button>
-        </div>
-    </div>
-
-    <script>
-        function createStars() {
-            const container = document.getElementById('starsContainer');
-            for(let i = 0; i < 60; i++) {
-                let star = document.createElement('div');
-                star.className = 'star';
-                star.style.width = Math.random() * 3 + 'px';
-                star.style.height = star.style.width;
-                star.style.left = Math.random() * 100 + 'vw';
-                star.style.top = Math.random() * 100 + 'vh';
-                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                star.style.animationDelay = Math.random() * 2 + 's';
-                container.appendChild(star);
-            }
-        }
-        createStars();
-
-        let currentTab = 'ios';
-        let activeIssues = [];
-
-        const db = {
-            ios: [
-                "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15",
-                "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14",
-                "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13", "iPhone 13 Mini",
-                "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", "iPhone 12 Mini",
-                "iPhone 11 Pro Max", "iPhone 11 Pro", "iPhone 11", "iPhone XS Max", 
-                "iPhone XS", "iPhone XR", "iPhone X", "iPhone 8 Plus", "iPhone 8", 
-                "iPhone 7 Plus", "iPhone 7", "iPhone 6s Plus", "iPhone 6s", "iPhone SE (Gen 3)", "iPhone SE (Gen 2)"
-            ],
-            ipad: [
-                "iPad Pro M2 (12.9-inch)", "iPad Pro M2 (11-inch)", "iPad Pro M1 (12.9-inch)", "iPad Pro M1 (11-inch)",
-                "iPad Pro (2020) 12.9-inch", "iPad Pro (2020) 11-inch", "iPad Pro (2018) 12.9-inch", "iPad Pro (2018) 11-inch",
-                "iPad Air 5", "iPad Air 4", "iPad Air 3",
-                "iPad Mini 6", "iPad Mini 5", "iPad Mini 4",
-                "iPad Gen 10", "iPad Gen 9", "iPad Gen 8", "iPad Gen 7"
-            ],
-            android: [
-                "Samsung Galaxy S24 Ultra", "Samsung Galaxy S24+", "Samsung Galaxy S24",
-                "Samsung Galaxy S23 Ultra", "Samsung Galaxy S23+", "Samsung Galaxy S23", "Samsung Galaxy S23 FE",
-                Do hệ thống gặp chút gián đoạn tự động khi xử lý đoạn mã dài. Dưới đây là toàn bộ mã nguồn **`index.html`** đã được lột xác hoàn toàn theo đúng ý bạn:
-
-* **Tông màu Galaxy Gamer:** Xanh Neon (`#00f2fe`) pha Tím dạ quang (`#9b51e0`).
-* **Hiệu ứng sao băng & Vũ trụ:** Các dải sao băng vút qua cùng nền tinh vân chuyển động linh hoạt.
-* **Nút bấm 3D Mechanical:** Bo góc 14px mềm mại, khi ấn có phản hồi lún nút chuẩn cảm giác gõ bàn phím cơ.
-* **Nút "KHỞI CHẠY TỐI ƯU":** Chạy lại trình mô phỏng tối ưu AI một lần nữa, sau đó tự động mở game **Free Fire** hoặc **Free Fire Max** dựa trên lựa chọn phiên bản của bạn.
-
-```html
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DoNhayChuan PRO - SensiLegend Galaxy</title>
-    <style>
         :root {
             --bg-color: #060713;
             --primary: #00f2fe;
@@ -383,7 +21,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-light); overflow-x: hidden; min-height: 100vh; position: relative; }
 
-        /* NEBULA & GALAXY AURA */
         .galaxy-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 20% 30%, rgba(155, 81, 224, 0.25), transparent 50%),
@@ -392,7 +29,6 @@
         }
         @keyframes pulseSpace { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
 
-        /* SHOOTING STARS */
         .shooting-star {
             position: fixed; top: -10px; width: 120px; height: 2px;
             background: linear-gradient(90deg, #00f2fe, transparent);
@@ -409,7 +45,6 @@
             100% { opacity: 0; }
         }
 
-        /* CONTAINER & PANELS */
         .container { max-width: 480px; margin: 0 auto; padding: 18px; padding-bottom: 80px; }
         .hidden { display: none !important; }
         
@@ -426,7 +61,6 @@
         }
         .panel-title::before { content: ''; width: 4px; height: 14px; background: var(--secondary); border-radius: 2px; }
 
-        /* TYPOGRAPHY & LOGO */
         h1.logo {
             text-align: center; font-size: 26px; font-weight: 900; letter-spacing: 2px;
             background: linear-gradient(135deg, var(--primary), #ffffff, var(--secondary));
@@ -434,7 +68,6 @@
             margin-bottom: 22px; text-shadow: var(--glow-cyan);
         }
 
-        /* INPUTS & SELECTS */
         input[type="text"], input[type="password"], select {
             width: 100%; padding: 14px; border-radius: 12px;
             border: 1px solid rgba(155, 81, 224, 0.4); background: rgba(6, 7, 19, 0.7);
@@ -442,7 +75,6 @@
         }
         input:focus, select:focus { border-color: var(--primary); box-shadow: var(--glow-cyan); }
 
-        /* GAMER BUTTONS WITH KEYPRESS TACTILE EFFECT */
         .btn {
             width: 100%; padding: 15px; border: none; border-radius: 14px;
             font-weight: 800; font-size: 15px; cursor: pointer; text-transform: uppercase;
@@ -462,7 +94,6 @@
             transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.5) !important;
         }
 
-        /* TABS & FILTERS */
         .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
         .tab-btn {
             flex: 1; padding: 12px; background: rgba(255,255,255,0.05);
@@ -482,7 +113,6 @@
         .filter-btn.active-issue { background: rgba(231, 76, 60, 0.25); border-color: #e74c3c; color: #ff6b6b; }
         .filter-btn.active-mode { background: rgba(0, 242, 254, 0.2); border-color: var(--primary); color: var(--primary); }
 
-        /* TOGGLE SWITCHES */
         .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.08); }
         .toggle-row:last-child { border-bottom: none; }
         .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
@@ -493,7 +123,6 @@
         input:checked + .slider:before { transform: translateX(22px); }
         .badge-pro { background: var(--secondary); color: white; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: bold; }
 
-        /* OVERLAYS & MODALS */
         .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .touch-text { font-size: 22px; font-weight: 900; color: var(--primary); text-shadow: var(--glow-cyan); animation: pulseTouch 1.5s infinite; cursor: pointer; }
         @keyframes pulseTouch { 0%, 100% { opacity: 0.6; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.04); } }
@@ -537,9 +166,9 @@
         <h1 class="logo">DoNhayChuan PRO</h1>
         
         <div class="tabs">
-            <div class="tab-btn active" onclick="switchTab('ios')">iOS</div>
-            <div class="tab-btn" onclick="switchTab('ipad')">iPad</div>
-            <div class="tab-btn" onclick="switchTab('android')">Android</div>
+            <div class="tab-btn active" onclick="switchTab('ios', this)">iOS</div>
+            <div class="tab-btn" onclick="switchTab('ipad', this)">iPad</div>
+            <div class="tab-btn" onclick="switchTab('android', this)">Android</div>
         </div>
 
         <div class="panel">
@@ -631,6 +260,7 @@
         };
 
         function initApp() {
+            // Phát nhạc nền (nếu trình duyệt cho phép)
             document.getElementById('bgMusic').play().catch(e => console.log("Audio blocked."));
             document.getElementById('touchScreen').classList.add('hidden');
             let savedKey = localStorage.getItem('userKey');
@@ -658,10 +288,10 @@
             loadDevices('ios');
         }
 
-        function switchTab(tab) {
+        function switchTab(tab, el) {
             currentTab = tab;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            el.classList.add('active');
             loadDevices(tab);
         }
 
@@ -786,10 +416,10 @@
                         // Mở Free Fire hoặc Free Fire MAX qua URL Scheme / Deep Link
                         if(selectedGame === 'max') {
                             window.location.href = "freefiremax://";
-                            setTimeout(() => { window.location.href = "[https://play.google.com/store/apps/details?id=com.dts.freefiremax](https://play.google.com/store/apps/details?id=com.dts.freefiremax)"; }, 1500);
+                            setTimeout(() => { window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefiremax"; }, 1500);
                         } else {
                             window.location.href = "freefire://";
-                            setTimeout(() => { window.location.href = "[https://play.google.com/store/apps/details?id=com.dts.freefireth](https://play.google.com/store/apps/details?id=com.dts.freefireth)"; }, 1500);
+                            setTimeout(() => { window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefireth"; }, 1500);
                         }
                     }, 500);
                 }
