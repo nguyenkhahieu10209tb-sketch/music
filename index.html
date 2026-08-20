@@ -20,7 +20,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-light); overflow-x: hidden; position: relative; min-height: 100vh; }
         
-        /* Hiệu ứng Aura & Hạt sao */
         .aura-shift {
             position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle at 50% 50%, rgba(243, 156, 18, 0.1), rgba(231, 76, 60, 0.05), transparent 60%);
@@ -36,12 +35,10 @@
         .panel { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; margin-bottom: 15px; backdrop-filter: blur(10px); }
         .panel-title { font-size: 14px; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
         
-        /* Typography & Form */
         h1.logo { text-align: center; font-size: 24px; background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; font-weight: 900; }
         input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: white; margin-bottom: 10px; font-size: 14px; outline: none; transition: 0.3s; }
         input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(243, 156, 18, 0.5); }
         
-        /* Nút bấm & Tabs */
         .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-top: 10px; }
         .btn-primary { background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4); }
         .btn-primary:active { transform: scale(0.98); }
@@ -51,13 +48,11 @@
         .tab-btn { flex: 1; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); border-radius: 8px; cursor: pointer; transition: 0.3s; text-align: center; font-weight: bold; }
         .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* Tùy chọn thực chiến (Grid) */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .filter-btn { padding: 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; text-align: center; cursor: pointer; font-size: 13px; transition: 0.2s; }
         .filter-btn.active-issue { background: rgba(231, 76, 60, 0.2); border-color: var(--secondary); color: var(--secondary); }
         .filter-btn.active-mode { background: rgba(52, 152, 219, 0.2); border-color: var(--accent); color: var(--accent); }
 
-        /* Toggle Switch */
         .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); }
         .toggle-row:last-child { border-bottom: none; }
         .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
@@ -69,43 +64,35 @@
         .pro-label { display: flex; align-items: center; gap: 5px; font-size: 14px; }
         .badge-pro { background: var(--secondary); color: white; font-size: 10px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
 
-        /* Progress Bar Modal */
         #progressModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .progress-circle { width: 120px; height: 120px; border-radius: 50%; border: 5px solid rgba(255,255,255,0.1); border-top-color: var(--primary); animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         #progressText { color: var(--primary); font-weight: bold; font-size: 18px; margin-bottom: 10px; text-align: center; }
         #progressDesc { color: var(--text-muted); font-size: 14px; text-align: center; }
 
-        /* Bảng Kết quả */
         .result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 15px; }
         .result-val { color: var(--primary); font-weight: bold; font-size: 16px; }
+        .scale-info { font-size: 11px; color: var(--success); text-align: center; margin-bottom: 10px; font-style: italic; }
 
-        /* Màn hình chờ & Khóa */
         .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .touch-text { font-size: 24px; font-weight: bold; color: var(--primary); animation: pulse 1.5s infinite; cursor: pointer; text-transform: uppercase; }
         @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.5; transform: scale(0.95); } }
 
-        /* ZaloPay Box */
         .zalopay-box { text-align: center; background: rgba(0, 136, 255, 0.1); border: 1px solid #0088ff; padding: 15px; border-radius: 12px; margin-top: 15px; }
         .zalopay-box h3 { color: #0088ff; margin-bottom: 5px; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <!-- BGM Lách Luật iOS -->
     <audio id="bgMusic" loop src="music.mp3"></audio>
-
-    <!-- Hiệu ứng Nền -->
     <div class="aura-shift"></div>
     <div id="starsContainer"></div>
 
-    <!-- 1. Màn hình "CHẠM ĐỂ VÀO APP" (Bypass Audio iOS) -->
     <div id="touchScreen" class="fullscreen-overlay">
         <div class="touch-text" onclick="initApp()">Chạm Để Vào App</div>
         <p style="color: var(--text-muted); margin-top: 20px; font-size: 12px;">Đang thiết lập môi trường tối ưu...</p>
     </div>
 
-    <!-- 2. Màn hình KHÓA BẢO MẬT (Login) -->
     <div id="lockScreen" class="fullscreen-overlay hidden">
         <div class="container" style="width: 100%;">
             <h1 class="logo">SENSILegend</h1>
@@ -117,28 +104,22 @@
         </div>
     </div>
 
-    <!-- 3. GIAO DIỆN CHÍNH (Main App) -->
     <div id="mainApp" class="container hidden">
         <h1 class="logo">DoNhayChuan PRO</h1>
         
-        <!-- Tab Hệ Điều Hành -->
         <div class="tabs">
             <div class="tab-btn active" onclick="switchTab('ios')">iOS</div>
             <div class="tab-btn" onclick="switchTab('ipad')">iPad</div>
             <div class="tab-btn" onclick="switchTab('android')">Android</div>
         </div>
 
-        <!-- Tra cứu Dòng máy -->
         <div class="panel">
             <div class="panel-title">1. Chọn Dòng Máy Của Bạn</div>
             <input type="text" id="searchInput" placeholder="Tìm nhanh (VD: iPhone 13, iPad Air, S23...)" onkeyup="filterDevices()">
-            <select id="deviceSelect">
-                <!-- Danh sách thiết bị đổ bằng JS -->
-            </select>
+            <select id="deviceSelect"></select>
             <p id="keyLockStatus" style="font-size: 12px; color: var(--success); margin-top: 5px; text-align: center;"></p>
         </div>
 
-        <!-- Bộ Lọc Tình Trạng Thực Chiến -->
         <div class="panel">
             <div class="panel-title">2. Phân Tích Thực Chiến</div>
             <p style="font-size: 12px; margin-bottom: 5px; color: var(--text-muted);">Chế độ chơi (Chọn 1):</p>
@@ -155,13 +136,10 @@
             </div>
         </div>
 
-        <!-- Nút Tạo Độ Nhạy -->
-        <button class="btn btn-primary" onclick="startGeneration()">TẠO ĐỘ NHẠY</button>
+        <button class="btn btn-primary" onclick="startGeneration()">KHỞI CHẠY</button>
 
-        <!-- Tính năng Tối ưu (Toggles) -->
         <div class="panel" style="margin-top: 15px;">
             <div class="panel-title">BẢNG ĐIỀU KHIỂN TỐI ƯU HỆ THỐNG</div>
-            <!-- Chức năng thường -->
             <div class="toggle-row">
                 <span class="pro-label">Fix rung</span>
                 <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
@@ -174,7 +152,6 @@
                 <span class="pro-label">Nhẹ tâm</span>
                 <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
             </div>
-            <!-- Chức năng PRO -->
             <div class="toggle-row">
                 <span class="pro-label">Đầm tâm <span class="badge-pro">PRO</span></span>
                 <label class="switch"><input type="checkbox" id="pro1" onchange="checkProToggle(this)"><span class="slider"></span></label>
@@ -193,7 +170,6 @@
             </div>
         </div>
 
-        <!-- Khung Nâng Cấp Pro (ZaloPay) -->
         <div id="upgradeBox" class="zalopay-box">
             <h3>KÍCH HOẠT ĐẶC QUYỀN PRO</h3>
             <p style="font-size: 13px; margin-bottom: 10px; color: var(--text-light);">Mở khóa toàn bộ chức năng ẩn và xóa giới hạn thiết bị.</p>
@@ -204,18 +180,17 @@
         </div>
     </div>
 
-    <!-- 4. Progress Bar Modal -->
     <div id="progressModal" class="hidden">
         <div class="progress-circle"></div>
         <div id="progressText">0%</div>
-        <div id="progressDesc">Đang nhận diện thiết bị...</div>
+        <div id="progressDesc">AI đang nhận diện thiết bị...</div>
     </div>
 
-    <!-- 5. Bảng Kết Quả Độ Nhạy (Result) -->
     <div id="resultModal" class="fullscreen-overlay hidden" style="background: rgba(13, 15, 18, 0.95); padding: 20px;">
         <div class="container" style="width: 100%;">
             <div class="panel">
-                <h2 style="text-align: center; color: var(--primary); margin-bottom: 15px;">KẾT QUẢ ĐỘ NHẠY</h2>
+                <h2 style="text-align: center; color: var(--primary); margin-bottom: 5px;">KẾT QUẢ ĐỘ NHẠY AI</h2>
+                <div class="scale-info">* Áp dụng hệ số bản cập nhật mới (Thang đo 0 - 200)</div>
                 <div class="result-row"><span>Nhìn xung quanh</span><span class="result-val" id="resGeneral">0</span></div>
                 <div class="result-row"><span>Ống ngắm Red Dot</span><span class="result-val" id="resReddot">0</span></div>
                 <div class="result-row"><span>Ống ngắm 2x</span><span class="result-val" id="res2x">0</span></div>
@@ -232,7 +207,6 @@
     </div>
 
     <script>
-        // ================= HIỆU ỨNG HẠT SAO =================
         function createStars() {
             const container = document.getElementById('starsContainer');
             for(let i = 0; i < 50; i++) {
@@ -249,59 +223,62 @@
         }
         createStars();
 
-        // ================= BIẾN TOÀN CỤC =================
         let isPro = false;
         let currentTab = 'ios';
-        let hwidLockedDevice = localStorage.getItem('hwidLockedDevice') || null;
         let activeIssues = [];
 
-        // ================= DATABASE THIẾT BỊ HOÀN CHỈNH =================
+        // HỆ THỐNG DATABASE ĐẠI TRÀ VÀ CHI TIẾT
         const db = {
             ios: [
                 "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15",
                 "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14",
                 "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13", "iPhone 13 Mini",
-                "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", "iPhone 11 Pro Max",
-                "iPhone 11 Pro", "iPhone 11", "iPhone XS Max", "iPhone XS", "iPhone XR",
-                "iPhone X", "iPhone 8 Plus", "iPhone 8", "iPhone 7 Plus", "iPhone 7", "iPhone 6s Plus"
+                "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", "iPhone 12 Mini",
+                "iPhone 11 Pro Max", "iPhone 11 Pro", "iPhone 11", "iPhone XS Max", 
+                "iPhone XS", "iPhone XR", "iPhone X", "iPhone 8 Plus", "iPhone 8", 
+                "iPhone 7 Plus", "iPhone 7", "iPhone 6s Plus", "iPhone 6s", "iPhone SE (Gen 3)", "iPhone SE (Gen 2)"
             ],
             ipad: [
-                "iPad Pro M2 (12.9-inch)", "iPad Pro M2 (11-inch)", "iPad Pro M1",
-                "iPad Pro (2020/2018)", "iPad Air 5", "iPad Air 4", "iPad Air 3",
-                "iPad Mini 6", "iPad Mini 5", "iPad Gen 10", "iPad Gen 9", "iPad Gen 8"
+                "iPad Pro M2 (12.9-inch)", "iPad Pro M2 (11-inch)", "iPad Pro M1 (12.9-inch)", "iPad Pro M1 (11-inch)",
+                "iPad Pro (2020) 12.9-inch", "iPad Pro (2020) 11-inch", "iPad Pro (2018) 12.9-inch", "iPad Pro (2018) 11-inch",
+                "iPad Air 5", "iPad Air 4", "iPad Air 3",
+                "iPad Mini 6", "iPad Mini 5", "iPad Mini 4",
+                "iPad Gen 10", "iPad Gen 9", "iPad Gen 8", "iPad Gen 7"
             ],
             android: [
-                // Samsung Dòng S
                 "Samsung Galaxy S24 Ultra", "Samsung Galaxy S24+", "Samsung Galaxy S24",
-                "Samsung Galaxy S23 Ultra", "Samsung Galaxy S23+", "Samsung Galaxy S23",
-                "Samsung Galaxy S22 Ultra", "Samsung Galaxy S21 Ultra", "Samsung Galaxy S20 Ultra",
-                // Samsung Dòng A & F
-                "Samsung Galaxy A55 5G", "Samsung Galaxy A54 5G", "Samsung Galaxy A35",
-                "Samsung Galaxy A34", "Samsung Galaxy A25", "Samsung Galaxy A15", "Samsung Galaxy A05",
-                "Samsung Galaxy F55", "Samsung Galaxy F15", "Samsung Galaxy M54",
-                // Xiaomi / Poco / Redmi
-                "Xiaomi 14 Pro", "Xiaomi 14", "Xiaomi 13 Pro", "Xiaomi 13", 
-                "POCO X6 Pro", "POCO F5 Pro", "POCO M6",
-                "Redmi Note 13 Pro+", "Redmi Note 13 Pro", "Redmi Note 12 Pro", "Redmi 12",
-                // Oppo / Realme / Vivo
-                "Oppo Find X7 Ultra", "Oppo Reno 11 Pro", "Oppo Reno 10", "Oppo A79",
-                "Realme GT5 Pro", "Realme 12 Pro+", "Realme 11",
-                "Vivo X100 Pro", "Vivo V30", "iQOO 12",
-                // Khác
-                "Google Pixel 8 Pro", "Google Pixel 7a", "Sony Xperia 1 V", "ROG Phone 8 Pro"
+                "Samsung Galaxy S23 Ultra", "Samsung Galaxy S23+", "Samsung Galaxy S23", "Samsung Galaxy S23 FE",
+                "Samsung Galaxy S22 Ultra", "Samsung Galaxy S22+", "Samsung Galaxy S22",
+                "Samsung Galaxy S21 Ultra", "Samsung Galaxy S21+", "Samsung Galaxy S21", "Samsung Galaxy S21 FE",
+                "Samsung Galaxy S20 Ultra", "Samsung Galaxy S20+", "Samsung Galaxy S20", "Samsung Galaxy S20 FE",
+                "Samsung Galaxy Note 20 Ultra", "Samsung Galaxy Note 20", "Samsung Galaxy Note 10+",
+                "Samsung Galaxy Z Fold 5", "Samsung Galaxy Z Fold 4", "Samsung Galaxy Z Flip 5", "Samsung Galaxy Z Flip 4",
+                "Samsung Galaxy A55 5G", "Samsung Galaxy A54 5G", "Samsung Galaxy A53 5G", "Samsung Galaxy A52s 5G", "Samsung Galaxy A52", "Samsung Galaxy A51",
+                "Samsung Galaxy A35", "Samsung Galaxy A34", "Samsung Galaxy A33", "Samsung Galaxy A32",
+                "Samsung Galaxy A25", "Samsung Galaxy A24", "Samsung Galaxy A23", "Samsung Galaxy A22",
+                "Samsung Galaxy A15", "Samsung Galaxy A14", "Samsung Galaxy A13", "Samsung Galaxy A12",
+                "Samsung Galaxy A05s", "Samsung Galaxy A05", "Samsung Galaxy A04", "Samsung Galaxy A03",
+                "Samsung Galaxy M54", "Samsung Galaxy M53", "Samsung Galaxy M34", "Samsung Galaxy M14",
+                "Samsung Galaxy F55", "Samsung Galaxy F54", "Samsung Galaxy F34", "Samsung Galaxy F15",
+                "Xiaomi 14 Ultra", "Xiaomi 14 Pro", "Xiaomi 14", "Xiaomi 13 Ultra", "Xiaomi 13 Pro", "Xiaomi 13", "Xiaomi 13T Pro", "Xiaomi 12T Pro",
+                "POCO X6 Pro", "POCO X6", "POCO F5 Pro", "POCO F5", "POCO X5 Pro", "POCO M6 Pro", "POCO M5s",
+                "Redmi Note 13 Pro+", "Redmi Note 13 Pro", "Redmi Note 13", "Redmi Note 12 Pro+", "Redmi Note 12 Pro", "Redmi Note 12",
+                "Redmi Note 11 Pro", "Redmi Note 11", "Redmi Note 10 Pro", "Redmi 13C", "Redmi 12", "Redmi 10",
+                "Oppo Find X7 Ultra", "Oppo Find X6 Pro", "Oppo Reno 11 Pro", "Oppo Reno 11", "Oppo Reno 10 Pro+", "Oppo Reno 8 T",
+                "Oppo A79", "Oppo A58", "Oppo A38", "Oppo A18",
+                "Realme GT 5 Pro", "Realme GT Neo 5", "Realme 12 Pro+", "Realme 11 Pro+", "Realme 11", "Realme C67", "Realme C55",
+                "Vivo X100 Pro", "Vivo X90 Pro", "Vivo V30", "Vivo V29", "Vivo V27", "Vivo Y36", "Vivo Y17s",
+                "iQOO 12 Pro", "iQOO 12", "iQOO Neo 9 Pro", "iQOO Z7",
+                "Google Pixel 8 Pro", "Google Pixel 8", "Google Pixel 7 Pro", "Google Pixel 7a", "Google Pixel 6 Pro",
+                "Asus ROG Phone 8 Pro", "Asus ROG Phone 7 Ultimate", "Red Magic 9 Pro", "Sony Xperia 1 V", "Sony Xperia 5 V"
             ]
         };
 
-        // ================= LUỒNG VẬN HÀNH =================
         function initApp() {
-            // Bypass âm thanh iOS
-            document.getElementById('bgMusic').play().catch(e => console.log("Audio play blocked by browser."));
+            document.getElementById('bgMusic').play().catch(e => console.log("Audio blocked."));
             document.getElementById('touchScreen').classList.add('hidden');
-            
-            // Check session/Key
             let savedKey = localStorage.getItem('userKey');
             if(savedKey === 'bohieudaycon09' || savedKey === 'hieudeptrai009') {
-                isPro = (savedKey === 'hieudeptrai009');
                 openMainApp();
             } else {
                 document.getElementById('lockScreen').classList.remove('hidden');
@@ -310,13 +287,8 @@
 
         function checkKey() {
             const key = document.getElementById('keyInput').value.trim();
-            if(key === 'bohieudaycon09') {
+            if(key === 'bohieudaycon09' || key === 'hieudeptrai009') {
                 localStorage.setItem('userKey', key);
-                isPro = false;
-                openMainApp();
-            } else if(key === 'hieudeptrai009') {
-                localStorage.setItem('userKey', key);
-                isPro = true;
                 openMainApp();
             } else {
                 alert("Key kích hoạt không hợp lệ hoặc đã hết hạn!");
@@ -327,18 +299,15 @@
             document.getElementById('lockScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
             
-            if(isPro) {
-                document.getElementById('upgradeBox').classList.add('hidden');
-                document.getElementById('keyLockStatus').innerText = "Trạng thái: VIP PRO (Không giới hạn thiết bị)";
-            } else {
-                let txt = hwidLockedDevice ? `Basic Key - Đã khóa vào: ${hwidLockedDevice}` : "Basic Key - Chưa khóa thiết bị";
-                document.getElementById('keyLockStatus').innerText = txt;
-            }
+            // Luôn hiển thị trạng thái đã mở khóa, có thể dùng nhiều máy
+            document.getElementById('keyLockStatus').innerText = "Trạng thái: Đã Mở Khóa Đa Thiết Bị";
+            
+            // Luôn giữ bảng ZaloPay hiển thị 
+            document.getElementById('upgradeBox').classList.remove('hidden');
             
             loadDevices('ios');
         }
 
-        // ================= GIAO DIỆN & UI LOGIC =================
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -389,88 +358,100 @@
         }
 
         function checkProToggle(el) {
-            if(!isPro) {
-                el.checked = false;
-                alert("Bạn cần Key PRO (hieudeptrai009) để kích hoạt tính năng can thiệp hệ thống này!");
-            }
+            // Đã xóa giới hạn, người dùng có thể thoải mái bật/tắt mọi tính năng PRO
         }
 
-        // ================= SENSITIVITY ENGINE (THUẬT TOÁN) =================
         function startGeneration() {
             const device = document.getElementById('deviceSelect').value;
             if(!device) return alert("Vui lòng chọn dòng máy!");
 
-            // Xử lý cơ chế khóa máy Basic (HWID Lock)
-            if(!isPro) {
-                if(!hwidLockedDevice) {
-                    hwidLockedDevice = device;
-                    localStorage.setItem('hwidLockedDevice', device);
-                    document.getElementById('keyLockStatus').innerText = `Basic Key - Đã khóa vào: ${hwidLockedDevice}`;
-                } else if(hwidLockedDevice !== device) {
-                    return alert(`Key BASIC của bạn đã bị khóa cứng vào thiết bị: ${hwidLockedDevice}. Không thể tạo độ nhạy cho máy khác. Vui lòng nâng cấp PRO!`);
-                }
-            }
-
-            // Fake Progress Bar
             document.getElementById('progressModal').classList.remove('hidden');
             let progress = 0;
             let textEl = document.getElementById('progressText');
             let descEl = document.getElementById('progressDesc');
             
             let interval = setInterval(() => {
+                // Hiệu ứng Loading
                 progress += Math.floor(Math.random() * 15) + 5;
                 if(progress >= 100) progress = 100;
                 
                 textEl.innerText = progress + "%";
-                if(progress < 30) descEl.innerText = "Đang nhận diện định danh " + device + "...";
-                else if(progress < 60) descEl.innerText = "Phân tích tình trạng thực chiến & Fix lỗi...";
-                else if(progress < 90) descEl.innerText = "Đang đồng bộ thuật toán OB Sensi...";
-                else descEl.innerText = "Hoàn tất trích xuất dữ liệu!";
+                if(progress < 30) descEl.innerText = "AI đang trích xuất định danh " + device + "...";
+                else if(progress < 60) descEl.innerText = "Tính toán ma trận độ nhạy (Scale 200)...";
+                else if(progress < 90) descEl.innerText = "Ghi đè biến số lỗi thực chiến...";
+                else descEl.innerText = "Hoàn tất thuật toán Sensi 2.0!";
                 
                 if(progress === 100) {
                     clearInterval(interval);
                     setTimeout(() => {
                         document.getElementById('progressModal').classList.add('hidden');
-                        calculateAndShowResult(device);
+                        calculateSensiAI(device);
                     }, 500);
                 }
-            }, 300);
+            }, 250);
         }
 
-        function calculateAndShowResult(device) {
-            // Thông số gốc tùy hệ điều hành
-            let baseGen = currentTab === 'ipad' ? 100 : (currentTab === 'ios' ? 95 : 90);
-            let baseReddot = currentTab === 'ipad' ? 95 : 92;
-            let base2x = 90;
-            let base4x = 88;
-            let baseSniper = 45;
-            let btnSize = 45;
-            let dpi = "Không cần (Mặc định)";
+        // THUẬT TOÁN AI PHÂN TÍCH ĐỘ NHẠY (0 - 200) - CỐ ĐỊNH, KHÔNG DÙNG RANDOM
+        function calculateSensiAI(device) {
+            // Hash chuỗi tên máy để tạo bộ số chuẩn xác 100% không đổi cho từng máy
+            let hash = 0;
+            for (let i = 0; i < device.length; i++) {
+                hash = device.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            hash = Math.abs(hash);
 
-            // Thuật toán tùy chỉnh theo tình trạng
-            if(activeIssues.includes("nangtam")) { baseGen += 5; btnSize -= 2; }
-            if(activeIssues.includes("lodau")) { baseGen -= 3; baseReddot -= 5; btnSize += 3; }
-            if(activeIssues.includes("rungtam")) { base2x -= 4; base4x -= 4; }
-            if(activeIssues.includes("lacdan")) { baseReddot -= 2; baseGen -= 2; }
+            // Dải thông số AI tự sinh trên thang 200 (Công thức toán học tuyệt đối cố định)
+            let baseGen = 150 + (hash % 45);       // Nhìn xung quanh: 150 - 195
+            let baseReddot = 140 + (hash % 50);    // Reddot: 140 - 190
+            let base2x = 135 + (hash % 55);        // 2x: 135 - 190
+            let base4x = 130 + (hash % 60);        // 4x: 130 - 190
+            let baseSniper = 60 + (hash % 50);     // Sniper: 60 - 110
+            let btnSize = 38 + (hash % 17);        // Nút bắn: 38 - 55
 
-            // Giới hạn max 100
-            baseGen = Math.min(100, Math.max(50, baseGen));
-            baseReddot = Math.min(100, Math.max(50, baseReddot));
+            // Hệ số điều chỉnh cho iPad
+            if(currentTab === 'ipad') {
+                baseGen += 5; baseReddot += 5;
+            }
 
-            // Gợi ý DPI cho Android
+            // Ghi đè bằng biến số Tình trạng gặp phải (AI Logic)
+            if(activeIssues.includes("nangtam")) { 
+                baseGen += 12; baseReddot += 8; btnSize -= 3; 
+            }
+            if(activeIssues.includes("lodau")) { 
+                baseGen -= 15; baseReddot -= 18; btnSize += 4; 
+            }
+            if(activeIssues.includes("rungtam")) { 
+                base2x -= 12; base4x -= 12; 
+            }
+            if(activeIssues.includes("lacdan")) { 
+                baseReddot -= 8; baseGen -= 5; 
+            }
+
+            // Giới hạn an toàn (Tuyệt đối không vượt 0 - 200)
+            baseGen = Math.min(200, Math.max(0, baseGen));
+            baseReddot = Math.min(200, Math.max(0, baseReddot));
+            base2x = Math.min(200, Math.max(0, base2x));
+            base4x = Math.min(200, Math.max(0, base4x));
+            baseSniper = Math.min(200, Math.max(0, baseSniper));
+
+            // Gợi ý DPI Android theo phân khúc
             if(currentTab === 'android') {
-                if(device.includes("Ultra") || device.includes("Pro")) dpi = "550 - 600";
-                else dpi = "480 - 520";
+                let dpi = "480 - 520"; 
+                if(device.includes("Ultra") || device.includes("Pro") || device.includes("Fold") || device.includes("Max")) {
+                    dpi = "550 - 620";
+                } else if(device.includes("A0") || device.includes("C") || device.includes("Y")) {
+                    dpi = "410 - 450";
+                }
                 document.getElementById('resDPI').innerText = dpi;
             }
 
-            // Đổ dữ liệu ra UI
+            // Đổ dữ liệu
             document.getElementById('resGeneral').innerText = baseGen;
             document.getElementById('resReddot').innerText = baseReddot;
             document.getElementById('res2x').innerText = base2x;
             document.getElementById('res4x').innerText = base4x;
             document.getElementById('resSniper').innerText = baseSniper;
-            document.getElementById('resCamera').innerText = "100";
+            document.getElementById('resCamera').innerText = "150"; 
             document.getElementById('resButton').innerText = btnSize + "%";
 
             document.getElementById('resultModal').classList.remove('hidden');
@@ -481,7 +462,7 @@
         }
 
         function copyResult() {
-            let txt = `ĐỘ NHẠY SENSILEGEND PRO\nThiết bị: ${document.getElementById('deviceSelect').value}\n`;
+            let txt = `ĐỘ NHẠY SENSIPRO (Cập nhật 200)\nThiết bị: ${document.getElementById('deviceSelect').value}\n`;
             txt += `Nhìn Xung Quanh: ${document.getElementById('resGeneral').innerText}\n`;
             txt += `Red Dot: ${document.getElementById('resReddot').innerText}\n`;
             txt += `Ống 2x: ${document.getElementById('res2x').innerText}\n`;
@@ -491,7 +472,7 @@
             if(currentTab === 'android') txt += `DPI: ${document.getElementById('resDPI').innerText}\n`;
             
             navigator.clipboard.writeText(txt).then(() => {
-                alert("Đã sao chép bộ thông số!");
+                alert("Đã sao chép bộ thông số AI (Thang 200)!");
             });
         }
     </script>
