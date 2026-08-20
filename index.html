@@ -302,9 +302,9 @@
 
     <!-- Widget thông số hệ thống -->
     <div id="systemWidget" class="drag-widget system-widget" style="top: auto; left: auto; bottom: 90px; left: 20px;">
-        <div class="system-item">🔋 <span id="batteryPercent">--</span>%</div>
-        <div class="system-item">🎮 FPS: <span id="fpsValue">--</span></div>
         <div class="system-item">📶 Ping: <span id="pingValue">Đang đo...</span></div>
+        <div class="system-item">🖥️ Độ phân giải: <span id="resolutionValue">---</span></div>
+        <div class="system-item">🕒 Giờ: <span id="timeValue">---</span></div>
     </div>
 
     <script>
@@ -427,38 +427,6 @@
         });
 
         // ================= CẬP NHẬT THÔNG SỐ HỆ THỐNG =================
-        // Pin
-        if ('getBattery' in navigator) {
-            navigator.getBattery().then(battery => {
-                function updateBattery() {
-                    document.getElementById('batteryPercent').textContent = Math.round(battery.level * 100);
-                }
-                updateBattery();
-                battery.addEventListener('levelchange', updateBattery);
-            }).catch(() => {
-                document.getElementById('batteryPercent').textContent = '100';
-            });
-        } else {
-            document.getElementById('batteryPercent').textContent = '100';
-        }
-
-        // FPS (đo thực tế)
-        let fps = 0;
-        let frameCount = 0;
-        let lastTime = performance.now();
-        function updateFPS() {
-            frameCount++;
-            let now = performance.now();
-            if (now - lastTime >= 1000) {
-                fps = frameCount;
-                frameCount = 0;
-                lastTime = now;
-                document.getElementById('fpsValue').textContent = fps;
-            }
-            requestAnimationFrame(updateFPS);
-        }
-        updateFPS();
-
         // Ping mạng (đo bằng Image pixel)
         function measurePing(callback) {
             const startTime = performance.now();
@@ -488,6 +456,31 @@
         }
         updatePingDisplay();
         setInterval(updatePingDisplay, 5000); // Cập nhật mỗi 5 giây
+
+        // Độ phân giải màn hình
+        function updateResolution() {
+            const el = document.getElementById('resolutionValue');
+            if (el) {
+                el.textContent = window.screen.width + ' x ' + window.screen.height;
+            }
+        }
+        updateResolution();
+        // Cập nhật khi xoay màn hình
+        window.addEventListener('resize', updateResolution);
+
+        // Giờ hiện tại
+        function updateTime() {
+            const el = document.getElementById('timeValue');
+            if (el) {
+                const now = new Date();
+                let hours = now.getHours().toString().padStart(2, '0');
+                let minutes = now.getMinutes().toString().padStart(2, '0');
+                let seconds = now.getSeconds().toString().padStart(2, '0');
+                el.textContent = hours + ':' + minutes + ':' + seconds;
+            }
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
 
         // ================= LOGIC APP =================
         function initApp() {
