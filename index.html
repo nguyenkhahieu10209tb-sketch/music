@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DoNhayChuan PRO - SensiLegend Galaxy</title>
     <style>
+        /* Giữ nguyên CSS như phiên bản trước (bạn có thể copy từ code cũ) */
         :root {
             --bg-color: #060713;
             --primary: #00f2fe;
@@ -137,7 +138,7 @@
         .zalopay-box { text-align: center; background: rgba(155, 81, 224, 0.1); border: 1px solid var(--secondary); padding: 16px; border-radius: 16px; margin-top: 16px; box-shadow: var(--glow-purple); }
         .zalopay-box h3 { color: var(--primary); margin-bottom: 6px; font-size: 15px; text-transform: uppercase; }
 
-        /* ===== WIDGET KÉO THẢ ===== */
+        /* Widget kéo thả */
         .drag-widget {
             position: fixed;
             z-index: 1000;
@@ -219,7 +220,19 @@
         <div class="panel">
             <div class="panel-title">1. Chọn Dòng Máy</div>
             <input type="text" id="searchInput" placeholder="Tìm nhanh (VD: iPhone 15, S24 Ultra...)" onkeyup="filterDevices()">
+            
+            <!-- Dropdown dành cho iOS/iPad -->
             <select id="deviceSelect"></select>
+            
+            <!-- Dropdown dành cho Android (ẩn/hiện tùy tab) -->
+            <div id="androidFilters" class="hidden">
+                <label style="font-size: 12px; color: var(--text-muted);">Chọn hãng:</label>
+                <select id="brandSelect" onchange="onBrandChange()"></select>
+                <label style="font-size: 12px; color: var(--text-muted);">Chọn phân khúc:</label>
+                <select id="segmentSelect" onchange="onSegmentChange()"></select>
+                <select id="androidDeviceSelect"></select>
+            </div>
+
             <p id="keyLockStatus" style="font-size: 12px; color: var(--success); margin-top: 5px; text-align: center; font-weight: 600;"></p>
         </div>
 
@@ -331,6 +344,204 @@
         let selectedGame = 'normal';
         let isMusicPlaying = false;
 
+        // ================= DỮ LIỆU THIẾT BỊ (CẬP NHẬT 2026) =================
+        const iOSDevices = [
+            "iPhone 5s", "iPhone 6", "iPhone 6 Plus", "iPhone 6s", "iPhone 6s Plus", "iPhone SE (2016)",
+            "iPhone 7", "iPhone 7 Plus", "iPhone 8", "iPhone 8 Plus", "iPhone X", "iPhone XR", "iPhone XS", "iPhone XS Max",
+            "iPhone 11", "iPhone SE (2020)", "iPhone SE (2022)",
+            "iPhone 11 Pro", "iPhone 11 Pro Max", "iPhone 12 mini", "iPhone 12", "iPhone 13 mini", "iPhone 13",
+            "iPhone 14", "iPhone 14 Plus", "iPhone 15", "iPhone 15 Plus", "iPhone 16", "iPhone 16 Plus",
+            "iPhone 12 Pro", "iPhone 12 Pro Max", "iPhone 13 Pro", "iPhone 13 Pro Max", "iPhone 14 Pro", "iPhone 14 Pro Max",
+            "iPhone 15 Pro", "iPhone 15 Pro Max", "iPhone 16 Pro", "iPhone 16 Pro Max",
+            "iPhone 17", "iPhone 17 Plus", "iPhone 17 Pro", "iPhone 17 Pro Max"
+        ];
+
+        const iPadDevices = [
+            "iPad Pro M2 (12.9-inch)", "iPad Pro M2 (11-inch)", "iPad Pro M1 (12.9-inch)", "iPad Pro M1 (11-inch)",
+            "iPad Pro (2020) 12.9-inch", "iPad Pro (2020) 11-inch", "iPad Pro (2018) 12.9-inch", "iPad Pro (2018) 11-inch",
+            "iPad Air 5", "iPad Air 4", "iPad Air 3", "iPad Mini 6", "iPad Mini 5", "iPad Mini 4",
+            "iPad Gen 10", "iPad Gen 9", "iPad Gen 8", "iPad Gen 7"
+        ];
+
+        // Android: phân loại theo hãng và phân khúc
+        const androidBrands = {
+            "Samsung": {
+                "Giá rẻ": [
+                    "Galaxy A01", "A02", "A02s", "A03", "A03 Core", "A03s", "A04", "A04e", "A04s", "A05", "A05s", "A06", "A06s",
+                    "A10", "A10e", "A10s", "A11", "A12", "A12 Nacho", "A13", "A13 5G", "A14", "A14 5G", "A15", "A15 5G", "A16", "A16 5G",
+                    "A20", "A20e", "A20s", "A21", "A21s", "A22", "A22 5G", "A23", "A23 5G", "A24", "A25", "A25 5G", "A26", "A26 5G",
+                    "M01", "M01 Core", "M02", "M02s", "M11", "M12", "M13", "M13 5G", "M14", "M14 5G", "M15", "M15 5G", "M16", "M16 5G"
+                ],
+                "Tầm trung": [
+                    "Galaxy A30", "A30s", "A31", "A32", "A32 5G", "A33 5G", "A34 5G", "A35 5G", "A36 5G",
+                    "A50", "A50s", "A51", "A51 5G", "A52", "A52 5G", "A52s 5G", "A53 5G", "A54 5G", "A55 5G", "A56 5G",
+                    "A70", "A70s", "A71", "A71 5G", "A72", "A73 5G", "A80",
+                    "M32", "M32 5G", "M33 5G", "M34 5G", "M35 5G", "M36 5G", "M52 5G", "M53 5G", "M54 5G", "M55 5G", "M56 5G"
+                ],
+                "Cận cao cấp": [
+                    "Galaxy S20 FE", "S21 FE", "S23 FE", "S24 FE"
+                ],
+                "Cao cấp": [
+                    "Galaxy S20", "S20+", "S20 Ultra", "S21", "S21+", "S21 Ultra", "S22", "S22+", "S22 Ultra",
+                    "S23", "S23+", "S23 Ultra", "S24", "S24+", "S24 Ultra", "S25", "S25+", "S25 Ultra",
+                    "Galaxy Z Fold 2", "Fold 3", "Fold 4", "Fold 5", "Fold 6", "Z Flip 3", "Flip 4", "Flip 5", "Flip 6"
+                ]
+            },
+            "Xiaomi": {
+                "Giá rẻ": [
+                    "Redmi 9A", "9AT", "9i", "9C", "10A", "10C", "12C", "13C", "13C 5G", "14C", "14C 5G",
+                    "Redmi 9", "9 Prime", "9T", "10", "10 2022", "11", "12", "13", "13 5G", "14", "14 5G",
+                    "Poco C40", "C50", "C51", "C55", "C65", "C75"
+                ],
+                "Tầm trung": [
+                    "Redmi Note 8", "8 Pro", "9", "9 Pro", "9 Pro Max", "9S", "10", "10 Pro", "10 Pro Max",
+                    "Redmi Note 11", "11 Pro", "11 Pro 5G", "11 Pro+", "12", "12 Pro", "12 Pro 5G", "12 Pro+",
+                    "Redmi Note 13", "13 Pro", "13 Pro 5G", "13 Pro+", "14", "14 Pro", "14 Pro 5G", "14 Pro+",
+                    "Poco M3", "M3 Pro 5G", "M4", "M4 Pro 5G", "M4 Pro 4G", "M5", "M5s", "M6", "M6 Pro", "M6 Pro 5G", "M7", "M7 Pro",
+                    "Poco X3", "X3 NFC", "X3 Pro", "X4 Pro 5G", "X5", "X5 Pro 5G", "X6", "X6 Pro 5G", "X7", "X7 Pro"
+                ],
+                "Cận cao cấp": [
+                    "Redmi K20", "K20 Pro", "K30", "K30 Pro", "K40", "K40 Pro", "K50", "K50 Pro", "K60", "K60 Pro", "K70", "K70 Pro",
+                    "Xiaomi Mi 10T", "10T Pro", "11T", "11T Pro", "12T", "12T Pro", "13T", "13T Pro", "14T", "14T Pro"
+                ],
+                "Cao cấp": [
+                    "Xiaomi Mi 10", "10 Pro", "10 Ultra", "11", "11 Pro", "11 Ultra", "12", "12 Pro", "12 Ultra",
+                    "13", "13 Pro", "13 Ultra", "14", "14 Pro", "14 Ultra", "15", "15 Pro", "15 Ultra",
+                    "Xiaomi Mix 4", "Mix Fold", "Mix Fold 2", "Mix Fold 3", "Mix Fold 4"
+                ]
+            },
+            "OPPO": {
+                "Giá rẻ": [
+                    "Oppo A15", "A15s", "A16", "A16e", "A16k", "A17", "A17k", "A18", "A38", "A58", "A58x", "A78", "A78 5G"
+                ],
+                "Tầm trung": [
+                    "Oppo F19", "F19 Pro", "F19 Pro+", "F21 Pro", "F21 Pro 5G", "F23 5G", "F25 Pro 5G", "F27 Pro 5G",
+                    "Oppo Reno 7", "7 Pro", "7 Z", "8", "8 Pro", "8 Pro+", "9", "9 Pro", "9 Pro+",
+                    "10", "10 Pro", "10 Pro+", "11", "11 Pro", "12", "12 Pro"
+                ],
+                "Cao cấp": [
+                    "Oppo Find X2", "X2 Pro", "X3", "X3 Pro", "X5", "X5 Pro", "X6", "X6 Pro", "X7", "X7 Ultra", "X8", "X8 Pro",
+                    "Oppo Find N", "N2", "N2 Flip", "N3", "N3 Flip"
+                ]
+            },
+            "Vivo": {
+                "Giá rẻ": [
+                    "Vivo Y01", "Y02", "Y02t", "Y03", "Y11", "Y12", "Y12s", "Y15", "Y16", "Y17",
+                    "Y20", "Y20i", "Y20s", "Y21", "Y21s", "Y22", "Y22s", "Y27", "Y36", "Y38"
+                ],
+                "Tầm trung": [
+                    "Vivo V21", "V21e", "V21 5G", "V23", "V23e", "V23 Pro", "V25", "V25 Pro", "V27", "V27 Pro",
+                    "V29", "V29 Pro", "V30", "V30 Pro", "V31", "V31 Pro",
+                    "Vivo T1", "T1 Pro", "T2", "T2 Pro", "T3", "T3 Pro", "T4", "T4 Pro"
+                ],
+                "Cao cấp": [
+                    "Vivo X60", "X60 Pro", "X60 Pro+", "X70", "X70 Pro", "X70 Pro+", "X80", "X80 Pro",
+                    "X90", "X90 Pro", "X90 Pro+", "X100", "X100 Pro", "X100 Pro+", "X200", "X200 Pro",
+                    "Vivo X Fold", "X Fold+", "X Fold 2", "X Fold 3"
+                ]
+            },
+            "Realme": {
+                "Giá rẻ": [
+                    "Realme C11", "C11 2021", "C12", "C15", "C17", "C21", "C21Y", "C25", "C25Y",
+                    "C33", "C33 2023", "C35", "C51", "C53", "C55", "C65", "C67",
+                    "Realme Narzo 50A", "50i", "60A", "70A"
+                ],
+                "Tầm trung": [
+                    "Realme 8", "8i", "8 Pro", "9", "9i", "9 Pro", "9 Pro+", "10", "10 Pro", "10 Pro+",
+                    "11", "11 Pro", "11 Pro+", "12", "12 Pro", "12 Pro+", "13", "13 Pro", "13 Pro+", "14", "14 Pro",
+                    "Realme Narzo 50 Pro", "60 Pro", "70 Pro"
+                ],
+                "Cận cao cấp": [
+                    "Realme GT Neo", "GT Neo 2", "GT Neo 3", "GT Neo 3T", "GT Neo 5", "GT Neo 5 SE", "GT Neo 6",
+                    "GT 2", "GT 3", "GT 5", "GT 6"
+                ],
+                "Cao cấp": [
+                    "Realme GT 2 Pro", "GT 5 Pro", "GT 6 Pro", "GT 7 Pro"
+                ]
+            },
+            "ASUS ROG Phone": {
+                "Cao cấp": [
+                    "ROG Phone", "2", "3", "5", "5s", "5 Ultimate", "6", "6D", "6D Ultimate", "6 Pro",
+                    "7", "7 Ultimate", "8", "8 Pro", "9", "9 Pro"
+                ]
+            },
+            "Nubia Red Magic": {
+                "Cao cấp": [
+                    "Red Magic 3", "3S", "5G", "5S", "6", "6R", "6 Pro", "6S Pro", "7", "7 Pro", "7S", "7S Pro",
+                    "8", "8S", "8 Pro", "8S Pro", "9", "9 Pro", "9S Pro", "10", "10 Pro"
+                ]
+            },
+            "Black Shark": {
+                "Cao cấp": [
+                    "Black Shark 1", "2", "2 Pro", "3", "3 Pro", "3S", "4", "4 Pro", "4S", "4S Pro", "5", "5 Pro", "5 RS", "6", "6 Pro"
+                ]
+            },
+            "Lenovo Legion": {
+                "Cao cấp": [
+                    "Legion Phone Duel", "Duel 2", "Y70", "Y90"
+                ]
+            },
+            "Google Pixel": {
+                "Giá rẻ": [
+                    "Pixel 2", "2 XL", "3", "3 XL", "3a", "3a XL", "4", "4 XL", "4a", "4a 5G", "5", "5a"
+                ],
+                "Tầm trung": [
+                    "Pixel 6", "6 Pro", "6a", "7", "7 Pro", "7a", "8", "8 Pro", "8a", "9", "9 Pro", "9 Pro XL", "9 Pro Fold"
+                ]
+            },
+            "OnePlus": {
+                "Giá rẻ": [
+                    "OnePlus One", "2", "3", "3T", "5", "5T", "6", "6T", "7", "7 Pro", "7T", "7T Pro",
+                    "8", "8 Pro", "8T", "9", "9 Pro", "9R", "9RT", "10 Pro", "10T", "11", "11R", "12", "12R", "13", "13R", "Open"
+                ]
+            },
+            "Sony Xperia": {
+                "Tầm trung": [
+                    "Xperia XZ", "XZ1", "XZ2", "XZ3", "1", "1 II", "1 III", "1 IV", "1 V", "1 VI",
+                    "5", "5 II", "5 III", "5 IV", "5 V", "10", "10 Plus", "10 II", "10 III", "10 IV", "10 V", "10 VI"
+                ]
+            },
+            "Motorola": {
+                "Giá rẻ": [
+                    "Moto E4", "E5", "E6", "E7", "E13", "E14", "E22", "E23", "E32", "E42", "E53", "E54", "E64",
+                    "Moto G4", "G5", "G6", "G7", "G8", "G9", "G10", "G11", "G12", "G13", "G14",
+                    "G20", "G21", "G22", "G23", "G24", "G30", "G31", "G32", "G34",
+                    "G40", "G41", "G42", "G50", "G51", "G52", "G53", "G54", "G60", "G62", "G71", "G72", "G73", "G82", "G84", "G100"
+                ],
+                "Tầm trung": [
+                    "Moto Edge", "Edge+", "Edge 20", "Edge 20 Pro", "Edge 20 Lite", "Edge 30", "Edge 30 Pro",
+                    "Edge 30 Fusion", "Edge 30 Neo", "Edge 40", "Edge 40 Pro", "Edge 40 Neo", "Edge 50", "Edge 50 Pro", "Edge 50 Ultra", "Edge 50 Neo",
+                    "Razr 2019", "Razr 5G", "Razr 2022", "Razr 40", "Razr 40 Ultra", "Razr 50", "Razr 50 Ultra"
+                ]
+            },
+            "Honor": {
+                "Giá rẻ": [
+                    "Honor X5", "X6", "X7", "X8", "X9", "X10", "X20", "X30", "X40", "X50", "X60"
+                ],
+                "Tầm trung": [
+                    "Honor 8", "9", "10", "20", "20 Pro", "30", "30 Pro", "50", "50 Pro", "60", "60 Pro", "70", "70 Pro",
+                    "80", "80 Pro", "90", "90 Pro", "100", "100 Pro"
+                ],
+                "Cao cấp": [
+                    "Honor Magic", "Magic 2", "Magic 3", "Magic 3 Pro", "Magic 4", "Magic 4 Pro", "Magic 5", "Magic 5 Pro",
+                    "Magic 6", "Magic 6 Pro", "Magic 7", "Magic 7 Pro", "Magic V", "Magic Vs", "Magic V2", "Magic V3"
+                ]
+            },
+            "Huawei": {
+                "Giá rẻ": [
+                    "Huawei Nova", "Nova Plus", "Nova 2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"
+                ],
+                "Tầm trung": [
+                    "Huawei P9", "P10", "P20", "P20 Pro", "P30", "P30 Pro", "P40", "P40 Pro",
+                    "P50", "P50 Pro", "P60", "P60 Pro", "Pura 70", "Pura 70 Pro"
+                ],
+                "Cao cấp": [
+                    "Huawei Mate 9", "10", "20", "20 Pro", "30", "30 Pro", "40", "40 Pro", "50", "50 Pro",
+                    "60", "60 Pro", "Mate Xs", "X", "Xs 2", "X3", "X5"
+                ]
+            }
+        };
+
         // ================= HÀM KÉO THẢ WIDGET =================
         function makeDraggable(el) {
             let startX, startY, startLeft, startTop;
@@ -341,7 +552,6 @@
                 e.preventDefault();
                 startX = e.clientX;
                 startY = e.clientY;
-                // Lấy vị trí hiện tại từ style
                 startLeft = parseInt(el.style.left) || 0;
                 startTop = parseInt(el.style.top) || 0;
                 isDragging = true;
@@ -356,7 +566,6 @@
                 if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
                 el.style.left = (startLeft + dx) + 'px';
                 el.style.top = (startTop + dy) + 'px';
-                // Đảm bảo không bị trôi ra ngoài màn hình
                 let maxLeft = window.innerWidth - el.offsetWidth;
                 let maxTop = window.innerHeight - el.offsetHeight;
                 if (parseInt(el.style.left) < 0) el.style.left = '0px';
@@ -368,18 +577,14 @@
             el.addEventListener('pointerup', (e) => {
                 if (isDragging) {
                     isDragging = false;
-                    if (!moved) {
-                        handleWidgetClick(el);
-                    }
+                    if (!moved) handleWidgetClick(el);
                     el.releasePointerCapture(e.pointerId);
                 }
             });
         }
 
         function handleWidgetClick(el) {
-            if (el.id === 'musicToggle') {
-                toggleMusic();
-            }
+            if (el.id === 'musicToggle') toggleMusic();
         }
 
         // ================= ĐIỀU KHIỂN NHẠC =================
@@ -394,9 +599,7 @@
                 music.play().then(() => {
                     icon.textContent = '🔊';
                     isMusicPlaying = true;
-                }).catch(e => {
-                    alert("Không thể phát nhạc do trình duyệt chặn.");
-                });
+                }).catch(() => alert("Không thể phát nhạc do trình duyệt chặn."));
             }
         }
 
@@ -404,18 +607,15 @@
         function initWidgetsPosition() {
             const music = document.getElementById('musicToggle');
             const system = document.getElementById('systemWidget');
-            // Đặt vị trí ban đầu: bên trái dưới, cách dưới 20px
             music.style.left = '20px';
             music.style.top = (window.innerHeight - music.offsetHeight - 20) + 'px';
             system.style.left = '20px';
             system.style.top = (window.innerHeight - system.offsetHeight - 90) + 'px';
-            // Kích hoạt kéo thả
             makeDraggable(music);
             makeDraggable(system);
         }
         window.addEventListener('load', initWidgetsPosition);
         window.addEventListener('resize', () => {
-            // Giới hạn lại vị trí khi resize
             const music = document.getElementById('musicToggle');
             const system = document.getElementById('systemWidget');
             [music, system].forEach(el => {
@@ -427,64 +627,37 @@
         });
 
         // ================= CẬP NHẬT THÔNG SỐ HỆ THỐNG =================
-        // Ping mạng (đo bằng Image pixel)
         function measurePing(callback) {
             const startTime = performance.now();
             const img = new Image();
             const pingUrl = 'https://www.google.com/images/phd/px.gif?timestamp=' + Date.now();
-            img.onload = function() {
-                const endTime = performance.now();
-                const ping = Math.round(endTime - startTime);
-                callback(ping);
-            };
-            img.onerror = function() {
-                const endTime = performance.now();
-                const ping = Math.round(endTime - startTime);
-                callback(ping);
-            };
+            img.onload = function() { callback(Math.round(performance.now() - startTime)); };
+            img.onerror = function() { callback(Math.round(performance.now() - startTime)); };
             img.src = pingUrl;
         }
-
         function updatePingDisplay() {
             const pingElement = document.getElementById('pingValue');
-            if (pingElement) {
-                pingElement.textContent = 'Đang đo...';
-                measurePing((ping) => {
-                    pingElement.textContent = ping + ' ms';
-                });
-            }
+            pingElement.textContent = 'Đang đo...';
+            measurePing((ping) => { pingElement.textContent = ping + ' ms'; });
         }
         updatePingDisplay();
-        setInterval(updatePingDisplay, 5000); // Cập nhật mỗi 5 giây
+        setInterval(updatePingDisplay, 5000);
 
-        // Độ phân giải màn hình
         function updateResolution() {
-            const el = document.getElementById('resolutionValue');
-            if (el) {
-                el.textContent = window.screen.width + ' x ' + window.screen.height;
-            }
+            document.getElementById('resolutionValue').textContent = window.screen.width + ' x ' + window.screen.height;
         }
         updateResolution();
-        // Cập nhật khi xoay màn hình
         window.addEventListener('resize', updateResolution);
 
-        // Giờ hiện tại
         function updateTime() {
-            const el = document.getElementById('timeValue');
-            if (el) {
-                const now = new Date();
-                let hours = now.getHours().toString().padStart(2, '0');
-                let minutes = now.getMinutes().toString().padStart(2, '0');
-                let seconds = now.getSeconds().toString().padStart(2, '0');
-                el.textContent = hours + ':' + minutes + ':' + seconds;
-            }
+            const now = new Date();
+            document.getElementById('timeValue').textContent = now.toLocaleTimeString();
         }
         updateTime();
         setInterval(updateTime, 1000);
 
         // ================= LOGIC APP =================
         function initApp() {
-            // Luôn hiện lockScreen, không lưu key
             document.getElementById('touchScreen').classList.add('hidden');
             document.getElementById('lockScreen').classList.remove('hidden');
             document.getElementById('keyInput').value = '';
@@ -503,44 +676,159 @@
             document.getElementById('lockScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
             document.getElementById('keyLockStatus').innerText = "Trạng thái: VIP PRO (Đa Thiết Bị)";
-            loadDevices('ios');
+            switchTab('ios', document.querySelector('.tab-btn.active'));
         }
 
         function switchTab(tab, el) {
             currentTab = tab;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             el.classList.add('active');
-            loadDevices(tab);
+            const deviceSelect = document.getElementById('deviceSelect');
+            const androidFilters = document.getElementById('androidFilters');
+            const androidDeviceSelect = document.getElementById('androidDeviceSelect');
+            
+            if (tab === 'android') {
+                deviceSelect.classList.add('hidden');
+                androidFilters.classList.remove('hidden');
+                androidDeviceSelect.classList.remove('hidden');
+                loadAndroidFilters();
+            } else {
+                deviceSelect.classList.remove('hidden');
+                androidFilters.classList.add('hidden');
+                androidDeviceSelect.classList.add('hidden');
+                loadDevices(tab);
+            }
+            document.getElementById('androidDPI').classList.toggle('hidden', tab !== 'android');
         }
-
-        const db = {
-            ios: ["iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15", "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 13 Pro Max", "iPhone 13", "iPhone 12 Pro Max", "iPhone 12", "iPhone 11 Pro Max", "iPhone 11", "iPhone XS Max", "iPhone 8 Plus"],
-            ipad: ["iPad Pro M2 (12.9-inch)", "iPad Pro M1 (11-inch)", "iPad Air 5", "iPad Mini 6", "iPad Gen 10"],
-            android: ["Samsung Galaxy S24 Ultra", "Samsung Galaxy S23 Ultra", "Xiaomi 14 Ultra", "POCO X6 Pro", "Redmi Note 13 Pro+", "Oppo Find X7 Ultra", "ROG Phone 8 Pro", "Red Magic 9 Pro"]
-        };
 
         function loadDevices(tab) {
             const select = document.getElementById('deviceSelect');
             select.innerHTML = '';
-            db[tab].forEach(device => {
+            const devices = tab === 'ios' ? iOSDevices : iPadDevices;
+            devices.forEach(device => {
                 let opt = document.createElement('option');
-                opt.value = device; opt.innerHTML = device;
+                opt.value = device; opt.textContent = device;
                 select.appendChild(opt);
             });
-            document.getElementById('androidDPI').classList.toggle('hidden', tab !== 'android');
+        }
+
+        function loadAndroidFilters() {
+            const brandSelect = document.getElementById('brandSelect');
+            const segmentSelect = document.getElementById('segmentSelect');
+            const deviceSelect = document.getElementById('androidDeviceSelect');
+            
+            // Lấy danh sách hãng
+            brandSelect.innerHTML = '<option value="">Chọn hãng...</option>';
+            Object.keys(androidBrands).forEach(brand => {
+                let opt = document.createElement('option');
+                opt.value = brand; opt.textContent = brand;
+                brandSelect.appendChild(opt);
+            });
+            
+            segmentSelect.innerHTML = '<option value="">Chọn phân khúc...</option>';
+            segmentSelect.disabled = true;
+            deviceSelect.innerHTML = '<option value="">Chọn máy...</option>';
+            deviceSelect.disabled = true;
+        }
+
+        function onBrandChange() {
+            const brand = document.getElementById('brandSelect').value;
+            const segmentSelect = document.getElementById('segmentSelect');
+            const deviceSelect = document.getElementById('androidDeviceSelect');
+            
+            segmentSelect.innerHTML = '<option value="">Chọn phân khúc...</option>';
+            deviceSelect.innerHTML = '<option value="">Chọn máy...</option>';
+            deviceSelect.disabled = true;
+            
+            if (brand) {
+                segmentSelect.disabled = false;
+                const segments = Object.keys(androidBrands[brand]);
+                segments.forEach(seg => {
+                    let opt = document.createElement('option');
+                    opt.value = seg; opt.textContent = seg;
+                    segmentSelect.appendChild(opt);
+                });
+            } else {
+                segmentSelect.disabled = true;
+            }
+        }
+
+        function onSegmentChange() {
+            const brand = document.getElementById('brandSelect').value;
+            const segment = document.getElementById('segmentSelect').value;
+            const deviceSelect = document.getElementById('androidDeviceSelect');
+            
+            deviceSelect.innerHTML = '<option value="">Chọn máy...</option>';
+            
+            if (brand && segment) {
+                deviceSelect.disabled = false;
+                const devices = androidBrands[brand][segment];
+                devices.forEach(device => {
+                    let opt = document.createElement('option');
+                    opt.value = device; opt.textContent = device;
+                    deviceSelect.appendChild(opt);
+                });
+            } else {
+                deviceSelect.disabled = true;
+            }
         }
 
         function filterDevices() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            const select = document.getElementById('deviceSelect');
-            select.innerHTML = '';
-            db[currentTab].forEach(device => {
-                if(device.toLowerCase().includes(term)) {
-                    let opt = document.createElement('option');
-                    opt.value = device; opt.innerHTML = device;
-                    select.appendChild(opt);
+            if (!term) {
+                // Nếu ô tìm kiếm trống, tải lại danh sách đầy đủ
+                if (currentTab === 'android') {
+                    onBrandChange();
+                    onSegmentChange();
+                } else {
+                    loadDevices(currentTab);
                 }
-            });
+                return;
+            }
+            
+            if (currentTab === 'android') {
+                // Tìm kiếm trong toàn bộ Android, bất kể hãng/phân khúc
+                const results = [];
+                for (const brand in androidBrands) {
+                    for (const segment in androidBrands[brand]) {
+                        androidBrands[brand][segment].forEach(device => {
+                            if (device.toLowerCase().includes(term)) {
+                                results.push(device);
+                            }
+                        });
+                    }
+                }
+                const deviceSelect = document.getElementById('androidDeviceSelect');
+                deviceSelect.innerHTML = '';
+                if (results.length > 0) {
+                    results.forEach(device => {
+                        let opt = document.createElement('option');
+                        opt.value = device; opt.textContent = device;
+                        deviceSelect.appendChild(opt);
+                    });
+                    deviceSelect.disabled = false;
+                } else {
+                    deviceSelect.innerHTML = '<option value="">Không tìm thấy</option>';
+                    deviceSelect.disabled = true;
+                }
+                // Ẩn các dropdown hãng/phân khúc khi đang tìm kiếm? Hoặc giữ nguyên nhưng có thể làm rối.
+                // Tốt nhất: nếu đang tìm kiếm, ta vẫn giữ hãng/phân khúc nhưng cập nhật danh sách máy theo kết quả tìm kiếm.
+                // Tuy nhiên, cần đảm bảo người dùng có thể chọn máy từ kết quả.
+            } else {
+                const select = document.getElementById('deviceSelect');
+                const devices = currentTab === 'ios' ? iOSDevices : iPadDevices;
+                select.innerHTML = '';
+                const filtered = devices.filter(device => device.toLowerCase().includes(term));
+                if (filtered.length > 0) {
+                    filtered.forEach(device => {
+                        let opt = document.createElement('option');
+                        opt.value = device; opt.textContent = device;
+                        select.appendChild(opt);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">Không tìm thấy</option>';
+                }
+            }
         }
 
         function selectFilter(el, type) {
@@ -562,7 +850,12 @@
         }
 
         function startGeneration() {
-            const device = document.getElementById('deviceSelect').value;
+            let device;
+            if (currentTab === 'android') {
+                device = document.getElementById('androidDeviceSelect').value;
+            } else {
+                device = document.getElementById('deviceSelect').value;
+            }
             if(!device) return alert("Vui lòng chọn dòng máy!");
 
             document.getElementById('progressModal').classList.remove('hidden');
