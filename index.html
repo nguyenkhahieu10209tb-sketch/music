@@ -136,6 +136,47 @@
 
         .zalopay-box { text-align: center; background: rgba(155, 81, 224, 0.1); border: 1px solid var(--secondary); padding: 16px; border-radius: 16px; margin-top: 16px; box-shadow: var(--glow-purple); }
         .zalopay-box h3 { color: var(--primary); margin-bottom: 6px; font-size: 15px; text-transform: uppercase; }
+
+        /* ===== WIDGET KÉO THẢ ===== */
+        .drag-widget {
+            position: fixed;
+            z-index: 1000;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            transition: transform 0.1s;
+        }
+        .drag-widget:active { cursor: grabbing; }
+
+        .music-widget {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(15, 12, 41, 0.85);
+            border: 2px solid var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .system-widget {
+            background: rgba(15, 12, 41, 0.85);
+            border: 1px solid var(--secondary);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: white;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            box-shadow: 0 4px 15px rgba(155, 81, 224, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .system-item { white-space: nowrap; }
     </style>
 </head>
 <body>
@@ -145,12 +186,15 @@
     <div class="shooting-star star-1"></div>
     <div class="shooting-star star-2"></div>
     <div class="shooting-star star-3"></div>
+    <div id="starsContainer"></div>
 
+    <!-- Touch Screen -->
     <div id="touchScreen" class="fullscreen-overlay">
         <div class="touch-text" onclick="initApp()">✦ CHẠM ĐỂ KÍCH HOẠT SENSI GALAXY ✦</div>
         <p style="color: var(--text-muted); margin-top: 15px; font-size: 12px; letter-spacing: 1px;">Môi trường tối ưu sẵn sàng...</p>
     </div>
 
+    <!-- Lock Screen -->
     <div id="lockScreen" class="fullscreen-overlay hidden">
         <div class="container" style="width: 100%;">
             <h1 class="logo">SENSILegend</h1>
@@ -162,6 +206,7 @@
         </div>
     </div>
 
+    <!-- Main App -->
     <div id="mainApp" class="container hidden">
         <h1 class="logo">DoNhayChuan PRO</h1>
         
@@ -221,12 +266,14 @@
         </div>
     </div>
 
+    <!-- Modal Tiến trình -->
     <div id="progressModal" class="hidden">
         <div class="progress-circle"></div>
         <div id="progressText" style="color: var(--primary); font-weight: 800; font-size: 20px;">0%</div>
         <div id="progressDesc" style="color: var(--text-muted); font-size: 13px; margin-top: 8px;">AI đang trích xuất dữ liệu...</div>
     </div>
 
+    <!-- Modal Kết quả -->
     <div id="resultModal" class="fullscreen-overlay hidden" style="background: rgba(6, 7, 19, 0.96); padding: 20px;">
         <div class="container" style="width: 100%;">
             <div class="panel" style="border-color: var(--primary);">
@@ -248,33 +295,211 @@
         </div>
     </div>
 
+    <!-- Widget nút nhạc -->
+    <div id="musicToggle" class="drag-widget music-widget" style="top: auto; left: auto; bottom: 20px; left: 20px;">
+        <span id="musicIcon">🔇</span>
+    </div>
+
+    <!-- Widget thông số hệ thống -->
+    <div id="systemWidget" class="drag-widget system-widget" style="top: auto; left: auto; bottom: 90px; left: 20px;">
+        <div class="system-item">🔋 <span id="batteryPercent">--</span>%</div>
+        <div class="system-item">🎮 FPS: <span id="fpsValue">--</span></div>
+        <div class="system-item">📶 Ping: <span id="pingValue">Đang đo...</span></div>
+    </div>
+
     <script>
+        // ================= KHỞI TẠO SAO =================
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for(let i = 0; i < 60; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(star);
+            }
+        }
+        createStars();
+
+        // ================= BIẾN TOÀN CỤC =================
         let currentTab = 'ios';
         let activeIssues = [];
-        let selectedGame = 'normal'; // 'normal' hoặc 'max'
+        let selectedGame = 'normal';
+        let isMusicPlaying = false;
 
-        const db = {
-            ios: ["iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15", "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 13 Pro Max", "iPhone 13", "iPhone 12 Pro Max", "iPhone 12", "iPhone 11 Pro Max", "iPhone 11", "iPhone XS Max", "iPhone 8 Plus"],
-            ipad: ["iPad Pro M2 (12.9-inch)", "iPad Pro M1 (11-inch)", "iPad Air 5", "iPad Mini 6", "iPad Gen 10"],
-            android: ["Samsung Galaxy S24 Ultra", "Samsung Galaxy S23 Ultra", "Xiaomi 14 Ultra", "POCO X6 Pro", "Redmi Note 13 Pro+", "Oppo Find X7 Ultra", "ROG Phone 8 Pro", "Red Magic 9 Pro"]
-        };
+        // ================= HÀM KÉO THẢ WIDGET =================
+        function makeDraggable(el) {
+            let startX, startY, startLeft, startTop;
+            let isDragging = false;
+            let moved = false;
 
-        function initApp() {
-            // Phát nhạc nền (nếu trình duyệt cho phép)
-            document.getElementById('bgMusic').play().catch(e => console.log("Audio blocked."));
-            document.getElementById('touchScreen').classList.add('hidden');
-            let savedKey = localStorage.getItem('userKey');
-            if(savedKey === 'bohieudaycon09' || savedKey === 'hieudeptrai009') {
-                openMainApp();
-            } else {
-                document.getElementById('lockScreen').classList.remove('hidden');
+            el.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                startX = e.clientX;
+                startY = e.clientY;
+                // Lấy vị trí hiện tại từ style
+                startLeft = parseInt(el.style.left) || 0;
+                startTop = parseInt(el.style.top) || 0;
+                isDragging = true;
+                moved = false;
+                el.setPointerCapture(e.pointerId);
+            });
+
+            el.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                let dx = e.clientX - startX;
+                let dy = e.clientY - startY;
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) moved = true;
+                el.style.left = (startLeft + dx) + 'px';
+                el.style.top = (startTop + dy) + 'px';
+                // Đảm bảo không bị trôi ra ngoài màn hình
+                let maxLeft = window.innerWidth - el.offsetWidth;
+                let maxTop = window.innerHeight - el.offsetHeight;
+                if (parseInt(el.style.left) < 0) el.style.left = '0px';
+                if (parseInt(el.style.left) > maxLeft) el.style.left = maxLeft + 'px';
+                if (parseInt(el.style.top) < 0) el.style.top = '0px';
+                if (parseInt(el.style.top) > maxTop) el.style.top = maxTop + 'px';
+            });
+
+            el.addEventListener('pointerup', (e) => {
+                if (isDragging) {
+                    isDragging = false;
+                    if (!moved) {
+                        handleWidgetClick(el);
+                    }
+                    el.releasePointerCapture(e.pointerId);
+                }
+            });
+        }
+
+        function handleWidgetClick(el) {
+            if (el.id === 'musicToggle') {
+                toggleMusic();
             }
+        }
+
+        // ================= ĐIỀU KHIỂN NHẠC =================
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const icon = document.getElementById('musicIcon');
+            if (isMusicPlaying) {
+                music.pause();
+                icon.textContent = '🔇';
+                isMusicPlaying = false;
+            } else {
+                music.play().then(() => {
+                    icon.textContent = '🔊';
+                    isMusicPlaying = true;
+                }).catch(e => {
+                    alert("Không thể phát nhạc do trình duyệt chặn.");
+                });
+            }
+        }
+
+        // ================= KHỞI TẠO VỊ TRÍ WIDGET =================
+        function initWidgetsPosition() {
+            const music = document.getElementById('musicToggle');
+            const system = document.getElementById('systemWidget');
+            // Đặt vị trí ban đầu: bên trái dưới, cách dưới 20px
+            music.style.left = '20px';
+            music.style.top = (window.innerHeight - music.offsetHeight - 20) + 'px';
+            system.style.left = '20px';
+            system.style.top = (window.innerHeight - system.offsetHeight - 90) + 'px';
+            // Kích hoạt kéo thả
+            makeDraggable(music);
+            makeDraggable(system);
+        }
+        window.addEventListener('load', initWidgetsPosition);
+        window.addEventListener('resize', () => {
+            // Giới hạn lại vị trí khi resize
+            const music = document.getElementById('musicToggle');
+            const system = document.getElementById('systemWidget');
+            [music, system].forEach(el => {
+                let maxLeft = window.innerWidth - el.offsetWidth;
+                let maxTop = window.innerHeight - el.offsetHeight;
+                if (parseInt(el.style.left) > maxLeft) el.style.left = maxLeft + 'px';
+                if (parseInt(el.style.top) > maxTop) el.style.top = maxTop + 'px';
+            });
+        });
+
+        // ================= CẬP NHẬT THÔNG SỐ HỆ THỐNG =================
+        // Pin
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(battery => {
+                function updateBattery() {
+                    document.getElementById('batteryPercent').textContent = Math.round(battery.level * 100);
+                }
+                updateBattery();
+                battery.addEventListener('levelchange', updateBattery);
+            }).catch(() => {
+                document.getElementById('batteryPercent').textContent = '100';
+            });
+        } else {
+            document.getElementById('batteryPercent').textContent = '100';
+        }
+
+        // FPS (đo thực tế)
+        let fps = 0;
+        let frameCount = 0;
+        let lastTime = performance.now();
+        function updateFPS() {
+            frameCount++;
+            let now = performance.now();
+            if (now - lastTime >= 1000) {
+                fps = frameCount;
+                frameCount = 0;
+                lastTime = now;
+                document.getElementById('fpsValue').textContent = fps;
+            }
+            requestAnimationFrame(updateFPS);
+        }
+        updateFPS();
+
+        // Ping mạng (đo bằng Image pixel)
+        function measurePing(callback) {
+            const startTime = performance.now();
+            const img = new Image();
+            const pingUrl = 'https://www.google.com/images/phd/px.gif?timestamp=' + Date.now();
+            img.onload = function() {
+                const endTime = performance.now();
+                const ping = Math.round(endTime - startTime);
+                callback(ping);
+            };
+            img.onerror = function() {
+                const endTime = performance.now();
+                const ping = Math.round(endTime - startTime);
+                callback(ping);
+            };
+            img.src = pingUrl;
+        }
+
+        function updatePingDisplay() {
+            const pingElement = document.getElementById('pingValue');
+            if (pingElement) {
+                pingElement.textContent = 'Đang đo...';
+                measurePing((ping) => {
+                    pingElement.textContent = ping + ' ms';
+                });
+            }
+        }
+        updatePingDisplay();
+        setInterval(updatePingDisplay, 5000); // Cập nhật mỗi 5 giây
+
+        // ================= LOGIC APP =================
+        function initApp() {
+            // Luôn hiện lockScreen, không lưu key
+            document.getElementById('touchScreen').classList.add('hidden');
+            document.getElementById('lockScreen').classList.remove('hidden');
+            document.getElementById('keyInput').value = '';
         }
 
         function checkKey() {
             const key = document.getElementById('keyInput').value.trim();
             if(key === 'bohieudaycon09' || key === 'hieudeptrai009') {
-                localStorage.setItem('userKey', key);
                 openMainApp();
             } else {
                 alert("Key kích hoạt không hợp lệ!");
@@ -294,6 +519,12 @@
             el.classList.add('active');
             loadDevices(tab);
         }
+
+        const db = {
+            ios: ["iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15", "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 13 Pro Max", "iPhone 13", "iPhone 12 Pro Max", "iPhone 12", "iPhone 11 Pro Max", "iPhone 11", "iPhone XS Max", "iPhone 8 Plus"],
+            ipad: ["iPad Pro M2 (12.9-inch)", "iPad Pro M1 (11-inch)", "iPad Air 5", "iPad Mini 6", "iPad Gen 10"],
+            android: ["Samsung Galaxy S24 Ultra", "Samsung Galaxy S23 Ultra", "Xiaomi 14 Ultra", "POCO X6 Pro", "Redmi Note 13 Pro+", "Oppo Find X7 Ultra", "ROG Phone 8 Pro", "Red Magic 9 Pro"]
+        };
 
         function loadDevices(tab) {
             const select = document.getElementById('deviceSelect');
@@ -413,7 +644,6 @@
                     setTimeout(() => {
                         document.getElementById('progressModal').classList.add('hidden');
                         
-                        // Mở Free Fire hoặc Free Fire MAX qua URL Scheme / Deep Link
                         if(selectedGame === 'max') {
                             window.location.href = "freefiremax://";
                             setTimeout(() => { window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefiremax"; }, 1500);
