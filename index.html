@@ -38,7 +38,6 @@
         .star-1 { left: 30%; animation-delay: 0s; }
         .star-2 { left: 70%; animation-delay: 1.8s; }
         .star-3 { left: 50%; animation-delay: 3.2s; }
-
         @keyframes meteor {
             0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; width: 120px; }
             30% { transform: translateX(-400px) translateY(400px) rotate(-35deg); opacity: 0; width: 0px; }
@@ -68,12 +67,12 @@
             margin-bottom: 22px; text-shadow: var(--glow-cyan);
         }
 
-        input[type="text"], input[type="password"], select {
+        input[type="text"], input[type="password"] {
             width: 100%; padding: 14px; border-radius: 12px;
             border: 1px solid rgba(155, 81, 224, 0.4); background: rgba(6, 7, 19, 0.7);
             color: #fff; margin-bottom: 12px; font-size: 14px; outline: none; transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: var(--glow-cyan); }
+        input:focus { border-color: var(--primary); box-shadow: var(--glow-cyan); }
 
         .btn {
             width: 100%; padding: 15px; border: none; border-radius: 14px;
@@ -119,9 +118,7 @@
 
         /* Loading tên lửa */
         #rocketLoadingModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(6,7,19,0.92); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        .rocket-spinner {
-            width: 150px; height: 150px; position: relative; margin-bottom: 30px;
-        }
+        .rocket-spinner { width: 150px; height: 150px; position: relative; margin-bottom: 30px; }
         .rocket-circle {
             width: 150px; height: 150px; border-radius: 50%;
             border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-right-color: var(--secondary);
@@ -244,49 +241,49 @@
             <div class="toggle-row">
                 <span>Fix rung</span>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="status-text" id="status-fixrung">ON</span>
+                    <span class="status-text" id="status-fixrung">Đã Bật</span>
                     <label class="switch"><input type="checkbox" checked onchange="toggleSystem('fixrung', this)"><span class="slider"></span></label>
                 </div>
             </div>
             <div class="toggle-row">
                 <span>Giảm lố</span>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="status-text" id="status-giamlo">ON</span>
+                    <span class="status-text" id="status-giamlo">Đã Bật</span>
                     <label class="switch"><input type="checkbox" checked onchange="toggleSystem('giamlo', this)"><span class="slider"></span></label>
                 </div>
             </div>
             <div class="toggle-row">
                 <span>Nhẹ tâm</span>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="status-text" id="status-nhetam">ON</span>
+                    <span class="status-text" id="status-nhetam">Đã Bật</span>
                     <label class="switch"><input type="checkbox" checked onchange="toggleSystem('nhetam', this)"><span class="slider"></span></label>
                 </div>
             </div>
             <div class="toggle-row">
                 <span>Đầm tâm <span class="badge-pro">PRO</span></span>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="status-text" id="status-damtam">ON</span>
+                    <span class="status-text" id="status-damtam">Đã Bật</span>
                     <label class="switch"><input type="checkbox" checked onchange="toggleSystem('damtam', this)"><span class="slider"></span></label>
                 </div>
             </div>
             <div class="toggle-row">
                 <span>Tăng FPS Max <span class="badge-pro">PRO</span></span>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="status-text" id="status-fps">ON</span>
+                    <span class="status-text" id="status-fps">Đã Bật</span>
                     <label class="switch"><input type="checkbox" checked onchange="toggleSystem('fps', this)"><span class="slider"></span></label>
                 </div>
             </div>
             <div class="toggle-row">
                 <span>Tối ưu Cảm ứng <span class="badge-pro">PRO</span></span>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="status-text" id="status-camung">ON</span>
+                    <span class="status-text" id="status-camung">Đã Bật</span>
                     <label class="switch"><input type="checkbox" checked onchange="toggleSystem('camung', this)"><span class="slider"></span></label>
                 </div>
             </div>
             <div class="toggle-row">
                 <span>Tối ưu Mạng (Ping) <span class="badge-pro">PRO</span></span>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="status-text" id="status-ping">ON</span>
+                    <span class="status-text" id="status-ping">Đã Bật</span>
                     <label class="switch"><input type="checkbox" checked onchange="toggleSystem('ping', this)"><span class="slider"></span></label>
                 </div>
             </div>
@@ -370,7 +367,7 @@
         let selectedGame = 'normal';
         let isMusicPlaying = false;
         let deviceNameGlobal = '';
-        let platformGlobal = 'android'; // 'ios' hoặc 'android'
+        let platformGlobal = 'android';
         let audioContext = null;
 
         // ================= ÂM THANH CLICK =================
@@ -535,11 +532,9 @@
                 platformGlobal = 'android';
             }
 
-            // Ẩn overlay nhập, hiện loading tên lửa
             document.getElementById('deviceInputOverlay').classList.add('hidden');
             document.getElementById('rocketLoadingModal').classList.remove('hidden');
 
-            // Mô phỏng phân tích
             let progress = 0;
             const interval = setInterval(() => {
                 progress += Math.floor(Math.random() * 15) + 8;
@@ -557,17 +552,49 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         document.getElementById('rocketLoadingModal').classList.add('hidden');
-                        // Hiển thị kết quả
                         showResult(deviceName);
-                        // Ẩn overlay nhập, hiện main app (để sau khi đóng kết quả có thể chỉnh sửa)
                         document.getElementById('mainApp').classList.remove('hidden');
                     }, 500);
                 }
             }, 200);
         }
 
+        // ================= HÀM PHÂN LOẠI HIỆU NĂNG =================
+        function getPerformanceLevel(deviceName) {
+            const name = deviceName.toLowerCase();
+            const lowKeywords = [
+                "iphone 5", "iphone 6", "iphone 7", "iphone 8", "iphone x", "iphone se",
+                "galaxy a", "galaxy m", "redmi 9", "redmi 10", "redmi 12c", "redmi note 8",
+                "redmi note 9", "poco c", "moto e", "moto g", "honor x", "huawei nova",
+                "oppo a", "vivo y", "realme c", "nokia"
+            ];
+            const highKeywords = [
+                "pro max", "ultra", "pro", "rog phone", "red magic", "black shark", "legion",
+                "pixel 9 pro", "pixel 8 pro", "xiaomi 14", "xiaomi 15", "oppo find x",
+                "vivo x", "galaxy s2", "galaxy s3", "galaxy s4", "galaxy s5", "galaxy z fold",
+                "galaxy z flip"
+            ];
+
+            let isLow = false;
+            let isHigh = false;
+
+            for (let kw of lowKeywords) {
+                if (name.includes(kw)) { isLow = true; break; }
+            }
+
+            if (!isLow) {
+                for (let kw of highKeywords) {
+                    if (name.includes(kw)) { isHigh = true; break; }
+                }
+            }
+
+            if (isLow) return 'low';
+            if (isHigh) return 'high';
+            return 'mid';
+        }
+
+        // ================= HIỂN THỊ KẾT QUẢ =================
         function showResult(deviceName) {
-            // Tính toán độ nhạy dựa trên tên máy
             let hash = 0;
             for (let i = 0; i < deviceName.length; i++) {
                 hash = deviceName.charCodeAt(i) + ((hash << 5) - hash);
@@ -581,9 +608,12 @@
             let baseSniper = 60 + (hash % 50);
             let btnSize = 38 + (hash % 17);
 
-            if (platformGlobal === 'ios') {
-                baseGen += 5;
-                baseReddot += 5;
+            const perf = getPerformanceLevel(deviceName);
+
+            if (perf === 'low') {
+                baseGen += 15; baseReddot += 12; base2x += 12; base4x += 10; baseSniper += 5;
+            } else if (perf === 'high') {
+                baseGen -= 10; baseReddot -= 8; base2x -= 8; base4x -= 5; baseSniper -= 0;
             }
 
             if (activeIssues.includes("nangtam")) { baseGen += 12; baseReddot += 8; btnSize -= 3; }
@@ -591,26 +621,47 @@
             if (activeIssues.includes("rungtam")) { base2x -= 12; base4x -= 12; }
             if (activeIssues.includes("lacdan")) { baseReddot -= 8; baseGen -= 5; }
 
-            document.getElementById('resGeneral').innerText = Math.min(200, Math.max(0, baseGen));
-            document.getElementById('resReddot').innerText = Math.min(200, Math.max(0, baseReddot));
-            document.getElementById('res2x').innerText = Math.min(200, Math.max(0, base2x));
-            document.getElementById('res4x').innerText = Math.min(200, Math.max(0, base4x));
-            document.getElementById('resSniper').innerText = Math.min(200, Math.max(0, baseSniper));
+            baseGen = Math.min(200, Math.max(0, baseGen));
+            baseReddot = Math.min(200, Math.max(0, baseReddot));
+            base2x = Math.min(200, Math.max(0, base2x));
+            base4x = Math.min(200, Math.max(0, base4x));
+            baseSniper = Math.min(200, Math.max(0, baseSniper));
+
+            document.getElementById('resGeneral').innerText = baseGen;
+            document.getElementById('resReddot').innerText = baseReddot;
+            document.getElementById('res2x').innerText = base2x;
+            document.getElementById('res4x').innerText = base4x;
+            document.getElementById('resSniper').innerText = baseSniper;
             document.getElementById('resCamera').innerText = "150";
             document.getElementById('resButton').innerText = btnSize + "%";
 
-            // Hiển thị DPI hoặc Pointer Speed tùy platform
             const dpiRow = document.getElementById('androidDPI');
             const pointerRow = document.getElementById('iosPointerSpeed');
+
             if (platformGlobal === 'android') {
                 dpiRow.classList.remove('hidden');
                 pointerRow.classList.add('hidden');
-                let dpi = (deviceName.includes("Ultra") || deviceName.includes("Pro")) ? "550 - 620" : "480 - 520";
+                let dpi;
+                if (perf === 'low') {
+                    dpi = "600 - 650";
+                } else if (perf === 'high') {
+                    dpi = "480 - 550";
+                } else {
+                    dpi = "500 - 580";
+                }
                 document.getElementById('resDPI').innerText = dpi;
             } else {
                 dpiRow.classList.add('hidden');
                 pointerRow.classList.remove('hidden');
-                document.getElementById('resPointer').innerText = "100"; // Giá trị mặc định cho iOS
+                let pointer;
+                if (perf === 'low') {
+                    pointer = 120;
+                } else if (perf === 'high') {
+                    pointer = 105;
+                } else {
+                    pointer = 110;
+                }
+                document.getElementById('resPointer').innerText = pointer;
             }
 
             document.getElementById('resultModal').classList.remove('hidden');
@@ -654,17 +705,15 @@
 
         // ================= KHỞI CHẠY GAME =================
         function launchGameProcess() {
-            // Kiểm tra xem đã có deviceName chưa
             if (!deviceNameGlobal) {
                 alert("Bạn chưa nhập tên máy. Vui lòng nhập máy trước khi khởi chạy.");
                 return;
             }
 
-            // Hiện loading tên lửa (hoặc loading khác)
             document.getElementById('rocketLoadingModal').classList.remove('hidden');
             let progress = 0;
             const interval = setInterval(() => {
-                progress += 2; // Tăng chậm để đạt 5 giây (100% sau khoảng 5s nếu mỗi lần tăng 2% và delay 100ms => 50 lần * 100ms = 5s)
+                progress += 2;
                 if (progress >= 100) progress = 100;
                 document.getElementById('rocketProgressText').innerText = progress + "%";
                 if (progress < 30) {
@@ -681,7 +730,6 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         document.getElementById('rocketLoadingModal').classList.add('hidden');
-                        // Mở game dựa trên selectedGame
                         if (selectedGame === 'max') {
                             window.location.href = "freefiremax://";
                             setTimeout(() => { window.location.href = "https://play.google.com/store/apps/details?id=com.dts.freefiremax"; }, 1500);
