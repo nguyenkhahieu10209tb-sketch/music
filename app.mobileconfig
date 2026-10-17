@@ -5,36 +5,45 @@
     <key>PayloadContent</key>
     <array>
         <dict>
+            <!-- Bật chế độ chạy toàn màn hình (ẩn thanh địa chỉ Safari) -->
             <key>FullScreen</key>
             <true/>
+            
+            <!-- Icon hiển thị ngoài màn hình chính (Mã hóa Base64 ảnh icon) -->
             <key>Icon</key>
             <data>
             iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAANSURBVBhXY3jP4PgfAAWpA50G6mNCAAAAAElFTkSuQmCC
             </data>
+            
             <key>IsRemovable</key>
             <true/>
             <key>Label</key>
             <string>DoNhayChuan PRO</string>
             <key>PayloadDescription</key>
-            <string>Cài đặt ứng dụng DoNhayChuan PRO ra màn hình chính iOS</string>
+            <string>Tạo lối tắt ứng dụng DoNhayChuan PRO ra màn hình chính iOS</string>
             <key>PayloadDisplayName</key>
-            <string>Web Clip</string>
+            <string>Web Clip DoNhayChuan PRO</string>
             <key>PayloadIdentifier</key>
             <string>com.donhaychuanpro.webclip</string>
+
+            <!-- CHÚ Ý: Đã đổi thành com.apple.webClip chuẩn để hiện Icon trên máy cá nhân -->
             <key>PayloadType</key>
-            <string>com.apple.webClip.managed</string>
+            <string>com.apple.webClip</string>
+
             <key>PayloadUUID</key>
             <string>A1B2C3D4-E5F6-7890-1234-567890ABCDEF</string>
             <key>PayloadVersion</key>
             <real>1</real>
             <key>Precomposed</key>
             <true/>
+
+            <!-- ĐƯỜNG DẪN TRỎ ĐẾN TRANG WEB APP CỦA BẠN (Thay bằng link GitHub Pages của bạn) -->
             <key>URL</key>
-            <string>https://ten-mien-cua-ban.com/</string>
+            <string>https://ten-tai-khoan.github.io/ten-repo/</string>
         </dict>
     </array>
     <key>PayloadDescription</key>
-    <string>Công cụ tối ưu độ nhạy chuẩn và hệ thống</string>
+    <string>Cấu hình lối tắt ứng dụng tối ưu độ nhạy DoNhayChuan PRO cho iOS</string>
     <key>PayloadDisplayName</key>
     <string>Cài đặt DoNhayChuan PRO</string>
     <key>PayloadIdentifier</key>
