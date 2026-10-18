@@ -113,7 +113,7 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- BƯỚC 1: MÀN HÌNH CHẠM KÍCH HOẠT (Code 1) -->
+    <!-- BƯỚC 1: MÀN HÌNH CHẠM KÍCH HOẠT -->
     <div id="touchScreen" class="fullscreen-overlay p-4 z-50">
         <div class="glass-modal max-w-md w-full p-8 rounded-3xl text-center border border-cyan-500/40 glow-border-cyan">
             <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-cyan-500/10 border border-cyan-400 flex items-center justify-center glow-border-cyan">
@@ -129,7 +129,7 @@
         </div>
     </div>
 
-    <!-- BƯỚC 2: MÀN HÌNH KHÓA NHẬP KEY (Code 1) -->
+    <!-- BƯỚC 2: MÀN HÌNH KHÓA NHẬP KEY -->
     <div id="lockScreen" class="fullscreen-overlay hidden p-4 z-50">
         <div class="glass-modal max-w-md w-full p-8 rounded-3xl text-center border border-purple-500/40">
             <h1 class="font-orbitron text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-4">
@@ -143,7 +143,7 @@
         </div>
     </div>
 
-    <!-- BƯỚC 2.5: NHẬP TÊN THIẾT BỊ (Code 1) -->
+    <!-- BƯỚC 2.5: NHẬP TÊN THIẾT BỊ -->
     <div id="deviceInputOverlay" class="fullscreen-overlay hidden p-4 z-50">
         <div class="glass-modal max-w-md w-full p-8 rounded-3xl text-center border border-cyan-500/40">
             <h1 class="font-orbitron text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
@@ -157,7 +157,7 @@
         </div>
     </div>
 
-    <!-- BƯỚC 3: GIAO DIỆN CHÍNH (Kết hợp Code 1 cốt lõi + Code 2 UI + MobileConfig iOS)[span_2](start_span)[span_2](end_span) -->
+    <!-- BƯỚC 3: GIAO DIỆN CHÍNH -->
     <div id="mainApp" class="hidden relative z-10 flex-1 flex flex-col max-w-2xl w-full mx-auto p-4 md:p-6 pb-24">
         
         <!-- HEADER -->
@@ -175,7 +175,7 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <!-- Nút tải cấu hình iOS Mobileconfig (Code 2) -->
+                <!-- Nút mở hướng dẫn tải cấu hình iOS Mobileconfig -->
                 <button onclick="openIOSModal()" class="px-3 py-1.5 rounded-lg bg-pink-500/20 border border-pink-500/50 text-pink-300 text-xs font-semibold hover:bg-pink-500/30 transition flex items-center space-x-1.5 glow-border-pink">
                     <i class="fa-brands fa-apple text-sm"></i>
                     <span>Tải App iOS</span>
@@ -188,7 +188,7 @@
             </div>
         </header>
 
-        <!-- CONTAINER CÁC PANEL (Code 1 Cốt lõi) -->
+        <!-- CONTAINER CÁC PANEL -->
         <div class="space-y-4">
 
             <!-- Panel 1: Thiết bị -->
@@ -263,7 +263,7 @@
             </button>
         </div>
 
-        <!-- Widget Trạng thái hệ thống nổi (Code 1) -->
+        <!-- Widget Trạng thái hệ thống nổi -->
         <div class="mt-6 glass-card rounded-2xl p-4 border border-purple-500/30 text-xs space-y-2">
             <div class="font-orbitron text-purple-400 font-bold mb-1">📊 THÔNG SỐ HỆ THỐNG THỜI GIAN THỰC</div>
             <div class="flex justify-between"><span>📶 Ping:</span> <span id="pingValue" class="text-cyan-300 font-bold">Đang đo...</span></div>
@@ -284,7 +284,7 @@
         </footer>
     </div>
 
-    <!-- MODAL KẾT QUẢ ĐỘ NHẠY (Code 1) -->
+    <!-- MODAL KẾT QUẢ ĐỘ NHẠY -->
     <div id="resultModal" class="fullscreen-overlay hidden p-4 z-50 bg-[#030014]/95">
         <div class="glass-modal max-w-md w-full p-6 rounded-3xl border border-cyan-500/50">
             <h2 class="font-orbitron text-center text-cyan-400 font-bold text-lg mb-1">KẾT QUẢ ĐỘ NHẠY AI</h2>
@@ -306,7 +306,7 @@
         </div>
     </div>
 
-    <!-- MODAL ROCKET LOADING (Code 1) -->
+    <!-- MODAL ROCKET LOADING -->
     <div id="rocketLoadingModal" class="fullscreen-overlay hidden z-50 bg-[#030014]/95">
         <div class="relative w-36 h-36 mb-6 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full border-4 border-white/10 border-t-cyan-400 border-r-purple-500 animate-spin"></div>
@@ -316,7 +316,7 @@
         <div id="rocketProgressDesc" class="text-xs text-gray-400">Đang phân tích thiết bị...</div>
     </div>
 
-    <!-- MODAL HƯỚNG DẪN CÀI ĐẶT IOS MOBILECONFIG (Code 2)[span_3](start_span)[span_3](end_span) -->
+    <!-- MODAL HƯỚNG DẪN CÀI ĐẶT IOS MOBILECONFIG (Đã sửa tạo file động qua JS) -->
     <div id="ios-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
         <div class="glass-modal max-w-md w-full p-6 rounded-3xl border border-pink-500/40 relative">
             <button onclick="closeIOSModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -334,27 +334,27 @@
             <div class="space-y-3 text-xs text-gray-200 mb-6 bg-black/40 p-4 rounded-xl border border-white/5">
                 <div class="flex items-start space-x-3">
                     <span class="w-5 h-5 rounded-full bg-pink-500/30 text-pink-300 font-bold flex items-center justify-center shrink-0">1</span>
-                    <p>Nhấn nút <strong class="text-pink-300">"Tải File Cấu Hình"</strong> bên dưới và chọn <strong class="text-white">Cho phép</strong> khi Safari hỏi.</p>
+                    <p>Nhấn nút <strong class="text-pink-300">"Tải File Cấu Hình"</strong> bên dưới. Khi Safari hiện bảng thông báo, chọn <strong class="text-white">Cho phép</strong>.</p>
                 </div>
                 <div class="flex items-start space-x-3">
                     <span class="w-5 h-5 rounded-full bg-pink-500/30 text-pink-300 font-bold flex items-center justify-center shrink-0">2</span>
-                    <p>Mở <strong class="text-white">Cài đặt (Settings)</strong> trên iPhone > Chọn <strong class="text-pink-300">Đã tải về hồ sơ</strong>.</p>
+                    <p>Vào <strong class="text-white">Cài đặt (Settings)</strong> trên iPhone > Chọn mục <strong class="text-pink-300">Đã tải về hồ sơ</strong>.</p>
                 </div>
                 <div class="flex items-start space-x-3">
                     <span class="w-5 h-5 rounded-full bg-pink-500/30 text-pink-300 font-bold flex items-center justify-center shrink-0">3</span>
-                    <p>Chọn hồ sơ <strong class="text-white">DoNhayChuan PRO</strong> > Bấm <strong class="text-pink-300">Cài đặt</strong>.</p>
+                    <p>Chọn hồ sơ <strong class="text-white">DoNhayChuan PRO</strong> > Bấm <strong class="text-pink-300">Cài đặt</strong> góc trên bên phải.</p>
                 </div>
             </div>
 
-            <a href="app.mobileconfig" download="app.mobileconfig" class="block w-full py-3.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl font-orbitron font-bold text-center text-xs text-white shadow-lg glow-border-pink">
+            <button onclick="downloadMobileConfig()" class="w-full py-3.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl font-orbitron font-bold text-center text-xs text-white shadow-lg glow-border-pink hover:opacity-90 transition active:scale-95">
                 <i class="fa-solid fa-download mr-2"></i> TẢI FILE CẤU HÌNH MOBILECONFIG
-            </a>
+            </button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC (Kết hợp Code 1 + Code 2)[span_4](start_span)[span_4](end_span) -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        /* ===== 1. GALAXY CANVAS BACKGROUND (Code 2)[span_5](start_span)[span_5](end_span) ===== */
+        /* ===== 1. GALAXY CANVAS BACKGROUND ===== */
         const canvas = document.getElementById('galaxy-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -396,7 +396,7 @@
         }
         drawGalaxy();
 
-        /* ===== 2. LƯU TRẠNG THÁI & HÀM CƠ BẢN (Code 1) ===== */
+        /* ===== 2. LƯU TRẠNG THÁI & HÀM CƠ BẢN ===== */
         const DEF = { device: '', mode: 'sinhton', ver: 'normal', issues: [], tg: {}, music: false };
         let S = Object.assign({}, DEF);
         try { const r = JSON.parse(localStorage.getItem('sensiState') || '{}'); S = Object.assign({}, DEF, r); } catch (e) {}
@@ -406,7 +406,7 @@
         const hide = id => $(id).classList.add('hidden');
         const cl = (v, a, b) => Math.min(b, Math.max(a, v));
 
-        /* ===== 3. NHẠC NỀN & ÂM THANH (Code 1) ===== */
+        /* ===== 3. NHẠC NỀN & ÂM THANH ===== */
         let isMusicPlaying = false;
         function setMusicUI(on) {
             isMusicPlaying = on;
@@ -421,7 +421,7 @@
             }
         }
 
-        /* ===== 4. LUỒNG TRUY CẬP 3 BƯỚC (Code 1) ===== */
+        /* ===== 4. LUỒNG TRUY CẬP 3 BƯỚC ===== */
         function initApp() {
             hide('touchScreen'); show('lockScreen'); $('keyInput').value = '';
             if (S.music) { $('bgMusic').play().then(() => setMusicUI(true)).catch(() => {}); }
@@ -460,7 +460,7 @@
         function changeDevice() { hide('mainApp'); $('deviceNameInput').value = S.device; show('deviceInputOverlay'); }
         function startMain(showRes) { show('mainApp'); renderAll(); if (showRes) openResult(); }
 
-        /* ===== 5. THÔNG SỐ HỆ THỐNG & WIDGET (Code 1) ===== */
+        /* ===== 5. THÔNG SỐ HỆ THỐNG & WIDGET ===== */
         function updatePing() {
             const t0 = performance.now(), i = new Image();
             const d = () => { $('pingValue').textContent = Math.round(performance.now() - t0) + ' ms'; };
@@ -494,7 +494,7 @@
         }
         updateRAM(); setInterval(updateRAM, 1000);
 
-        /* ===== 6. THUẬT TOÁN ĐỘ NHẠY & CẢM ỨNG (Code 1) ===== */
+        /* ===== 6. THUẬT TOÁN ĐỘ NHẠY & CẢM ỨNG ===== */
         function getPerformanceLevel(n) {
             n = n.toLowerCase();
             const low = ["iphone 5", "iphone 6", "iphone 7", "iphone 8", "iphone x", "galaxy a", "redmi 9", "redmi 10", "oppo a", "vivo y", "realme c"];
@@ -553,7 +553,7 @@
             $('sec4List').innerHTML = calcTouch().map(r => `<div class="flex justify-between py-1.5 border-b border-white/5"><span>${r[0]}</span><strong class="text-cyan-400">${r[1]}</strong></div>`).join('');
         }
 
-        /* ===== 7. BỘ LỌC & TOGGLES (Code 1) ===== */
+        /* ===== 7. BỘ LỌC & TOGGLES ===== */
         function setMode(m) { S.mode = m; save(); renderAll(); }
         function setVer(v) { S.ver = v; save(); renderAll(); }
         function toggleIssue(el) {
@@ -580,7 +580,7 @@
         }
         buildToggles();
 
-        /* ===== 8. KHỞI CHẠY GAME & iOS MODAL (Code 1 + Code 2)[span_6](start_span)[span_6](end_span) ===== */
+        /* ===== 8. KHỞI CHẠY GAME & TẠO FILE MOBILECONFIG ĐỘNG QUA JS ===== */
         function launchGameProcess() {
             if (!S.device) { alert("Vui lòng nhập tên máy trước khi khởi chạy."); return; }
             runLoading(false, () => {
@@ -592,6 +592,60 @@
 
         function openIOSModal() { document.getElementById('ios-modal').classList.remove('hidden'); }
         function closeIOSModal() { document.getElementById('ios-modal').classList.add('hidden'); }
+
+        // Hàm tạo và tải file .mobileconfig chuẩn trực tiếp bằng JavaScript
+        function downloadMobileConfig() {
+            const currentUrl = window.location.href.split('#')[0];
+            const plistContent = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>FullScreen</key>
+            <true/>
+            <key>PayloadDisplayName</key>
+            <string>DoNhayChuan PRO Web Clip</string>
+            <key>PayloadIdentifier</key>
+            <string>com.sensilegend.donhaychuan.webclip</string>
+            <key>PayloadType</key>
+            <string>com.apple.webClip.managed</string>
+            <key>PayloadUUID</key>
+            <string>8C2E4F90-1234-4567-89AB-CDEF01234567</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>URL</key>
+            <string>${currentUrl}</string>
+            <key>Label</key>
+            <string>DoNhayChuan PRO</string>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Cài đặt lối tắt ứng dụng DoNhayChuan PRO cho iOS</string>
+    <key>PayloadDisplayName</key>
+    <string>DoNhayChuan PRO</string>
+    <key>PayloadIdentifier</key>
+    <string>com.sensilegend.donhaychuan</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>`;
+
+            const blob = new Blob([plistContent], { type: 'application/x-apple-aspen-config' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'DoNhayChuanPRO.mobileconfig';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
     </script>
 </body>
 </html>
